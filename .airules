@@ -62,6 +62,24 @@
 - 默认输出：
   - 简洁中文；必要时附代码块与路径；提供“变更摘要/下一步建议”。
 
+### 9.1 命令执行模式（重要约定）
+- 由 AI 提供待执行命令，用户本地执行并回传终端输出；AI 默认不在本地自动执行命令（尤其是具有副作用的命令）。
+- AI 提供的命令须具备幂等性与安全性，尽量可一次性复制粘贴执行；必要时分步给出，并在每步前说明目的与影响。
+- 命令上下文需明确指定工作目录（不使用 `cd` 链），例如：在说明文字中指出“于项目根目录 `~/Documents/GitHub/pairusuo` 执行”。
+- 命令模板示例：
+
+```bash
+# 目的：推送代码到 GitHub（初始化、设置 remote、提交与推送）
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || git init
+git branch -M main
+git remote get-url origin >/dev/null 2>&1 \
+  && git remote set-url origin https://github.com/pairusuo/pairusuo.git \
+  || git remote add origin https://github.com/pairusuo/pairusuo.git
+git add -A
+git commit -m "chore: initial push" || echo "No changes to commit"
+git push -u origin main
+```
+
 ## 10. 常见约定与片段
 - 暗色变体：`@custom-variant dark (&:is(.dark *));`
 - 统一容器：使用 `.site-container { max-width: var(--content-max) }`。
