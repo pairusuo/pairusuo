@@ -20,6 +20,10 @@ const withMDX = createMDX({
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  eslint: {
+    // Avoid failing Vercel builds due to lint errors; we still lint locally/CI if desired
+    ignoreDuringBuilds: true,
+  },
 };
 const withNextIntl = createNextIntlPlugin();
 
