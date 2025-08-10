@@ -1,0 +1,28 @@
+{
+  "site": {
+    "title": "pairusuo",
+    "description": "Personal blog"
+  },
+  "home": {
+    "welcome": "Welcome to my blog",
+    "subtitle": "Sharing tech, product and thoughts",
+    "recent": "Recent Posts",
+    "more": "More",
+    "empty": "No posts yet.",
+    "other": "Personal information to be supplemented.",
+    "readingTime": "{minutes, plural, one {# min read} other {# min read}}"
+  },
+  "about": {
+    "title": "About the Author",
+    "content": "Freshman in the field of website builder, a follower of Ge Fei."
+  },
+  "links": {
+    "title": "Friend Links",
+    "empty": "No links yet. Please check back later."
+  },
+  "blog": {
+    "title": "Blog",
+    "empty": "No posts yet.",
+    "readingTime": "{minutes, plural, one {# min read} other {# min read}}"
+  }
+}

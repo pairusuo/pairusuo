@@ -1,0 +1,70 @@
+# pairusuo 项目 AI 协作与设计原则（.airules）
+
+本文件用于规范本项目的人机协作方式、设计原则与默认需求，AI 参与开发时需优先遵循。
+
+## 1. 通用沟通与默认需求
+- 【语言】默认使用简体中文进行问答与提交说明。
+- 【风格】回答要简洁、要点式为主；必要时给出文件路径与函数名，使用反引号标注，如 `app/globals.css`、`components/header.tsx`。
+- 【安全】在执行可能有破坏性的操作（删除、重写大量文件、安装依赖、网络请求）前需明确说明影响并征求确认。
+- 【可运行性】提交代码必须可直接运行；缺失的依赖、导入、脚本需一并补齐。
+- 【变更说明】每次变更请在回复中包含“变更摘要”和“下一步建议”。
+- 【版本控制】AI主要是修改代码，若要提交代码到GitHub，必须征求人类意见。
+
+## 2. 技术栈与架构约定
+- 框架：Next.js 15（App Router），React 19。
+- 样式：Tailwind CSS v4 + `@tailwindcss/postcss`；允许使用 v4 新语法：`@theme`、`@custom-variant`、`@utility` 等。
+- CSS 规范：已在 `app/globals.css` 使用 `@custom-variant dark (&:is(.dark *));` 定义暗色变体；编辑器若提示“Unknown at rule”应忽略（参见 `.vscode/settings.json`）。
+- 动画：`tw-animate-css`。
+- 内容处理：MDX、`rehype-pretty-code` + Shiki。
+- 国际化：`next-intl`。
+
+## 3. 设计与体验原则（UX/UI）
+- 【一致性】颜色、半径、排版等从 `:root` CSS 变量与 `@theme` 导出，避免硬编码。
+- 【暗色模式】采用类名 `.dark` 切换，所有组件需在深/浅两套变量下对比度合规。
+- 【内容宽度】全站统一容器宽度通过 `--content-max` 控制（见 `app/globals.css` 与 `.site-container`）。
+- 【可访问性】表单、交互控件须有可见焦点态；图标需标题或 aria-label；颜色对比度≥ WCAG AA。
+
+## 4. 文案与国际化
+- 默认文案中文，使用 `next-intl` 管理多语言。
+- UI 字符串不可散落硬编码在组件，需集中于消息文件或常量，并考虑占位符与复数。
+
+## 5. 代码规范
+- TypeScript：开启严格模式；优先使用类型窄化与不可变数据结构。
+- 命名：文件/组件使用小驼峰或短横线，React 组件 PascalCase。
+- 样式：优先使用 Tailwind 工具类；全局样式仅放在 `app/globals.css` 或少量层（`@layer base/components`）。
+- 组件：拆分小而清晰的无副作用 UI 组件；数据获取放在 Server Components 或专用 hooks。
+- 目录：公共组件放在 `components/`，页面在 `app/`，公共样式/变量在 `app/globals.css`。
+
+## 6. 质量与工具
+- Lint：使用 `eslint`/`eslint-config-next`；编辑器对 Tailwind v4 at-rule 警告需忽略（`.vscode/settings.json` 已配置）。
+- 构建：`postcss.config.mjs` 必须包含 `@tailwindcss/postcss` 插件。
+- 提交信息：使用约定式提交（feat/fix/docs/refactor/perf/chore/test），附上影响范围和动机。
+
+## 7. 性能与 SEO
+- 图片与图标：使用 `next/image` 与 SVG；按需加载、避免阻塞渲染。
+- 代码分割：页面级别与组件级别懒加载；谨慎引入体积较大的依赖。
+- 元信息：使用 App Router Metadata API 统一管理页面 SEO。
+
+## 8. 安全与隐私
+- 禁止在代码库中硬编码密钥/访问令牌；使用环境变量与安全注入。
+- 第三方请求需说明数据出境与存储位置。
+
+## 9. AI 编程协作规则
+- 当用户给出高层目标时：
+  1) 先给方案要点与影响面；
+  2) 再给最小可行改动；
+  3) 必要时分步提交多次小改动，保证可回滚。且提交代码需要征求人类意见。
+- 当编辑文件：
+  - 使用补丁式修改工具（保持上下文与最小 diff），避免整体覆盖。
+  - 变更必须包含必要的 import、类型与依赖更新。
+- 当需要运行命令：
+  - 仅在安全的情况下自动执行；潜在破坏性命令需请求确认。
+- 默认输出：
+  - 简洁中文；必要时附代码块与路径；提供“变更摘要/下一步建议”。
+
+## 10. 常见约定与片段
+- 暗色变体：`@custom-variant dark (&:is(.dark *));`
+- 统一容器：使用 `.site-container { max-width: var(--content-max) }`。
+- Prose 样式：文章页使用 `.prose` 调整排版与代码块高亮（Shiki）。
+
+（更新本文件时请保持条目编号与结构，便于 AI 与人类共同维护。）

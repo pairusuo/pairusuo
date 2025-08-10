@@ -1,0 +1,148 @@
+---
+title: Markdown Blogging Guide (with Common Syntax Examples)
+summary: "A comprehensive guide to writing blog posts with Markdown in this site: headings, emphasis, lists, quotes, images, tables, code blocks, task lists, and MDX notes."
+publishedAt: "2025-08-10 21:14:36"
+updatedAt: "2025-08-10 21:14:36"
+draft: false
+---
+
+> This post demonstrates how to write with Markdown/MDX in this blog. When saving or publishing, the system auto-creates directories by year/month and uses Asia/Shanghai timestamps.
+
+## 1. Headings
+
+Use `#` to `######` for H1–H6:
+
+```md
+# Heading 1
+## Heading 2
+### Heading 3
+```
+
+## 2. Emphasis
+
+- Italic: `*text*` or `_text_` → *text*
+- Bold: `**text**` or `__text__` → **text**
+- Strikethrough: `~~text~~` → ~~text~~
+- Inline code: `` `code` `` → `code`
+
+## 3. Paragraphs & Line Breaks
+
+Leave a blank line to start a new paragraph. Add two spaces at line end or use `<br />` for a hard break.
+
+## 4. Lists
+
+- Unordered: `-` / `*` / `+`
+- Ordered: `1.`, `2.`, … (auto increments)
+
+```md
+- Item A
+- Item B
+  - Subitem B1
+
+1. Step one
+2. Step two
+```
+
+## 5. Blockquotes
+
+Use `>`:
+
+```md
+> A quote paragraph.
+>> Nested quote.
+```
+
+## 6. Links & Images
+
+- Link: `[text](https://example.com)`
+- Image: `![alt](/images/example.png)` (Recommended to put assets under `public/` like `public/images/...`)
+
+```md
+[Next.js](https://nextjs.org/)
+
+![Example](/images/example.png)
+```
+
+## 7. Code
+
+- Inline code: surround with backticks `` `code` ``
+- Code blocks: triple backticks plus a language (Shiki highlighting is enabled)
+
+```ts
+export function hello(name: string) {
+  return `Hello, ${name}!`;
+}
+```
+
+```bash
+# CLI example
+npm run dev
+```
+
+## 8. Tables
+
+```md
+| Feature | Syntax | Example |
+|---|---|---|
+| Italic | *text* | *text* |
+| Bold | **text** | **text** |
+| Inline code | `code` | `code` |
+```
+
+| Feature | Syntax | Example |
+|---|---|---|
+| Italic | `*text*` | *text* |
+| Bold | `**text**` | **text** |
+| Inline code | `` `code` `` | `code` |
+
+## 9. Thematic Break
+
+Use three or more `-`, `*`, or `_` on a single line:
+
+---
+
+## 10. Task List
+
+```md
+- [x] Done
+- [ ] Todo
+```
+
+- [x] Done
+- [ ] Todo
+
+## 11. Tips / Admonitions
+
+The project doesn’t ship a dedicated admonition syntax, but you can mimic it with blockquotes + bold text:
+
+> **Tip**: When publishing/saving drafts via Admin, you only fill a short slug; the system auto-prefixes `YYYY/MM/`.
+
+## 12. MDX Notes
+
+- MDX is supported; you can embed React components when needed.
+- If a component is interactive, mark it as a client component with `"use client"` and import/use carefully in MDX.
+- For most posts, plain Markdown is sufficient to keep content simple and maintainable.
+
+## 13. Frontmatter
+
+Put YAML at the top as metadata:
+
+```md
+---
+title: Title
+summary: Summary
+tags: [tag1, tag2]
+publishedAt: 2025-08-10 21:14:36
+updatedAt: 2025-08-10 21:14:36
+draft: false
+---
+```
+
+- `publishedAt`/`updatedAt`: Use Asia/Shanghai full datetime `YYYY-MM-DD HH:mm:ss` consistently.
+- `draft`: set `true` for drafts; after publishing, it should be `false`.
+- Slug: in Admin, only fill a short slug (lowercase letters/numbers/hyphen). The system auto-adds `YYYY/MM/` directories.
+
+## 14. Preview & Publish
+
+- In Admin, you can first save as a draft. The list supports refresh and one-click publish.
+- After publishing, you’ll be redirected to the post page: `/en/blog/YYYY/MM/slug` (Chinese is `/blog/YYYY/MM/slug`).

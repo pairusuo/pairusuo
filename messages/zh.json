@@ -1,0 +1,28 @@
+{
+  "site": {
+    "title": "pairusuo",
+    "description": "个人博客"
+  },
+  "home": {
+    "welcome": "欢迎来到我的博客",
+    "subtitle": "分享技术、产品与思考",
+    "recent": "最新文章",
+    "more": "更多",
+    "empty": "暂时还没有文章。",
+    "other": "个人信息待补充。",
+    "readingTime": "{minutes, plural, one {# 分钟阅读} other {# 分钟阅读}}"
+  },
+  "about": {
+    "title": "关于作者",
+    "content": "出海新人，哥飞追随者。"
+  },
+  "links": {
+    "title": "友情链接",
+    "empty": "暂时还没有友链，欢迎稍后再来。"
+  },
+  "blog": {
+    "title": "博客",
+    "empty": "暂时还没有文章。",
+    "readingTime": "{minutes, plural, one {# 分钟阅读} other {# 分钟阅读}}"
+  }
+}
