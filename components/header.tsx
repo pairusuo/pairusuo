@@ -44,7 +44,7 @@ export default function Header({ locale }: { locale: string }) {
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="site-container h-14 flex items-center justify-between border-b">
-        <Logo href={base} width={24} height={24} showText={true} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm" />
+        <Logo href={base} width={32} height={32} showText={true} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm" />
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-4 text-sm">
           {items.map((it) => (
