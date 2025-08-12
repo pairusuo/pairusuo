@@ -31,5 +31,17 @@
   "loadingDrafts": "Loading drafts...",
   "noDrafts": "No drafts yet",
   "publishDraft": "Publish draft",
-  "loadDraftsFailed": "Failed to load drafts"
+  "loadDraftsFailed": "Failed to load drafts",
+  "edit": "Edit",
+  "saveEdits": "Save edits",
+  "loadedDraft": "Draft loaded",
+  "draftUpdated": "Draft updated",
+  "updateDraftFailed": "Failed to update draft",
+  "loadDraftFailed": "Failed to load draft",
+  "editingDraftNotice": "Editing draft: {path}",
+  "exitEdit": "Exit editing",
+  "uploadingImage": "Uploading image...",
+  "uploadImageFailed": "Image upload failed",
+  "imageInserted": "Image inserted",
+  "pasteImageTip": "You can paste images directly; we'll upload and insert the link."
 }

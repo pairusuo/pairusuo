@@ -11,8 +11,9 @@ const inter = Inter({
 const notoSansSC = Noto_Sans_SC({
   variable: "--font-noto-sc",
   weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {

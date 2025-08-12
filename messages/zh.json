@@ -10,6 +10,8 @@
     "more": "更多",
     "empty": "暂时还没有文章。",
     "other": "个人信息待补充。",
+    "tagsTitle": "标签",
+    "tags": ["准出海人", "出海人", "GitHub老玩家新提交者"],
     "readingTime": "{minutes, plural, one {# 分钟阅读} other {# 分钟阅读}}"
   },
   "about": {

@@ -9,6 +9,51 @@ function badRequest(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
 }
 
+export async function PUT(req: NextRequest) {
+  const auth = ensureAuth(req);
+  if (!auth.ok) return auth.res;
+  let body: { locale?: string; slug?: string; title?: string; summary?: string; content?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return badRequest('Invalid JSON body');
+  }
+  const locale = (body.locale || 'zh').toLowerCase();
+  if (!isLocale(locale)) return badRequest("Invalid locale; expected 'zh' or 'en'");
+  if (!body.slug) return badRequest('Missing slug');
+
+  const filePath = path.join(CONTENT_ROOT, locale, `${body.slug}.mdx`);
+  try {
+    const source = await fs.readFile(filePath, 'utf8');
+    const parsed = matter(source);
+    const fm = parsed.data || {};
+    const isDraft = (() => {
+      const v = fm.draft as unknown;
+      if (typeof v === 'boolean') return v;
+      if (typeof v === 'number') return v === 1;
+      if (typeof v === 'string') return ['true','yes','1'].includes(v.trim().toLowerCase());
+      return false;
+    })();
+    if (!isDraft) return badRequest('Not a draft');
+
+    const dateTime = shanghaiDateTime();
+    const newData = {
+      ...fm,
+      title: (body.title ?? fm.title) || body.slug,
+      summary: body.summary ?? (fm.summary || ''),
+      draft: true,
+      updatedAt: dateTime,
+      publishedAt: fm.publishedAt || dateTime,
+    };
+    const newContent = body.content ?? parsed.content;
+    const nextFile = matter.stringify(newContent, newData);
+    await fs.writeFile(filePath, nextFile, 'utf8');
+    return NextResponse.json({ ok: true, path: filePath, slug: body.slug });
+  } catch (e: any) {
+    return badRequest(`Failed to update draft: ${e?.message || String(e)}`, 500);
+  }
+}
+
 function ensureAuth(req: NextRequest) {
   const adminToken = process.env.ADMIN_TOKEN;
   const token = req.headers.get("x-admin-token");
@@ -116,6 +161,37 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const locale = (searchParams.get('locale') || 'zh').toLowerCase();
   if (!isLocale(locale)) return badRequest("Invalid locale; expected 'zh' or 'en'");
+  const slug = (searchParams.get('slug') || '').trim();
+  if (slug) {
+    // Load single draft content
+    const filePath = path.join(CONTENT_ROOT, locale, `${slug}.mdx`);
+    try {
+      const source = await fs.readFile(filePath, 'utf8');
+      const parsed = matter(source);
+      const fm = parsed.data || {};
+      const isDraft = (() => {
+        const v = fm.draft as unknown;
+        if (typeof v === 'boolean') return v;
+        if (typeof v === 'number') return v === 1;
+        if (typeof v === 'string') return ['true','yes','1'].includes(v.trim().toLowerCase());
+        return false;
+      })();
+      if (!isDraft) return badRequest('Not a draft');
+      return NextResponse.json({
+        ok: true,
+        draft: {
+          slug,
+          title: (fm.title as string) || slug,
+          summary: (fm.summary as string) || '',
+          content: parsed.content,
+          publishedAt: (fm.publishedAt as string) || '',
+          updatedAt: (fm.updatedAt as string) || '',
+        },
+      });
+    } catch (e: any) {
+      return badRequest(`Failed to read draft: ${e?.message || String(e)}`, 404);
+    }
+  }
   const drafts = await listDrafts(locale);
   return NextResponse.json({ ok: true, drafts });
 }
@@ -146,7 +222,8 @@ export async function POST(req: NextRequest) {
       ...parsed.data,
       draft: false,
       updatedAt: dateTime,
-      publishedAt: parsed.data.publishedAt || dateTime,
+      // On publish, set publishedAt to the publish moment (Asia/Shanghai)
+      publishedAt: dateTime,
     };
     const nextContent = matter.stringify(parsed.content, newData);
     await fs.writeFile(filePath, nextContent, 'utf8');

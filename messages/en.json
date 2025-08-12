@@ -10,6 +10,8 @@
     "more": "More",
     "empty": "No posts yet.",
     "other": "Personal information to be supplemented.",
+    "tagsTitle": "Tags",
+    "tags": ["Freshman"],
     "readingTime": "{minutes, plural, one {# min read} other {# min read}}"
   },
   "about": {

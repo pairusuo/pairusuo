@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { loadBase } from "@/lib/messages";
 import { getAllPostMeta, PostMeta } from "@/lib/posts";
 import { formatDateTime } from "@/lib/utils";
 
@@ -9,6 +10,8 @@ export const revalidate = 300; // seconds
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home" });
+  const base = await loadBase(locale);
+  const tags: string[] = Array.isArray(base?.home?.tags) ? (base.home.tags as string[]) : [];
   const posts: PostMeta[] = getAllPostMeta(locale as "zh" | "en").slice(0, 10);
 
   return (
@@ -50,6 +53,20 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <aside className="space-y-4">
           <div className="border rounded p-4 min-h-[160px] flex items-center justify-center text-muted-foreground">
             {t("other")}
+          </div>
+          <div className="border rounded p-4">
+            <div className="text-sm font-medium mb-2">{t("tagsTitle")}</div>
+            {tags.length === 0 ? (
+              <p className="text-sm text-muted-foreground">—</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span key={tag} className="px-2 py-0.5 text-xs rounded-full border bg-muted">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </aside>
       </div>

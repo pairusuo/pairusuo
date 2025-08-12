@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 export default function Editor({ adminToken, initialLocale }: { adminToken: string; initialLocale: string }) {
@@ -11,9 +11,12 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
   const [slug, setSlug] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const contentRef = useRef<HTMLTextAreaElement | null>(null);
   const [publishing, setPublishing] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [slugError, setSlugError] = useState<string>("");
+  // editing state
+  const [editingSlug, setEditingSlug] = useState<string>("");
 
   // Drafts state
   const [draftsLoading, setDraftsLoading] = useState(false);
@@ -36,6 +39,82 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       setDraftsError(t("loadDraftsFailed"));
     } finally {
       setDraftsLoading(false);
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData?.items || [];
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (it.kind === 'file') {
+        const f = it.getAsFile();
+        if (f && f.type.startsWith('image/')) {
+          e.preventDefault();
+          setMessage(t('uploadingImage'));
+          try {
+            const fd = new FormData();
+            fd.append('file', f, f.name || 'paste.png');
+            fd.append('locale', locale);
+            const res = await fetch('/api/admin/upload', {
+              method: 'POST',
+              headers: { 'X-Admin-Token': adminToken },
+              body: fd,
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            const url = data.r2Url || data.url || data.path;
+            // insert markdown at cursor
+            const ta = contentRef.current;
+            const md = `![image](${url})`;
+            if (ta) {
+              const start = ta.selectionStart || 0;
+              const end = ta.selectionEnd || 0;
+              const before = content.slice(0, start);
+              const after = content.slice(end);
+              const next = `${before}${md}${after}`;
+              setContent(next);
+              requestAnimationFrame(() => {
+                ta.focus();
+                const pos = start + md.length;
+                ta.setSelectionRange(pos, pos);
+              });
+            } else {
+              setContent((prev) => `${prev}\n\n${md}`);
+            }
+            setMessage(t('imageInserted'));
+          } catch (err) {
+            setMessage(t('uploadImageFailed'));
+          }
+          return; // only handle the first image
+        }
+      }
+    }
+  };
+
+  const publishEditingDraft = async () => {
+    if (!editingSlug) return;
+    setPublishing(true);
+    setMessage("");
+    try {
+      const res = await fetch('/api/admin/drafts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': adminToken,
+        },
+        body: JSON.stringify({ locale, slug: editingSlug, action: 'publish' }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(data.error || t('publishFailed'));
+      }
+      const data = await res.json();
+      if (data.url) router.push(data.url as string);
+      else setMessage(`${t('successPrefix')}${data.path || editingSlug}`);
+    } catch (e: any) {
+      setMessage(e?.message || t('publishFailed'));
+    } finally {
+      setPublishing(false);
     }
   };
 
@@ -96,6 +175,54 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
     }
   };
 
+  const loadDraftForEdit = async (slugToLoad: string) => {
+    try {
+      const res = await fetch(`/api/admin/drafts?locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slugToLoad)}`, {
+        headers: { "X-Admin-Token": adminToken },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const d = data.draft as { title: string; summary: string; content: string; slug: string };
+      setTitle(d.title || "");
+      setSummary(d.summary || "");
+      setContent(d.content || "");
+      const full = d.slug || slugToLoad;
+      const leaf = (full.split('/').pop() || "").toLowerCase();
+      setSlug(leaf);
+      setEditingSlug(full);
+      setMessage(t('loadedDraft'));
+    } catch (e: any) {
+      setMessage(e?.message || t('loadDraftFailed'));
+    }
+  };
+
+  const saveDraftEdits = async () => {
+    if (!editingSlug) return;
+    setPublishing(true);
+    setMessage("");
+    try {
+      const res = await fetch('/api/admin/drafts', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Admin-Token': adminToken,
+        },
+        body: JSON.stringify({ locale, slug: editingSlug, title, summary, content }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(data.error || 'Failed');
+      }
+      setMessage(t('draftUpdated'));
+      setEditingSlug(editingSlug); // stay in edit mode
+      loadDrafts();
+    } catch (e: any) {
+      setMessage(e?.message || t('updateDraftFailed'));
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
     <form onSubmit={(e) => submit(e, false)} className="space-y-3">
@@ -120,9 +247,11 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
               setSlug(v);
               setSlugError(validateSlug(v) || "");
             }}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 disabled:opacity-60"
+            disabled={!!editingSlug}
             placeholder={t("slugPlaceholder")}
           />
+          <span className="text-xs text-muted-foreground">{t("slugHelp")}</span>
           {slugError && <span className="text-xs text-red-600">{slugError}</span>}
         </label>
       </div>
@@ -152,6 +281,10 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onPaste={handlePaste}
+          ref={(el) => {
+            contentRef.current = el;
+          }}
           className="border rounded px-2 py-2 min-h-[300px] font-mono"
           placeholder={t("contentPlaceholder")}
         />
@@ -159,8 +292,12 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
 
       <div className="flex items-center gap-3">
         <button
-          type="submit"
+          type="button"
           disabled={publishing}
+          onClick={(e) => {
+            if (editingSlug) publishEditingDraft();
+            else submit(e as any, false);
+          }}
           className="h-9 px-4 rounded border bg-foreground text-background disabled:opacity-50"
         >
           {publishing ? t("publishing") : t("publish")}
@@ -168,13 +305,34 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         <button
           type="button"
           disabled={publishing}
-          onClick={(e) => submit(e as any, true)}
+          onClick={(e) => {
+            if (editingSlug) saveDraftEdits();
+            else submit(e as any, true);
+          }}
           className="h-9 px-4 rounded border bg-muted text-foreground disabled:opacity-50"
         >
           {publishing ? t("savingDraft") : t("saveDraft")}
         </button>
         {message && <span className="text-sm text-muted-foreground">{message}</span>}
       </div>
+      {editingSlug && (
+        <p className="text-xs text-muted-foreground flex items-center gap-2">
+          {t('editingDraftNotice', { path: editingSlug })}
+          <button
+            type="button"
+            disabled={publishing}
+            onClick={() => {
+              setEditingSlug("");
+              setMessage("");
+              setSlug("");
+              setSlugError("");
+            }}
+            className="underline text-muted-foreground/80 hover:text-foreground"
+          >
+            {t('exitEdit')}
+          </button>
+        </p>
+      )}
     </form>
     <DraftsSection
       locale={locale}
@@ -185,6 +343,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       draftsError={draftsError}
       onRefresh={loadDrafts}
       onPublished={() => loadDrafts()}
+      onEdit={loadDraftForEdit}
     />
     </div>
   );
@@ -199,6 +358,7 @@ export function DraftsSection({
   draftsError,
   onRefresh,
   onPublished,
+  onEdit,
 }: {
   locale: string;
   adminToken: string;
@@ -208,6 +368,7 @@ export function DraftsSection({
   draftsError?: string;
   onRefresh: () => void;
   onPublished?: (slug: string) => void;
+  onEdit?: (slug: string) => void;
 }) {
   const router = useRouter();
   const publishDraft = async (slug: string) => {
@@ -245,14 +406,21 @@ export function DraftsSection({
       ) : (
         <ul className="space-y-2">
           {drafts.map((d) => (
-            <li key={d.slug} className="flex items-center justify-between border rounded p-2">
+            <li key={d.slug} className="flex items-center justify-between border rounded p-2 gap-2">
               <div className="min-w-0">
                 <div className="font-medium truncate">{d.title}</div>
                 <div className="text-xs text-muted-foreground truncate">{d.slug}</div>
               </div>
-              <button type="button" className="h-8 px-3 rounded border bg-foreground text-background" onClick={() => publishDraft(d.slug)}>
-                {t('publishDraft')}
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {onEdit && (
+                  <button type="button" className="h-8 px-3 rounded border" onClick={() => onEdit(d.slug)}>
+                    {t('edit')}
+                  </button>
+                )}
+                <button type="button" className="h-8 px-3 rounded border bg-foreground text-background" onClick={() => publishDraft(d.slug)}>
+                  {t('publishDraft')}
+                </button>
+              </div>
             </li>
           ))}
         </ul>

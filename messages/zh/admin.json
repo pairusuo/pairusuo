@@ -31,5 +31,17 @@
   "loadingDrafts": "加载草稿中...",
   "noDrafts": "暂无草稿",
   "publishDraft": "发布草稿",
-  "loadDraftsFailed": "草稿列表加载失败"
+  "loadDraftsFailed": "草稿列表加载失败",
+  "edit": "编辑",
+  "saveEdits": "保存修改",
+  "loadedDraft": "草稿已载入",
+  "draftUpdated": "草稿已更新",
+  "updateDraftFailed": "更新草稿失败",
+  "loadDraftFailed": "加载草稿失败",
+  "editingDraftNotice": "正在编辑草稿：{path}",
+  "exitEdit": "退出编辑",
+  "uploadingImage": "图片上传中...",
+  "uploadImageFailed": "图片上传失败",
+  "imageInserted": "图片已插入",
+  "pasteImageTip": "可直接粘贴图片到编辑框，自动上传并插入链接"
 }
