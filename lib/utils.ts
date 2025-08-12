@@ -12,6 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDateTime(v?: string | null, locale: string = "zh") {
   if (!v) return "";
   const raw = v.trim();
+  
   // If it's a date-only string, avoid UTC parsing offset; treat as local Shanghai 00:00:00
   const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
   if (dateOnly) {
@@ -19,17 +20,22 @@ export function formatDateTime(v?: string | null, locale: string = "zh") {
     if (locale === "zh") return `${yyyy}年${mm}月${dd}日 00:00:00`;
     return `${yyyy}-${mm}-${dd} 00:00:00`;
   }
-  // If it's a full datetime without timezone, interpret it as Asia/Shanghai local time
+  
+  // If it's a full datetime without timezone, treat as Shanghai local time and format directly
   const fullNoTZ = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/.exec(raw);
-  let d: Date;
   if (fullNoTZ) {
     const [, yyyy, mm, dd, HH, MM, SS] = fullNoTZ;
-    // Append explicit +08:00 to avoid engines treating it as UTC
-    d = new Date(`${yyyy}-${mm}-${dd}T${HH}:${MM}:${SS}+08:00`);
-  } else {
-    d = new Date(raw);
+    // 直接格式化，避免时区转换问题
+    if (locale === "zh") {
+      return `${yyyy}年${mm}月${dd}日 ${HH}:${MM}:${SS}`;
+    }
+    return `${yyyy}-${mm}-${dd} ${HH}:${MM}:${SS}`;
   }
+  
+  // For other formats, use Date parsing with timezone formatting
+  const d = new Date(raw);
   if (Number.isNaN(d.getTime())) return v; // fallback to raw
+  
   const rtf = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
     timeZone: "Asia/Shanghai",
     year: "numeric",

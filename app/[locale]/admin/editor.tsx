@@ -82,7 +82,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
               setContent((prev) => `${prev}\n\n${md}`);
             }
             setMessage(t('imageInserted'));
-          } catch (err) {
+          } catch {
             setMessage(t('uploadImageFailed'));
           }
           return; // only handle the first image
@@ -111,8 +111,9 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       const data = await res.json();
       if (data.url) router.push(data.url as string);
       else setMessage(`${t('successPrefix')}${data.path || editingSlug}`);
-    } catch (e: any) {
-      setMessage(e?.message || t('publishFailed'));
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : t('publishFailed');
+      setMessage(errorMessage);
     } finally {
       setPublishing(false);
     }
@@ -168,8 +169,9 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         setMessage(`${t("successPrefix")}${data.path}`);
         if (data.url) router.push(data.url as string);
       }
-    } catch (err: any) {
-      setMessage(err.message || String(err));
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setMessage(errorMessage);
     } finally {
       setPublishing(false);
     }
@@ -191,8 +193,12 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       setSlug(leaf);
       setEditingSlug(full);
       setMessage(t('loadedDraft'));
-    } catch (e: any) {
-      setMessage(e?.message || t('loadDraftFailed'));
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setMessage(e.message || t('loadDraftFailed'));
+      } else {
+        setMessage(t('loadDraftFailed'));
+      }
     }
   };
 
@@ -216,8 +222,9 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       setMessage(t('draftUpdated'));
       setEditingSlug(editingSlug); // stay in edit mode
       loadDrafts();
-    } catch (e: any) {
-      setMessage(e?.message || t('updateDraftFailed'));
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : t('updateDraftFailed');
+      setMessage(errorMessage);
     } finally {
       setPublishing(false);
     }
@@ -290,30 +297,34 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         />
       </label>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          disabled={publishing}
-          onClick={(e) => {
-            if (editingSlug) publishEditingDraft();
-            else submit(e as any, false);
-          }}
-          className="h-9 px-4 rounded border bg-foreground text-background disabled:opacity-50"
-        >
-          {publishing ? t("publishing") : t("publish")}
-        </button>
-        <button
-          type="button"
-          disabled={publishing}
-          onClick={(e) => {
-            if (editingSlug) saveDraftEdits();
-            else submit(e as any, true);
-          }}
-          className="h-9 px-4 rounded border bg-muted text-foreground disabled:opacity-50"
-        >
-          {publishing ? t("savingDraft") : t("saveDraft")}
-        </button>
-        {message && <span className="text-sm text-muted-foreground">{message}</span>}
+      <div className="space-y-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <button
+            type="button"
+            disabled={publishing}
+            onClick={(e) => {
+              e.preventDefault();
+              if (editingSlug) publishEditingDraft();
+              else submit(e, false);
+            }}
+            className="h-9 px-4 rounded border bg-foreground text-background disabled:opacity-50 whitespace-nowrap"
+          >
+            {publishing ? t("publishing") : t("publish")}
+          </button>
+          <button
+            type="button"
+            disabled={publishing}
+            onClick={(e) => {
+              e.preventDefault();
+              if (editingSlug) saveDraftEdits();
+              else submit(e, true);
+            }}
+            className="h-9 px-4 rounded border bg-muted text-foreground disabled:opacity-50 whitespace-nowrap"
+          >
+            {publishing ? t("savingDraft") : t("saveDraft")}
+          </button>
+        </div>
+        {message && <div className="text-sm text-muted-foreground break-words">{message}</div>}
       </div>
       {editingSlug && (
         <p className="text-xs text-muted-foreground flex items-center gap-2">
@@ -362,7 +373,7 @@ export function DraftsSection({
 }: {
   locale: string;
   adminToken: string;
-  t: (key: string, values?: Record<string, any>) => string;
+  t: ReturnType<typeof useTranslations>;
   drafts: Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }>;
   draftsLoading: boolean;
   draftsError?: string;
@@ -388,7 +399,7 @@ export function DraftsSection({
       const data = await res.json();
       if (onPublished) onPublished(slug);
       if (data.url) router.push(data.url);
-    } catch (e) {
+    } catch {
       // noop: keep simple for now
     }
   };

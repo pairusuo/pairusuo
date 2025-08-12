@@ -84,7 +84,6 @@ export async function POST(req: NextRequest) {
   const hh = parts.find((p) => p.type === "hour")?.value || "00";
   const mm = parts.find((p) => p.type === "minute")?.value || "00";
   const ss = parts.find((p) => p.type === "second")?.value || "00";
-  const shDate = `${y}-${m}-${d}`; // YYYY-MM-DD
   const shDateTime = `${y}-${m}-${d} ${hh}:${mm}:${ss}`; // YYYY-MM-DD HH:mm:ss in Asia/Shanghai
 
   // If slug has no directory, prefix with yyyy/mm
@@ -99,8 +98,8 @@ export async function POST(req: NextRequest) {
     `---`,
     `title: ${title.replace(/"/g, '\\"')}`,
     summary ? `summary: ${summary.replace(/"/g, '\\"')}` : undefined,
-    `publishedAt: ${shDateTime}`,
-    `updatedAt: ${shDateTime}`,
+    `publishedAt: "${shDateTime}"`,
+    `updatedAt: "${shDateTime}"`,
     `draft: ${draft ? 'true' : 'false'}`,
     `---`,
   ]
@@ -121,8 +120,8 @@ export async function POST(req: NextRequest) {
       // not exists, safe to write
     }
     await fs.writeFile(filePath, fileContent, "utf8");
-  } catch (err: any) {
-    return badRequest(`Failed to write file: ${err?.message || String(err)}`, 500);
+  } catch (err: unknown) {
+    return badRequest(`Failed to write file: ${err instanceof Error ? err.message : String(err)}`, 500);
   }
 
   const url = draft ? null : (locale === "zh" ? `/blog/${slug}` : `/en/blog/${slug}`);

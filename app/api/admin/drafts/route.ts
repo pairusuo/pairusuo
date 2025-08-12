@@ -49,8 +49,8 @@ export async function PUT(req: NextRequest) {
     const nextFile = matter.stringify(newContent, newData);
     await fs.writeFile(filePath, nextFile, 'utf8');
     return NextResponse.json({ ok: true, path: filePath, slug: body.slug });
-  } catch (e: any) {
-    return badRequest(`Failed to update draft: ${e?.message || String(e)}`, 500);
+  } catch (e: unknown) {
+    return badRequest(`Failed to update draft: ${e instanceof Error ? e.message : String(e)}`, 500);
   }
 }
 
@@ -71,13 +71,13 @@ function isLocale(v: string): v is "zh" | "en" {
 async function listDrafts(locale: "zh" | "en") {
   const baseDir = path.join(CONTENT_ROOT, locale);
   const results: Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }> = [];
-  async function walk(dir: string, relBase: string) {
+  async function walk(dir: string) {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
       const rel = path.relative(baseDir, full);
       if (entry.isDirectory()) {
-        await walk(full, rel);
+        await walk(full);
       } else if (entry.isFile() && entry.name.endsWith(".mdx")) {
         const slug = rel.replace(/\.mdx$/, '').split(path.sep).join('/');
         const source = await fs.readFile(full, 'utf8');
@@ -105,8 +105,8 @@ async function listDrafts(locale: "zh" | "en") {
     }
   }
   try {
-    await walk(baseDir, '');
-  } catch (e) {
+    await walk(baseDir);
+  } catch {
     // ignore if directory not exists
   }
   // Sort by last updated time desc (updatedAt fallback to publishedAt)
@@ -188,8 +188,9 @@ export async function GET(req: NextRequest) {
           updatedAt: (fm.updatedAt as string) || '',
         },
       });
-    } catch (e: any) {
-      return badRequest(`Failed to read draft: ${e?.message || String(e)}`, 404);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      return badRequest(`Failed to read draft: ${errorMessage}`, 404);
     }
   }
   const drafts = await listDrafts(locale);
@@ -229,7 +230,8 @@ export async function POST(req: NextRequest) {
     await fs.writeFile(filePath, nextContent, 'utf8');
     const url = locale === 'zh' ? `/blog/${body.slug}` : `/en/blog/${body.slug}`;
     return NextResponse.json({ ok: true, path: filePath, url, slug: body.slug });
-  } catch (err: any) {
-    return badRequest(`Failed to publish draft: ${err?.message || String(err)}`, 500);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    return badRequest(`Failed to publish draft: ${errorMessage}`, 500);
   }
 }
