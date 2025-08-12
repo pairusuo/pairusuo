@@ -32,8 +32,15 @@ export function formatDateTime(v?: string | null, locale: string = "zh") {
     return `${yyyy}-${mm}-${dd} ${HH}:${MM}:${SS}`;
   }
   
-  // For other formats, use Date parsing with timezone formatting
-  const d = new Date(raw);
+  // For other formats, try to parse as Shanghai local time first
+  const isoNoTZ = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/.exec(raw);
+  let d: Date;
+  if (isoNoTZ) {
+    // Parse as Shanghai time by appending +08:00
+    d = new Date(`${raw}+08:00`);
+  } else {
+    d = new Date(raw);
+  }
   if (Number.isNaN(d.getTime())) return v; // fallback to raw
   
   const rtf = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
