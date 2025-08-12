@@ -1,0 +1,30 @@
+---
+title: CloudFlare R2 Object Storage的使用
+summary: 使用CF的对象存储保存图片
+publishedAt: 2025-08-12 13:23:56
+updatedAt: 2025-08-12 13:23:56
+draft: false
+---
+
+![image](https://image.pairusuo.top/uploads/2025/08/vgnq45fh1e.png)
+之前做文生图网站时，就考虑了使用R2来存放用户生成的图片，因为有免费的额度，每月10G，超过部份每1G/月，收费0.015美金，一毛多，还是挺便宜的。当时没搞定境外付款，临时使用腾讯的COS，现在做个人博客，感觉也是需要存图片的，就再试一次。绑卡的步骤就不写了，挺简单的，忘记截图了。从创建桶，创建API Token开始，一边操作一边写这篇文章。
+![image](https://image.pairusuo.top/uploads/2025/08/cwpobo27vq.png)
+自定义桶名bucket name，其他用默认即可。（页面可以切换为中文，但是我要求自己坚持看英文界面）
+![image](https://image.pairusuo.top/uploads/2025/08/fb47bfpep3.png)
+接着创建API Token，创建完成后会有几个参数，创建完成时才显示，后面都看不到了，记得保存好。推荐创建Account API Tokens，还有一种是用户token，和组织相关，就是颗粒度更细的分类，暂时可以不用管。
+![image](https://image.pairusuo.top/uploads/2025/08/36voqa9cjr.png)
+![image](https://image.pairusuo.top/uploads/2025/08/mkxjgox76v.png)
+自定义名称，权限配置为读写，指定具体的桶（支持多个）
+![image](https://image.pairusuo.top/uploads/2025/08/h8z9rqi25i.png)
+安全起见，还可以配置IP白名单（支持多个），我配置了我个人博客的IP，在vercel上部署后，绑定域名的时候能看到这个IP，之后就看不到了，不过我在CloudFlare上托管了域名，需要配置DNS，那里会有这个IP。
+![image](https://image.pairusuo.top/uploads/2025/08/m25lkzpe1l.png)
+创建成功后保存好这几个值，后面查不到了，只在创建成功时展示（这里只需要用到 Access Key ID 和Secret Key ID）。其实坚持英文界面还有一个考虑，就是这些key, secret翻译成中文后，总感觉味不对，到环境变量填写参数时多少有点疑问，所以不如保持英文界面，强迫自己阅读英语的同时，也为参数填写提供了一点点便利。
+![image](https://image.pairusuo.top/uploads/2025/08/ug26skwpu5.png)
+AccountID，最快的方式是从URL里复制，你进任何页面，这个32位的数字加字母都不会变，这就是你的AccountID，看下图
+![image](https://image.pairusuo.top/uploads/2025/08/i1r7xytnhk.png)
+创建完成后，权限，桶，IP白名单也是可以修改的。
+![image](https://image.pairusuo.top/uploads/2025/08/sdjv3m0l3l.png)
+还有一个R2_PUBLIC_BASE，最终对外可访问的基础域名，这里我添加自定义域名（R2 → 进入你的 Bucket → Settings → Public access → Enable开启后会有一个公共域名，这个我没找到，还是用自己的域名吧），添加完成后CloudFlare会自动添加一条DNS解析，域名刚好也托管在这里，很方便。
+![image](https://image.pairusuo.top/uploads/2025/08/b6aw3f46qy.png)
+到这里所有的参数都配置完毕了，接下来就是让AI改代码，实现上传的逻辑了：上传逻辑变为优先上传到 R2 成功则不保存在本地，只有当 R2 不可用或失败时才保存到本地，并返回本地可访问的 URL。本地测试了一下，没啥问题，我的博客源代码是开源的，本次的修改也会提交到https://github.com/pairusuo/pairusuo.git
+后续其他人想要使用只需要配CloudFlare R2相关的参数即可。这篇文章也同步在博客更新了。
