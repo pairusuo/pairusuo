@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "url": "https://nextjs.org",
+    "name": "Next.js",
+    "desc": "The React Framework for Production"
+  },
+  {
+    "url": "https://tailwindcss.com",
+    "name": "Tailwind CSS",
+    "desc": "A utility-first CSS framework"
+  },
+  {
+    "url": "https://vercel.com",
+    "name": "Vercel",
+    "desc": "Platform for frontend frameworks and static sites"
+  },
+  {
+    "url": "https://github.com",
+    "name": "GitHub",
+    "desc": "Where the world builds software"
+  },
+  {
+    "url": "https://mdxjs.com",
+    "name": "MDX",
+    "desc": "Markdown for the component era"
+  }
+]

@@ -3,6 +3,16 @@
     "title": "pairusuo",
     "description": "Personal blog"
   },
+  "header": {
+    "home": "Home",
+    "blog": "Blog",
+    "links": "Links",
+    "about": "About"
+  },
+  "footer": {
+    "builtWith": "Built with",
+    "andSeparator": " · "
+  },
   "home": {
     "welcome": "Welcome to my blog",
     "subtitle": "Sharing tech, product and thoughts",
@@ -12,7 +22,15 @@
     "other": "Personal information to be supplemented.",
     "tagsTitle": "Tags",
     "tags": ["Freshman"],
-    "readingTime": "{minutes, plural, one {# min read} other {# min read}}"
+    "readingTime": "{minutes, plural, one {# min read} other {# min read}}",
+    "personalInfo": {
+      "name": "pairusuo",
+      "title": "Freshman in the field of website builder, a follower of Ge Fei",
+      "description": "Personal blog, sharing tech insights and entrepreneurial experiences",
+      "specialTags": [
+        
+      ]
+    }
   },
   "about": {
     "title": "About the Author",

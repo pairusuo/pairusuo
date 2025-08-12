@@ -3,6 +3,16 @@
     "title": "pairusuo",
     "description": "个人博客"
   },
+  "header": {
+    "home": "首页",
+    "blog": "博客",
+    "links": "友链",
+    "about": "关于"
+  },
+  "footer": {
+    "builtWith": "基于",
+    "andSeparator": " · "
+  },
   "home": {
     "welcome": "欢迎来到我的博客",
     "subtitle": "分享技术、产品与思考",
@@ -11,8 +21,21 @@
     "empty": "暂时还没有文章。",
     "other": "个人信息待补充。",
     "tagsTitle": "标签",
-    "tags": ["准出海人", "出海人", "GitHub老玩家新提交者"],
-    "readingTime": "{minutes, plural, one {# 分钟阅读} other {# 分钟阅读}}"
+    "tags": ["准出海人", "GitHub老玩家新提交者"],
+    "readingTime": "{minutes, plural, one {# 分钟阅读} other {# 分钟阅读}}",
+    "personalInfo": {
+      "name": "pairusuo",
+      "title": "出海新人，哥飞追随者",
+      "description": "个人博客，分享技术心得与出海经验",
+      "specialTags": [
+        {
+          "text": "labubu持有者",
+          "url": "https://changelabubuclothes.art/",
+          "color": "blue",
+          "tooltip": "试试点击我"
+        }
+      ]
+    }
   },
   "about": {
     "title": "关于作者",

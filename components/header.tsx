@@ -1,11 +1,17 @@
 "use client";
 import Link from "next/link";
 import { Logo } from "./logo";
-import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useState, useId } from "react";
 import ThemeToggle from "./theme-toggle";
 import LangSwitcher from "./lang-switcher";
+
+interface HeaderTranslations {
+  home: string;
+  blog: string;
+  links: string;
+  about: string;
+}
 
 function NavItem({ href, label, isActive }: { href: string; label: string; isActive: boolean }) {
   return (
@@ -27,18 +33,20 @@ function NavItem({ href, label, isActive }: { href: string; label: string; isAct
   );
 }
 
-export default function Header({ locale }: { locale: string }) {
-  const t = useTranslations("header");
+export default function Header({ locale, translations }: { 
+  locale: string;
+  translations: HeaderTranslations;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuId = useId();
 
   const base = `/${locale}`;
   const items = [
-    { href: base, key: "home", match: (p: string) => p === base },
-    { href: `${base}/blog`, key: "blog", match: (p: string) => p.startsWith(`${base}/blog`) },
-    { href: `${base}/links`, key: "links", match: (p: string) => p.startsWith(`${base}/links`) },
-    { href: `${base}/about`, key: "about", match: (p: string) => p.startsWith(`${base}/about`) },
+    { href: base, key: "home" as keyof HeaderTranslations, match: (p: string) => p === base },
+    { href: `${base}/blog`, key: "blog" as keyof HeaderTranslations, match: (p: string) => p.startsWith(`${base}/blog`) },
+    { href: `${base}/links`, key: "links" as keyof HeaderTranslations, match: (p: string) => p.startsWith(`${base}/links`) },
+    { href: `${base}/about`, key: "about" as keyof HeaderTranslations, match: (p: string) => p.startsWith(`${base}/about`) },
   ];
 
   return (
@@ -51,7 +59,7 @@ export default function Header({ locale }: { locale: string }) {
             <NavItem
               key={it.key}
               href={it.href}
-              label={t(it.key as any)}
+              label={translations[it.key]}
               isActive={it.match(pathname || "")}
             />
           ))}
@@ -102,7 +110,7 @@ export default function Header({ locale }: { locale: string }) {
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm",
               ].join(" ")}
             >
-              {t(it.key as any)}
+              {translations[it.key]}
             </Link>
           ))}
         </nav>

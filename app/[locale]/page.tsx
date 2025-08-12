@@ -1,8 +1,77 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { loadBase } from "@/lib/messages";
 import { getAllPostMeta, PostMeta } from "@/lib/posts";
 import { formatDateTime } from "@/lib/utils";
+import { PersonalTag } from "@/components/ui/personal-tag";
+import type { Metadata } from "next";
+
+type PersonalTagType = {
+  text: string;
+  url?: string;
+  color?: string;
+  tooltip?: string;
+};
+
+// Generate dynamic metadata for the home page
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ locale: string }> 
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "site" });
+  const homeT = await getTranslations({ locale, namespace: "home" });
+  
+  const title = t("title");
+  const description = homeT("subtitle");
+  const baseUrl = "https://pairusuo.top"; // 替换为你的实际域名
+  const url = locale === "zh" ? baseUrl : `${baseUrl}/${locale}`;
+  
+  return {
+    title,
+    description,
+    keywords: locale === "zh" 
+      ? "pairusuo, 个人博客, 出海, 技术分享, Next.js, React"
+      : "pairusuo, personal blog, tech, Next.js, React",
+    authors: [{ name: "pairusuo" }],
+    creator: "pairusuo",
+    publisher: "pairusuo",
+    alternates: {
+      canonical: url,
+      languages: {
+        'zh': baseUrl,
+        'en': `${baseUrl}/en`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: title,
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      creator: "@pairusuo", // 替换为你的 Twitter 用户名
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  };
+}
 
 // Revalidate the home list periodically to pick up new posts without a full rebuild.
 export const revalidate = 300; // seconds
@@ -13,6 +82,23 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const base = await loadBase(locale);
   const tags: string[] = Array.isArray(base?.home?.tags) ? (base.home.tags as string[]) : [];
   const posts: PostMeta[] = getAllPostMeta(locale as "zh" | "en").slice(0, 10);
+  
+  // Get personal tags from translations
+  const personalInfo = t.raw("personalInfo") as { 
+    name: string; 
+    title: string; 
+    description: string; 
+    specialTags?: PersonalTagType[] 
+  };
+  const specialTags: PersonalTagType[] = Array.isArray(personalInfo?.specialTags) 
+    ? personalInfo.specialTags 
+    : [];
+  
+  // Combine regular tags with special tags
+  const allTags = [
+    ...tags.map(tag => ({ text: tag, color: "default" })),
+    ...specialTags
+  ];
 
   return (
     <section className="space-y-6">
@@ -49,21 +135,41 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           )}
         </div>
 
-        {/* Sidebar: reserved for other content */}
+        {/* Sidebar: personal info and other content */}
         <aside className="space-y-4">
-          <div className="border rounded p-4 min-h-[160px] flex items-center justify-center text-muted-foreground">
-            {t("other")}
+          {/* Personal Info Card */}
+          <div className="border rounded p-4 space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0">
+                <Image
+                  src="https://image.pairusuo.top/uploads/2025/08/%E9%A9%AC%E5%B0%94%E4%BB%A3%E5%A4%AB.jpg"
+                  alt="pairusuo"
+                  width={64}
+                  height={64}
+                  className="object-cover object-right w-full h-full"
+                  priority
+                  sizes="64px"
+                />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-medium">{t("personalInfo.name")}</h3>
+                <p className="text-sm text-muted-foreground">{t("personalInfo.title")}</p>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t("personalInfo.description")}
+            </p>
           </div>
+          
+          {/* Tags */}
           <div className="border rounded p-4">
             <div className="text-sm font-medium mb-2">{t("tagsTitle")}</div>
-            {tags.length === 0 ? (
+            {allTags.length === 0 ? (
               <p className="text-sm text-muted-foreground">—</p>
             ) : (
               <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 text-xs rounded-full border bg-muted">
-                    {tag}
-                  </span>
+                {allTags.map((tag, index) => (
+                  <PersonalTag key={index} tag={tag} index={index} />
                 ))}
               </div>
             )}

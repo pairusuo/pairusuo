@@ -24,6 +24,16 @@ const nextConfig: NextConfig = {
     // Avoid failing Vercel builds due to lint errors; we still lint locally/CI if desired
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.pairusuo.top",
+        port: "",
+        pathname: "/uploads/**",
+      },
+    ],
+  },
 };
 const withNextIntl = createNextIntlPlugin();
 

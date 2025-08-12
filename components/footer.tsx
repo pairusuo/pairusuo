@@ -1,6 +1,6 @@
 "use client";
 
-export default function Footer({ locale }: { locale: string }) {
+export default function Footer() {
 
   return (
     <footer
