@@ -32,9 +32,13 @@
           "text": "labubu持有者",
           "url": "https://changelabubuclothes.art/",
           "color": "blue",
-          "tooltip": "试试点击我"
+          "tooltip": "点击跳转"
         }
-      ]
+      ],
+      "qrcode": {
+        "alt": "微信公众号二维码",
+        "label": "微信公众号"
+      }
     }
   },
   "about": {

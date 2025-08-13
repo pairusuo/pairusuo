@@ -20,13 +20,13 @@ export default function LangSwitcher({ currentLocale }: { currentLocale: string 
     if (target === "zh") {
       // zh is default (no prefix). If base is empty, go to root.
       const nextPath = normalizedBase === "" ? "/" : normalizedBase;
-      try { router.prefetch(nextPath as any); } catch {}
+      try { router.prefetch(nextPath); } catch {}
       router.replace(nextPath);
     } else if (target === "en") {
       // ensure /en prefix
       const rest = normalizedBase === "/" ? "" : normalizedBase;
       const nextPath = rest.startsWith("/en") ? rest : (rest === "/" ? "/en" : "/en" + rest);
-      try { router.prefetch(nextPath as any); } catch {}
+      try { router.prefetch(nextPath); } catch {}
       router.replace(nextPath);
     }
   };

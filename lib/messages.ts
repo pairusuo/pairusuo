@@ -1,4 +1,4 @@
-export type AnyDict = Record<string, any>;
+export type AnyDict = Record<string, unknown>;
 
 export async function loadNamespace(locale: string, namespace: string): Promise<AnyDict> {
   const l = (locale || 'zh').toLowerCase();

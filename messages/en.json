@@ -29,7 +29,11 @@
       "description": "Personal blog, sharing tech insights and entrepreneurial experiences",
       "specialTags": [
         
-      ]
+      ],
+      "qrcode": {
+        "alt": "WeChat Official Account QR Code",
+        "label": "WeChat Official Account"
+      }
     }
   },
   "about": {
