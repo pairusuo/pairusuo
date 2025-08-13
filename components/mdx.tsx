@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const MDXComponents: Record<string, React.ComponentType<any>> = {
+export const MDXComponents: Record<string, React.ComponentType<React.HTMLAttributes<HTMLElement>>> = {
   h1: (props) => <h1 className="text-3xl font-semibold tracking-tight mt-6 mb-4" {...props} />,
   h2: (props) => <h2 className="text-2xl font-semibold tracking-tight mt-6 mb-3" {...props} />,
   p: (props) => <p className="leading-7 [&:not(:first-child)]:mt-4" {...props} />,

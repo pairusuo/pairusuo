@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export interface LogoProps {
+export interface LogoProps extends Omit<React.ComponentProps<typeof Link>, 'href'> {
   /** Preset size: header/footer */
   size?: "header" | "footer";
   /** Custom width, higher priority than size */
@@ -129,7 +129,7 @@ export function Logo({
     <Link
       href={href}
       className={("flex items-center gap-2 hover:opacity-80 transition-opacity " + (className || "")).trim()}
-      {...(props as any)}
+      {...props}
     >
       <LogoSVG width={logoWidth} height={logoHeight} className="object-contain" />
       {showText && <span className="font-semibold text-lg text-foreground">pairusuo</span>}

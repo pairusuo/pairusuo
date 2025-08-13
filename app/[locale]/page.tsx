@@ -80,7 +80,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home" });
   const base = await loadBase(locale);
-  const tags: string[] = Array.isArray(base?.home?.tags) ? (base.home.tags as string[]) : [];
+  const homeData = base.home as { tags?: string[] } | undefined;
+  const tags: string[] = Array.isArray(homeData?.tags) ? homeData.tags : [];
   const posts: PostMeta[] = getAllPostMeta(locale as "zh" | "en").slice(0, 10);
   
   // Get personal tags from translations
@@ -142,11 +143,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <div className="flex items-center gap-3">
               <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0">
                 <Image
-                  src="https://image.pairusuo.top/uploads/2025/08/%E9%A9%AC%E5%B0%94%E4%BB%A3%E5%A4%AB.jpg"
+                  src="/info.png"
                   alt="pairusuo"
                   width={64}
                   height={64}
-                  className="object-cover object-right w-full h-full"
+                  className="object-cover object-center w-full h-full"
                   priority
                   sizes="64px"
                 />
@@ -173,6 +174,23 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 ))}
               </div>
             )}
+          </div>
+
+          {/* WeChat Official Account */}
+          <div className="border rounded p-4">
+            <div className="text-sm font-medium mb-3 text-center">{t("personalInfo.qrcode.label")}</div>
+            <div className="flex items-center justify-center">
+              <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white">
+                <Image
+                  src="/qrcode.jpg"
+                  alt={t("personalInfo.qrcode.alt")}
+                  width={96}
+                  height={96}
+                  className="object-contain w-full h-full"
+                  sizes="96px"
+                />
+              </div>
+            </div>
           </div>
         </aside>
       </div>
