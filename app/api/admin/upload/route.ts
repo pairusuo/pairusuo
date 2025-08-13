@@ -4,12 +4,19 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
 // Optional R2 via S3-compatible API
-let S3Client: any;
-let PutObjectCommand: any;
-try {
-  // lazy import to avoid bundling if not configured
-  ({ S3Client, PutObjectCommand } = require("@aws-sdk/client-s3"));
-} catch {}
+let S3Client: typeof import('@aws-sdk/client-s3').S3Client | undefined;
+let PutObjectCommand: typeof import('@aws-sdk/client-s3').PutObjectCommand | undefined;
+
+async function initAWS() {
+  if (S3Client && PutObjectCommand) return;
+  try {
+    const awsSdk = await import('@aws-sdk/client-s3');
+    S3Client = awsSdk.S3Client;
+    PutObjectCommand = awsSdk.PutObjectCommand;
+  } catch {
+    // AWS SDK not available
+  }
+}
 
 function randomId(len = 8) {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -19,6 +26,9 @@ function randomId(len = 8) {
 }
 
 export async function POST(req: NextRequest) {
+  // Initialize AWS SDK if needed
+  await initAWS();
+
   const adminTokenHeader = req.headers.get("x-admin-token") || "";
   const serverToken = process.env.ADMIN_TOKEN || "";
   if (!serverToken || adminTokenHeader !== serverToken) {
@@ -44,7 +54,7 @@ export async function POST(req: NextRequest) {
   const arrayBuffer = await file.arrayBuffer();
 
   // Prefer uploading to R2 first. Only fall back to local if R2 unavailable or upload fails.
-  let r2Key = `uploads/${yyyy}/${mm}/${name}`;
+  const r2Key = `uploads/${yyyy}/${mm}/${name}`;
   let r2Url: string | undefined = undefined;
   const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID || process.env.CF_ACCOUNT_ID;
   const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID;
@@ -53,7 +63,7 @@ export async function POST(req: NextRequest) {
   const R2_PUBLIC_BASE = process.env.R2_PUBLIC_BASE; // e.g. https://r2-cdn.example.com
   const R2_ENDPOINT = process.env.R2_ENDPOINT; // optional full endpoint override
 
-  if (S3Client && R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY) {
+  if (S3Client && PutObjectCommand && R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY) {
     try {
       const endpoint = R2_ENDPOINT || `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
       const client = new S3Client({
@@ -77,7 +87,7 @@ export async function POST(req: NextRequest) {
     } catch (e) {
       // Ignore R2 failure; local url still returned
       console.warn("R2 upload failed", {
-        err: (e as any)?.message || String(e),
+        err: (e instanceof Error ? e.message : String(e)),
         endpoint: (R2_ENDPOINT ? 'custom' : 'default')
       });
     }

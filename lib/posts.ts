@@ -44,13 +44,13 @@ export const listPostSlugs = cache(function listPostSlugs(locale: 'zh' | 'en') {
   }
 
   const slugs: string[] = [];
-  const walk = (dir: string, prefix = '') => {
+  const walk = (dir: string) => {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
       const rel = path.relative(baseDir, full);
       if (entry.isDirectory()) {
-        walk(full, rel);
+        walk(full);
       } else if (entry.isFile() && entry.name.endsWith('.mdx')) {
         const s = rel.replace(/\.mdx$/, '').split(path.sep).join('/');
         slugs.push(s);
@@ -111,13 +111,13 @@ export const getPostMeta = cache(function getPostMeta(locale: 'zh' | 'en', slug:
   return meta;
 });
 
-export async function getPost(locale: 'zh' | 'en', slug: string): Promise<CompiledPost | null> {
+export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: string): Promise<CompiledPost | null> {
   const filePath = getPostFilePath(locale, slug);
   if (!fs.existsSync(filePath)) return null;
   const source = fs.readFileSync(filePath, 'utf8');
 
   const { content, data } = matter(source);
-  const mdx = await compileMDX<{ [key: string]: any }>({
+  const mdx = await compileMDX<Record<string, unknown>>({
     source: content,
     options: {
       parseFrontmatter: false,
@@ -157,7 +157,7 @@ export async function getPost(locale: 'zh' | 'en', slug: string): Promise<Compil
   };
 
   return { meta, content: mdx.content };
-}
+});
 
 export function getAllPostMeta(locale: 'zh' | 'en'): PostMeta[] {
   const slugs = listPostSlugs(locale);
