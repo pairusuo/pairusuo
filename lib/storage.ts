@@ -1,5 +1,4 @@
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
+// R2-only storage implementation
 
 // R2 (S3-compatible)
 let S3Client: typeof import('@aws-sdk/client-s3').S3Client | undefined;
@@ -61,87 +60,24 @@ function isR2Enabled() {
   );
 }
 
-// Prefix root for posts when using FS
-const CONTENT_ROOT = path.join(process.cwd(), 'content', 'posts');
-
-function fsKeyToPath(key: string) {
-  // posts/zh/2025/08/slug.mdx -> content/posts/zh/2025/08/slug.mdx
-  const rel = key.replace(/^posts\//, '');
-  return path.join(CONTENT_ROOT, rel);
-}
-
-const fsStorage: Storage = {
-  async list(prefix: string) {
-    // prefix like 'posts/zh/' or 'posts/en/'
-    const base = fsKeyToPath(prefix);
-    const out: string[] = [];
-    async function walk(dir: string) {
-      let entries: import('node:fs').Dirent[] = [];
-      try {
-        entries = await fs.readdir(dir, { withFileTypes: true });
-      } catch {
-        return;
-      }
-      for (const e of entries) {
-        const full = path.join(dir, e.name);
-        if (e.isDirectory()) await walk(full);
-        else if (e.isFile()) {
-          const rel = path.relative(fsKeyToPath(''), full).split(path.sep).join('/');
-          out.push(`posts/${rel}`);
-        }
-      }
-    }
-    await walk(base);
-    return out.filter((k) => k.startsWith(prefix));
-  },
-  async read(key: string) {
-    try {
-      const p = fsKeyToPath(key);
-      const data = await fs.readFile(p, 'utf8');
-      return data;
-    } catch {
-      return null;
-    }
-  },
-  async write(key: string, content: string) {
-    const p = fsKeyToPath(key);
-    await fs.mkdir(path.dirname(p), { recursive: true });
-    await fs.writeFile(p, content, 'utf8');
-  },
-  async exists(key: string) {
-    try {
-      const p = fsKeyToPath(key);
-      await fs.access(p);
-      return true;
-    } catch {
-      return false;
-    }
-  },
-  async delete(key: string) {
-    try {
-      const p = fsKeyToPath(key);
-      await fs.unlink(p);
-    } catch {
-      // ignore if not exists
-    }
-  },
-};
-
+let cachedS3: import('@aws-sdk/client-s3').S3Client | null = null;
 async function r2Client() {
   const { S3Client } = await getAWS();
-  const accountId = process.env.R2_ACCOUNT_ID || process.env.CF_ACCOUNT_ID!;
-  const endpoint = process.env.R2_ENDPOINT || `https://${accountId}.r2.cloudflarestorage.com`;
-  const client = new S3Client({
-    region: 'auto',
-    endpoint,
-    forcePathStyle: true,
-    credentials: {
-      accessKeyId: process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY!,
-    },
-  });
+  if (!cachedS3) {
+    const accountId = process.env.R2_ACCOUNT_ID || process.env.CF_ACCOUNT_ID!;
+    const endpoint = process.env.R2_ENDPOINT || `https://${accountId}.r2.cloudflarestorage.com`;
+    cachedS3 = new S3Client({
+      region: 'auto',
+      endpoint,
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
+  }
   const bucket = process.env.R2_BUCKET!;
-  return { client, bucket };
+  return { client: cachedS3, bucket };
 }
 
 const r2Storage: Storage = {
@@ -203,10 +139,10 @@ const r2Storage: Storage = {
 
 export function getStorage(): Storage {
   if (!isR2Enabled()) {
-    // 无 R2 配置时，默认使用本地文件系统存储（开发态）
-    return fsStorage;
+    throw new Error(
+      'R2 is not configured. Please set R2_ACCOUNT_ID/CF_ACCOUNT_ID, R2_ACCESS_KEY_ID/AWS_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY/AWS_SECRET_ACCESS_KEY, and R2_BUCKET.'
+    );
   }
-  // 配置了 R2 时，使用 R2（生产态）
   return r2Storage;
 }
 

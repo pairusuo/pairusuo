@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { formatDateTime } from "@/lib/utils";
 import type { Metadata } from "next";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 // Generate static params for all posts
 export async function generateStaticParams() {

@@ -1,4 +1,3 @@
-import path from 'node:path';
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
 import { compileMDX } from 'next-mdx-remote/rsc';
@@ -31,12 +30,20 @@ export type CompiledPost = {
   content: React.ReactNode;
 };
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'posts');
+// R2-only: local FS helpers removed
 
-export function getPostFilePath(locale: 'zh' | 'en', slug: string) {
-  // kept for compatibility; storage uses keys via postKey
-  const p1 = path.join(CONTENT_DIR, locale, `${slug}.mdx`);
-  return p1;
+// Dev helpers: in-memory cache and timers
+const __DEV__ = process.env.NODE_ENV !== 'production';
+type DevCacheEntry = { hash: string; node: React.ReactNode };
+const devCompileCache: Map<string, DevCacheEntry> | undefined = __DEV__ ? new Map() : undefined;
+
+function hashString(input: string): string {
+  // lightweight non-crypto hash (djb2)
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) {
+    h = (h * 33) ^ input.charCodeAt(i);
+  }
+  return (h >>> 0).toString(16);
 }
 
 export const listPostSlugs = cache(async function listPostSlugs(locale: 'zh' | 'en') {
@@ -116,34 +123,57 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
   // 导致 "Objects are not valid as a React child" 报错。
   const storage = getStorage();
   const key = postKey(locale, slug);
-  const source = await storage.read(key);
+  // cached string reader avoids re-reading from R2; safe to cache (not React nodes)
+  const readPostSource = unstable_cache(
+    async (k: string) => {
+      if (__DEV__) console.time(`[posts] read ${k}`);
+      const s = await storage.read(k);
+      if (__DEV__) console.timeEnd(`[posts] read ${k}`);
+      return s;
+    },
+    ['readPostSource', locale, slug],
+    { revalidate: 300, tags: [`post-${locale}-${slug}`, `posts-${locale}`] }
+  );
+  const source = await readPostSource(key);
   if (!source) return null;
 
   const { content, data } = matter(source);
-  const mdx = await compileMDX<Record<string, unknown>>({
-    source: content,
-    options: {
-      parseFrontmatter: false,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm, remarkFrontmatter],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }],
-          [
-            rehypePrettyCode,
-            {
-              keepBackground: false,
-              theme: {
-                light: 'github-light',
-                dark: 'github-dark',
+  // dev cache by content hash
+  const contentHash = __DEV__ ? hashString(content) : '';
+  const devHit = __DEV__ && devCompileCache!.get(key);
+  let compiledNode: React.ReactNode | null = null;
+  if (devHit && devHit.hash === contentHash) {
+    compiledNode = devHit.node;
+  } else {
+    if (__DEV__) console.time(`[posts] mdx ${key}`);
+    const mdx = await compileMDX<Record<string, unknown>>({
+      source: content,
+      options: {
+        parseFrontmatter: false,
+        mdxOptions: {
+          remarkPlugins: [remarkGfm, remarkFrontmatter],
+          rehypePlugins: [
+            rehypeSlug,
+            [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }],
+            [
+              rehypePrettyCode,
+              {
+                keepBackground: false,
+                theme: {
+                  light: 'github-light',
+                  dark: 'github-dark',
+                },
+                defaultLang: 'plaintext',
               },
-              defaultLang: 'plaintext',
-            },
+            ],
           ],
-        ],
+        },
       },
-    },
-  });
+    });
+    if (__DEV__) console.timeEnd(`[posts] mdx ${key}`);
+    compiledNode = mdx.content;
+    if (__DEV__) devCompileCache!.set(key, { hash: contentHash, node: compiledNode });
+  }
 
   const meta: PostMeta = {
     title: (data as any).title || slug,
@@ -159,7 +189,7 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
     draft: (data as any).draft ?? false,
   };
 
-  return { meta, content: mdx.content };
+  return { meta, content: compiledNode };
 });
 
 export async function getAllPostMeta(locale: 'zh' | 'en'): Promise<PostMeta[]> {

@@ -2,6 +2,7 @@ export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getStorage, postKey } from "@/lib/storage";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 function badRequest(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
@@ -117,5 +118,19 @@ export async function POST(req: NextRequest) {
   }
 
   const url = draft ? null : (locale === "zh" ? `/blog/${slug}` : `/en/blog/${slug}`);
+
+  try {
+    // 列表与元信息缓存标签
+    revalidateTag(`posts-${locale}`);
+    if (!draft) {
+      // 详情页的元信息标签
+      revalidateTag(`post-${locale}-${slug}`);
+      // 列表页与详情页路径（可选）
+      revalidatePath(locale === "zh" ? "/blog" : "/en/blog");
+      revalidatePath(url!);
+    }
+  } catch {
+    // revalidate 失败不应影响发布结果
+  }
   return NextResponse.json({ ok: true, path: key, url, slug, draft });
 }
