@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
-import { getLocale } from "next-intl/server";
+import { getLocale } from 'next-intl/server';
+import { getBaseUrl } from '@/lib/site';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,6 +21,17 @@ const notoSansSC = Noto_Sans_SC({
 export const metadata: Metadata = {
   title: "pairusuo",
   description: "Personal blog",
+  // Use metadataBase to build absolute URLs for OG, etc.
+  metadataBase: new URL(getBaseUrl()),
+  openGraph: {
+    siteName: 'pairusuo',
+    type: 'website',
+    locale: 'zh_CN',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@pairusuo',
+  },
 };
 
 export default async function RootLayout({

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { getBaseUrl } from "@/lib/site";
 import { loadBase } from "@/lib/messages";
 import { getAllPostMeta, PostMeta } from "@/lib/posts";
 import { formatDateTime } from "@/lib/utils";
@@ -26,8 +27,8 @@ export async function generateMetadata({
   
   const title = t("title");
   const description = homeT("subtitle");
-  const baseUrl = "https://pairusuo.top"; // 替换为你的实际域名
-  const url = locale === "zh" ? baseUrl : `${baseUrl}/${locale}`;
+  const baseUrl = getBaseUrl();
+  const url = locale === "zh" ? `${baseUrl}/` : `${baseUrl}/${locale}`;
   
   return {
     title,
@@ -122,7 +123,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <ul className="space-y-4">
               {posts.map((p) => (
                 <li key={p.slug} className="border rounded p-4 hover:bg-muted/50 overflow-hidden">
-                  <Link href={`/${locale}/blog/${p.slug}`} className="font-medium break-words">
+                  <Link
+                    href={`/${locale}/blog/${p.slug}`}
+                    className="font-medium break-words inline-block outline-none rounded-sm underline-offset-4 transition-[text-decoration-color,text-decoration-thickness,color] duration-150 hover:underline hover:decoration-1 focus-visible:underline focus-visible:decoration-1 focus-visible:ring-2 focus-visible:ring-primary/40"
+                  >
                     {p.title}
                   </Link>
                   <p className="text-xs text-muted-foreground mt-1">

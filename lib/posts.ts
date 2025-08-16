@@ -34,6 +34,7 @@ export type CompiledPost = {
 
 // Dev helpers: in-memory cache and timers
 const __DEV__ = process.env.NODE_ENV !== 'production';
+const DEBUG_POSTS = process.env.DEBUG_POSTS === '1';
 type DevCacheEntry = { hash: string; node: React.ReactNode };
 const devCompileCache: Map<string, DevCacheEntry> | undefined = __DEV__ ? new Map() : undefined;
 
@@ -126,9 +127,9 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
   // cached string reader avoids re-reading from R2; safe to cache (not React nodes)
   const readPostSource = unstable_cache(
     async (k: string) => {
-      if (__DEV__) console.time(`[posts] read ${k}`);
+      if (DEBUG_POSTS) console.time(`[posts] read ${k}`);
       const s = await storage.read(k);
-      if (__DEV__) console.timeEnd(`[posts] read ${k}`);
+      if (DEBUG_POSTS) console.timeEnd(`[posts] read ${k}`);
       return s;
     },
     ['readPostSource', locale, slug],
@@ -145,7 +146,7 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
   if (devHit && devHit.hash === contentHash) {
     compiledNode = devHit.node;
   } else {
-    if (__DEV__) console.time(`[posts] mdx ${key}`);
+    if (DEBUG_POSTS) console.time(`[posts] mdx ${key}`);
     const mdx = await compileMDX<Record<string, unknown>>({
       source: content,
       options: {
@@ -170,7 +171,7 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
         },
       },
     });
-    if (__DEV__) console.timeEnd(`[posts] mdx ${key}`);
+    if (DEBUG_POSTS) console.timeEnd(`[posts] mdx ${key}`);
     compiledNode = mdx.content;
     if (__DEV__) devCompileCache!.set(key, { hash: contentHash, node: compiledNode });
   }
@@ -234,4 +235,12 @@ export async function getAllPostMeta(locale: 'zh' | 'en'): Promise<PostMeta[]> {
     ['getAllPostMeta', locale],
     { revalidate: 300, tags: [`posts-${locale}`] }
   )();
+}
+
+// Lightweight existence check to avoid unnecessary reads/compilations
+export async function hasPost(locale: 'zh' | 'en', slug: string): Promise<boolean> {
+  const slugs = await listPostSlugs(locale);
+  // listPostSlugs is cached via unstable_cache; Set for O(1) lookup
+  const set = new Set(slugs);
+  return set.has(slug);
 }

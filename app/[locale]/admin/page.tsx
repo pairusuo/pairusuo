@@ -1,7 +1,16 @@
 import { headers, cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Editor from "./editor";
 import { loadNamespace } from "@/lib/messages";
+
+// Prevent indexing admin page (top-level export required)
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AdminPage({ params, searchParams }: { params: Promise<{ locale: string }>, searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const h = await headers();

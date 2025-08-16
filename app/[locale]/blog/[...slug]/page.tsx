@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
-import { getPost, getAllPostMeta } from "@/lib/posts";
+import { getPost, getAllPostMeta, hasPost } from "@/lib/posts";
 import { getTranslations } from "next-intl/server";
 import { formatDateTime } from "@/lib/utils";
 import type { Metadata } from "next";
+import { getBaseUrl, absoluteUrl } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -43,10 +44,18 @@ export async function generateMetadata({
   const siteT = await getTranslations({ locale, namespace: "site" });
   const title = `${post.meta.title} - ${siteT("title")}`;
   const description = post.meta.summary || post.meta.title;
-  const baseUrl = "https://pairusuo.top"; // 替换为你的实际域名
+  const baseUrl = getBaseUrl();
   const url = locale === "zh" 
     ? `${baseUrl}/blog/${joinedSlug}` 
     : `${baseUrl}/${locale}/blog/${joinedSlug}`;
+  // Check alt language counterpart for hreflang without reading files
+  const altLocale = (locale === 'zh' ? 'en' : 'zh') as 'zh' | 'en';
+  const altExists = await hasPost(altLocale, joinedSlug);
+  const languages = altExists
+    ? { zh: `${baseUrl}/blog/${joinedSlug}`, en: `${baseUrl}/en/blog/${joinedSlug}` }
+    : (locale === 'zh'
+        ? { zh: `${baseUrl}/blog/${joinedSlug}` }
+        : { en: `${baseUrl}/en/blog/${joinedSlug}` });
   
   return {
     title,
@@ -55,6 +64,7 @@ export async function generateMetadata({
     authors: [{ name: "pairusuo" }],
     alternates: {
       canonical: url,
+      languages,
     },
     openGraph: {
       title: post.meta.title,
@@ -84,8 +94,64 @@ export default async function BlogDetail({
   const post = await getPost(locale as "zh" | "en", joinedSlug);
   if (!post) return notFound();
   const t = await getTranslations({ locale, namespace: "blog" });
+  const base = getBaseUrl();
+  const pageUrl = locale === "zh" ? `${base}/blog/${joinedSlug}` : `${base}/${locale}/blog/${joinedSlug}`;
+
+  // JSON-LD: BlogPosting
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.meta.title,
+    description: post.meta.summary || post.meta.title,
+    datePublished: post.meta.publishedAt || undefined,
+    dateModified: post.meta.updatedAt || post.meta.publishedAt || undefined,
+    author: { "@type": "Person", name: "pairusuo" },
+    publisher: {
+      "@type": "Organization",
+      name: "pairusuo",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": pageUrl,
+    },
+    url: pageUrl,
+    inLanguage: locale === "zh" ? "zh-CN" : "en-US",
+    image: post.meta.cover ? [absoluteUrl(post.meta.cover)] : undefined,
+    wordCount: post.meta.readingMinutes ? post.meta.readingMinutes * 200 : undefined,
+    keywords: post.meta.tags && post.meta.tags.length ? post.meta.tags.join(",") : undefined,
+  } as const;
+
+  // JSON-LD: BreadcrumbList
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "zh" ? "首页" : "Home",
+        item: locale === "zh" ? `${base}/` : `${base}/en`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "zh" ? "博客" : "Blog",
+        item: locale === "zh" ? `${base}/blog` : `${base}/en/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.meta.title,
+        item: pageUrl,
+      },
+    ],
+  } as const;
   return (
     <article className="prose dark:prose-invert">
+      {/* JSON-LD */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+
       <h1>{post.meta.title}</h1>
       <p className="text-sm text-muted-foreground">
         {formatDateTime(post.meta.publishedAt, locale)} · {t("readingTime", { minutes: post.meta.readingMinutes })}

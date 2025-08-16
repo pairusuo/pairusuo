@@ -1,5 +1,6 @@
 import rawLinks from "@/content/links.json";
 import { getTranslations } from "next-intl/server";
+import { getBaseUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
 type LinkItem = { url: string; name: string; desc?: string };
@@ -20,7 +21,7 @@ export async function generateMetadata({
     locale === "zh"
       ? "友情链接和推荐资源"
       : "Friend links and recommended resources";
-  const baseUrl = "https://pairusuo.top"; // 替换为你的实际域名
+  const baseUrl = getBaseUrl();
   const url =
     locale === "zh" ? `${baseUrl}/links` : `${baseUrl}/${locale}/links`;
 
@@ -28,7 +29,11 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: url
+      canonical: url,
+      languages: {
+        'zh': `${baseUrl}/links`,
+        'en': `${baseUrl}/en/links`,
+      },
     },
     openGraph: {
       title,

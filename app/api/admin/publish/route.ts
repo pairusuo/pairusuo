@@ -1,6 +1,7 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import matter from "gray-matter";
 import { getStorage, postKey } from "@/lib/storage";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -108,11 +109,41 @@ export async function POST(req: NextRequest) {
   const fileContent = `${frontmatter}\n\n${content}\n`;
 
   try {
-    // If exists, avoid overwriting accidentally
-    if (await storage.exists(key)) {
-      return badRequest("Post already exists with the same slug", 409);
+    const exists = await storage.exists(key);
+    if (exists) {
+      // If an existing file is a draft, treat this as an update (save or publish)
+      const source = await storage.read(key);
+      if (!source) return badRequest("Failed to write file: existing file unreadable", 500);
+      const parsed = matter(source);
+      const fm = parsed.data || {};
+      const isDraft = (() => {
+        const v = fm.draft as unknown;
+        if (typeof v === 'boolean') return v;
+        if (typeof v === 'number') return v === 1;
+        if (typeof v === 'string') {
+          const s = v.trim().toLowerCase();
+          return s === 'true' || s === 'yes' || s === '1';
+        }
+        return false;
+      })();
+      if (!isDraft) {
+        return badRequest("Post already exists with the same slug", 409);
+      }
+      // Merge with current form fields; use incoming content as source of truth
+      const newData = {
+        ...fm,
+        title: title || (fm as any).title || slug,
+        summary: summary || (fm as any).summary || '',
+        draft: Boolean(draft),
+        updatedAt: shDateTime,
+        publishedAt: draft ? ((fm as any).publishedAt || shDateTime) : shDateTime,
+      } as Record<string, unknown>;
+      const nextContent = content || parsed.content || '';
+      const nextFile = matter.stringify(nextContent, newData);
+      await storage.write(key, nextFile);
+    } else {
+      await storage.write(key, fileContent);
     }
-    await storage.write(key, fileContent);
   } catch (err: unknown) {
     return badRequest(`Failed to write file: ${err instanceof Error ? err.message : String(err)}`, 500);
   }

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { getBaseUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
 // Generate dynamic metadata for the about page
@@ -13,7 +14,7 @@ export async function generateMetadata({
 
   const title = `${t("title")} - ${siteT("title")}`;
   const description = t("content");
-  const baseUrl = "https://pairusuo.top"; // 替换为你的实际域名
+  const baseUrl = getBaseUrl();
   const url = locale === "zh" ? `${baseUrl}/about` : `${baseUrl}/${locale}/about`;
 
   return {
@@ -21,6 +22,10 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: url,
+      languages: {
+        'zh': `${baseUrl}/about`,
+        'en': `${baseUrl}/en/about`,
+      },
     },
     openGraph: {
       title,
