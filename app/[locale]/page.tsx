@@ -82,7 +82,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const base = await loadBase(locale);
   const homeData = base.home as { tags?: string[] } | undefined;
   const tags: string[] = Array.isArray(homeData?.tags) ? homeData.tags : [];
-  const posts: PostMeta[] = getAllPostMeta(locale as "zh" | "en").slice(0, 10);
+  const postsAll: PostMeta[] = await getAllPostMeta(locale as "zh" | "en");
+  const posts: PostMeta[] = postsAll.slice(0, 10);
   
   // Get personal tags from translations
   const personalInfo = t.raw("personalInfo") as { 

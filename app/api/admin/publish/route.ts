@@ -1,8 +1,7 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getStorage, postKey } from "@/lib/storage";
 
 function badRequest(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
@@ -63,8 +62,7 @@ export async function POST(req: NextRequest) {
     return badRequest("Invalid slug");
   }
 
-  const contentRoot = path.join(process.cwd(), "content", "posts");
-  const dir = path.join(contentRoot, locale);
+  const storage = getStorage();
 
   const now = new Date();
   // Asia/Shanghai local date-time components
@@ -91,8 +89,8 @@ export async function POST(req: NextRequest) {
     slug = `${y}/${m}/${slug}`;
   }
 
-  // Compute file path AFTER slug normalization/prefixing
-  const filePath = path.join(dir, `${slug}.mdx`);
+  // Compute storage key AFTER slug normalization/prefixing
+  const key = postKey(locale as "zh" | "en", slug);
 
   const frontmatter = [
     `---`,
@@ -109,21 +107,15 @@ export async function POST(req: NextRequest) {
   const fileContent = `${frontmatter}\n\n${content}\n`;
 
   try {
-    // Create nested directories for slugs with subpaths, e.g. 2025/08/test
-    const targetDir = path.dirname(filePath);
-    await fs.mkdir(targetDir, { recursive: true });
-    // If file exists, avoid overwriting accidentally
-    try {
-      await fs.access(filePath);
+    // If exists, avoid overwriting accidentally
+    if (await storage.exists(key)) {
       return badRequest("Post already exists with the same slug", 409);
-    } catch {
-      // not exists, safe to write
     }
-    await fs.writeFile(filePath, fileContent, "utf8");
+    await storage.write(key, fileContent);
   } catch (err: unknown) {
     return badRequest(`Failed to write file: ${err instanceof Error ? err.message : String(err)}`, 500);
   }
 
   const url = draft ? null : (locale === "zh" ? `/blog/${slug}` : `/en/blog/${slug}`);
-  return NextResponse.json({ ok: true, path: filePath, url, slug, draft });
+  return NextResponse.json({ ok: true, path: key, url, slug, draft });
 }

@@ -3,6 +3,8 @@ import { getLogoSvgString } from "@/components/logo";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n";
 import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { loadBase, loadNamespace } from "@/lib/messages";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import "../globals.css";
@@ -38,15 +40,19 @@ export default async function LocaleLayout({
     about: headerT("about"),
   };
 
+  // Provide messages for client components using next-intl (e.g., admin editor)
+  const baseMessages = await loadBase(locale);
+  const adminMessages = await loadNamespace(locale, "admin");
+  const messages = { ...baseMessages, admin: adminMessages } as any;
+
   return (
-    <html lang={locale}>
-      <body className="inter_5802845b-module__9kuUBG__variable noto_sans_sc_363aa9d0-module__fF6goG__variable antialiased">
-        <div className="min-h-dvh flex flex-col">
-          <Header locale={locale} translations={headerTranslations} />
-          <main className="site-container flex-1 py-8">{children}</main>
-          <Footer />
-        </div>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone={"Asia/Shanghai"}>
+      <div className="min-h-dvh flex flex-col">
+        <Header locale={locale} translations={headerTranslations} />
+        <main className="site-container flex-1 py-8">{children}</main>
+        <Footer />
+      </div>
+    </NextIntlClientProvider>
   );
 }
+

@@ -44,4 +44,13 @@
   "uploadImageFailed": "Image upload failed",
   "imageInserted": "Image inserted",
   "pasteImageTip": "You can paste images directly; we'll upload and insert the link."
+  ,
+  "delete": "Delete",
+  "deletePost": "Delete published post",
+  "confirmDelete": "Confirm delete?",
+  "published": "Published",
+  "refreshPublished": "Refresh published",
+  "loadingPublished": "Loading published...",
+  "noPublished": "No published posts",
+  "loadPublishedFailed": "Failed to load published posts"
 }

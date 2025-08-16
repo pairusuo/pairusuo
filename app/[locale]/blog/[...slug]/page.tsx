@@ -4,8 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { formatDateTime } from "@/lib/utils";
 import type { Metadata } from "next";
 
-// Incremental Static Regeneration for post pages
-export const revalidate = 300; // seconds
+export const dynamic = 'force-dynamic';
 
 // Generate static params for all posts
 export async function generateStaticParams() {
@@ -13,7 +12,7 @@ export async function generateStaticParams() {
   const allParams: { locale: string; slug: string[] }[] = [];
   
   for (const locale of locales) {
-    const posts = getAllPostMeta(locale as "zh" | "en");
+    const posts = await getAllPostMeta(locale as "zh" | "en");
     const params = posts.map((post) => ({
       locale,
       slug: post.slug.split("/"),

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:r2": "node scripts/migrate-to-r2.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",

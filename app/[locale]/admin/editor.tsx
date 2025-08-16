@@ -13,10 +13,41 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
   const [content, setContent] = useState("");
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
   const [publishing, setPublishing] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [slugError, setSlugError] = useState<string>("");
   // editing state
   const [editingSlug, setEditingSlug] = useState<string>("");
+  // delete published post state (removed: manual slug delete UI)
+
+  // Published list state (pagination)
+  const [pubLoading, setPubLoading] = useState(false);
+  const [pubError, setPubError] = useState<string>("");
+  const [pubItems, setPubItems] = useState<Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }>>([]);
+  const [pubTotal, setPubTotal] = useState(0);
+  const [pubPage, setPubPage] = useState(1);
+  const pubPageSize = 10;
+
+  const loadPublished = async (page = 1) => {
+    setPubLoading(true);
+    try {
+      const res = await fetch(`/api/admin/posts?locale=${encodeURIComponent(locale)}&page=${page}&pageSize=${pubPageSize}` , {
+        headers: { "X-Admin-Token": adminToken },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const arr = Array.isArray(data.posts) ? data.posts : [];
+      setPubItems(arr);
+      setPubTotal(Number(data.total || arr.length) || 0);
+      setPubPage(Number(data.page || page) || page);
+      setPubError("");
+    } catch (e) {
+      console.warn("loadPublished failed", e);
+      setPubError(t("loadPublishedFailed", { default: "加载已发布列表失败" }));
+    } finally {
+      setPubLoading(false);
+    }
+  };
 
   // Drafts state
   const [draftsLoading, setDraftsLoading] = useState(false);
@@ -116,12 +147,14 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       setMessage(errorMessage);
     } finally {
       setPublishing(false);
+      setEditingSlug("");
     }
   };
 
   useEffect(() => {
     // Auto load drafts on mount and when locale changes
     loadDrafts();
+    loadPublished(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
@@ -146,7 +179,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       setMessage(t("slugInvalid"));
       return;
     }
-    setPublishing(true);
+    if (draft) setSavingDraft(true); else setPublishing(true);
     try {
       const res = await fetch("/api/admin/publish", {
         method: "POST",
@@ -173,7 +206,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
       const errorMessage = err instanceof Error ? err.message : String(err);
       setMessage(errorMessage);
     } finally {
-      setPublishing(false);
+      if (draft) setSavingDraft(false); else setPublishing(false);
     }
   };
 
@@ -204,7 +237,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
 
   const saveDraftEdits = async () => {
     if (!editingSlug) return;
-    setPublishing(true);
+    setSavingDraft(true);
     setMessage("");
     try {
       const res = await fetch('/api/admin/drafts', {
@@ -220,13 +253,20 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         throw new Error(data.error || 'Failed');
       }
       setMessage(t('draftUpdated'));
-      setEditingSlug(editingSlug); // stay in edit mode
+      // Exit edit mode and go back to admin home
+      setEditingSlug("");
+      setSlug("");
+      setSlugError("");
+      setTitle("");
+      setSummary("");
+      setContent("");
       loadDrafts();
+      router.push(`/${locale}/admin`);
     } catch (e: unknown) {
       const errorMessage = e instanceof Error ? e.message : t('updateDraftFailed');
       setMessage(errorMessage);
     } finally {
-      setPublishing(false);
+      setSavingDraft(false);
     }
   };
 
@@ -301,7 +341,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         <div className="flex items-center gap-3 flex-wrap">
           <button
             type="button"
-            disabled={publishing}
+            disabled={publishing || savingDraft}
             onClick={(e) => {
               e.preventDefault();
               if (editingSlug) publishEditingDraft();
@@ -313,7 +353,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
           </button>
           <button
             type="button"
-            disabled={publishing}
+            disabled={publishing || savingDraft}
             onClick={(e) => {
               e.preventDefault();
               if (editingSlug) saveDraftEdits();
@@ -321,7 +361,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
             }}
             className="h-9 px-4 rounded border bg-muted text-foreground disabled:opacity-50 whitespace-nowrap"
           >
-            {publishing ? t("savingDraft") : t("saveDraft")}
+            {savingDraft ? t("savingDraft") : t("saveDraft")}
           </button>
         </div>
         {message && <div className="text-sm text-muted-foreground break-words">{message}</div>}
@@ -331,7 +371,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
           {t('editingDraftNotice', { path: editingSlug })}
           <button
             type="button"
-            disabled={publishing}
+            disabled={publishing || savingDraft}
             onClick={() => {
               setEditingSlug("");
               setMessage("");
@@ -345,6 +385,30 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         </p>
       )}
     </form>
+
+    {/* Manual slug delete removed in favor of PublishedSection per-item deletion */}
+
+    <PublishedSection
+      locale={locale}
+      adminToken={adminToken}
+      t={t}
+      loading={pubLoading}
+      error={pubError}
+      items={pubItems}
+      page={pubPage}
+      pageSize={pubPageSize}
+      total={pubTotal}
+      onRefresh={() => loadPublished(pubPage)}
+      onPageChange={(p: number) => loadPublished(p)}
+      onDeleted={() => {
+        // after deletion, reload current page (may go empty -> reload previous)
+        const totalAfter = Math.max(0, pubTotal - 1);
+        const totalPagesAfter = Math.max(1, Math.ceil(totalAfter / pubPageSize));
+        const nextPage = Math.min(pubPage, totalPagesAfter);
+        loadPublished(nextPage);
+      }}
+    />
+
     <DraftsSection
       locale={locale}
       adminToken={adminToken}
@@ -404,6 +468,20 @@ export function DraftsSection({
     }
   };
 
+  const deleteDraft = async (slug: string) => {
+    if (!confirm(t('confirmDelete', { default: 'Confirm delete?' }))) return;
+    try {
+      const res = await fetch(`/api/admin/drafts?locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slug)}`, {
+        method: 'DELETE',
+        headers: { 'X-Admin-Token': adminToken },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      onRefresh();
+    } catch {
+      // noop
+    }
+  };
+
   return (
     <section className="mt-8 space-y-3">
       <div className="flex items-center justify-between">
@@ -431,6 +509,9 @@ export function DraftsSection({
                 <button type="button" className="h-8 px-3 rounded border bg-foreground text-background" onClick={() => publishDraft(d.slug)}>
                   {t('publishDraft')}
                 </button>
+                <button type="button" className="h-8 px-3 rounded border text-red-600" onClick={() => deleteDraft(d.slug)}>
+                  {t('delete')}
+                </button>
               </div>
             </li>
           ))}
@@ -438,6 +519,98 @@ export function DraftsSection({
       )}
       {!!draftsError && drafts.length > 0 && (
         <p className="text-xs text-muted-foreground">{draftsError}</p>
+      )}
+    </section>
+  );
+}
+
+export function PublishedSection({
+  locale,
+  adminToken,
+  t,
+  loading,
+  error,
+  items,
+  page,
+  pageSize,
+  total,
+  onRefresh,
+  onPageChange,
+  onDeleted,
+}: {
+  locale: string;
+  adminToken: string;
+  t: ReturnType<typeof useTranslations>;
+  loading: boolean;
+  error?: string;
+  items: Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }>;
+  page: number;
+  pageSize: number;
+  total: number;
+  onRefresh: () => void;
+  onPageChange: (p: number) => void;
+  onDeleted?: (slug: string) => void;
+}) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const canPrev = page > 1;
+  const canNext = page < totalPages;
+
+  const deletePost = async (slug: string) => {
+    if (!confirm(t('confirmDelete', { default: 'Confirm delete?' }))) return;
+    try {
+      const res = await fetch(`/api/admin/posts?locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slug)}`, {
+        method: 'DELETE',
+        headers: { 'X-Admin-Token': adminToken },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      if (onDeleted) onDeleted(slug);
+    } catch (e) {
+      // 简化处理：保留在控制台
+      console.warn('delete post failed', e);
+    }
+  };
+
+  return (
+    <section className="mt-8 space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-medium">{t('published', { default: '已发布' })}</h2>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={onRefresh} className="h-8 px-3 rounded border">{t('refreshPublished', { default: '刷新已发布' })}</button>
+          <span className="text-xs text-muted-foreground">{total}</span>
+        </div>
+      </div>
+      {loading ? (
+        <p className="text-sm text-muted-foreground">{t('loadingPublished', { default: '加载已发布中…' })}</p>
+      ) : items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{error || t('noPublished', { default: '暂无已发布文章' })}</p>
+      ) : (
+        <>
+          <ul className="space-y-2">
+            {items.map((it) => (
+              <li key={it.slug} className="flex items-center justify-between border rounded p-2 gap-2">
+                <div className="min-w-0">
+                  <div className="font-medium truncate">{it.title}</div>
+                  <div className="text-xs text-muted-foreground truncate">{it.slug}</div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button type="button" className="h-8 px-3 rounded border text-red-600" onClick={() => deletePost(it.slug)}>
+                    {t('delete', { default: '删除' })}
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="flex items-center justify-between pt-2">
+            <div className="text-sm text-muted-foreground">
+              {(total === 0) ? '0' : `${(page - 1) * pageSize + 1}-${Math.min(page * pageSize, total)}`} / {total}
+            </div>
+            <div className="flex items-center gap-2">
+              <button type="button" disabled={!canPrev} onClick={() => canPrev && onPageChange(page - 1)} className="px-3 h-8 rounded border disabled:opacity-50">‹</button>
+              <span className="text-sm">{page} / {totalPages}</span>
+              <button type="button" disabled={!canNext} onClick={() => canNext && onPageChange(page + 1)} className="px-3 h-8 rounded border disabled:opacity-50">›</button>
+            </div>
+          </div>
+        </>
       )}
     </section>
   );

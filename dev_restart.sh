@@ -3,7 +3,7 @@
 # Simple development server restart script
 # Quick solution for port conflicts and cache cleanup
 
-PORT=3000
+PORT=4000
 
 echo "🔄 Restarting development server on port $PORT..."
 

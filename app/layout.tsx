@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
+import { getLocale } from "next-intl/server";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,14 +22,15 @@ export const metadata: Metadata = {
   description: "Personal blog",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Locale-specific layout is under app/[locale]/layout.tsx
+  // Determine active locale on the server and set the html lang accordingly
+  const locale = await getLocale();
   return (
-    <html lang="zh" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.variable} ${notoSansSC.variable} antialiased`}>
         {children}
       </body>

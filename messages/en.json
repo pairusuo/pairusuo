@@ -28,7 +28,12 @@
       "title": "Freshman in the field of website builder, a follower of Ge Fei",
       "description": "Personal blog, sharing tech insights and entrepreneurial experiences",
       "specialTags": [
-        
+        {
+          "text": "ShipAny Promoter",
+          "url": "https://shipany.ai/i/pairusuo",
+          "color": "green",
+          "tooltip": "Click to open"
+        }
       ],
       "qrcode": {
         "alt": "WeChat Official Account QR Code",

@@ -33,6 +33,12 @@
           "url": "https://changelabubuclothes.art/",
           "color": "blue",
           "tooltip": "点击跳转"
+        },
+        {
+          "text": "ShipAny推广员",
+          "url": "https://shipany.ai/i/pairusuo",
+          "color": "green",
+          "tooltip": "点击跳转"
         }
       ],
       "qrcode": {

@@ -1,12 +1,44 @@
 export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import matter from "gray-matter";
+import { getStorage, localePrefix, postKey } from "@/lib/storage";
+import { revalidateTag } from "next/cache";
 
 function badRequest(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
+}
+
+export async function DELETE(req: NextRequest) {
+  const auth = ensureAuth(req);
+  if (!auth.ok) return auth.res;
+  const { searchParams } = new URL(req.url);
+  const locale = (searchParams.get('locale') || 'zh').toLowerCase();
+  if (!isLocale(locale)) return badRequest("Invalid locale; expected 'zh' or 'en'");
+  const slug = (searchParams.get('slug') || '').trim();
+  if (!slug) return badRequest('Missing slug');
+
+  const storage = getStorage();
+  const key = postKey(locale, slug);
+  try {
+    const source = await storage.read(key);
+    if (!source) return badRequest('Draft not found', 404);
+    const parsed = matter(source);
+    const fm = parsed.data || {};
+    const isDraft = (() => {
+      const v = fm.draft as unknown;
+      if (typeof v === 'boolean') return v;
+      if (typeof v === 'number') return v === 1;
+      if (typeof v === 'string') return ['true','yes','1'].includes(v.trim().toLowerCase());
+      return false;
+    })();
+    if (!isDraft) return badRequest('Not a draft', 400);
+    await storage.delete(key);
+    return NextResponse.json({ ok: true, path: key, slug });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return badRequest(`Failed to delete draft: ${msg}`, 500);
+  }
 }
 
 export async function PUT(req: NextRequest) {
@@ -21,10 +53,11 @@ export async function PUT(req: NextRequest) {
   const locale = (body.locale || 'zh').toLowerCase();
   if (!isLocale(locale)) return badRequest("Invalid locale; expected 'zh' or 'en'");
   if (!body.slug) return badRequest('Missing slug');
-
-  const filePath = path.join(CONTENT_ROOT, locale, `${body.slug}.mdx`);
+  const storage = getStorage();
+  const key = postKey(locale, body.slug);
   try {
-    const source = await fs.readFile(filePath, 'utf8');
+    const source = await storage.read(key);
+    if (!source) return badRequest('Not a draft', 404);
     const parsed = matter(source);
     const fm = parsed.data || {};
     const isDraft = (() => {
@@ -47,8 +80,8 @@ export async function PUT(req: NextRequest) {
     };
     const newContent = body.content ?? parsed.content;
     const nextFile = matter.stringify(newContent, newData);
-    await fs.writeFile(filePath, nextFile, 'utf8');
-    return NextResponse.json({ ok: true, path: filePath, slug: body.slug });
+    await storage.write(key, nextFile);
+    return NextResponse.json({ ok: true, path: key, slug: body.slug });
   } catch (e: unknown) {
     return badRequest(`Failed to update draft: ${e instanceof Error ? e.message : String(e)}`, 500);
   }
@@ -62,52 +95,42 @@ function ensureAuth(req: NextRequest) {
   return { ok: true } as const;
 }
 
-const CONTENT_ROOT = path.join(process.cwd(), "content", "posts");
-
 function isLocale(v: string): v is "zh" | "en" {
   return v === "zh" || v === "en";
 }
 
 async function listDrafts(locale: "zh" | "en") {
-  const baseDir = path.join(CONTENT_ROOT, locale);
+  const storage = getStorage();
+  const prefix = localePrefix(locale);
   const results: Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }> = [];
-  async function walk(dir: string) {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const full = path.join(dir, entry.name);
-      const rel = path.relative(baseDir, full);
-      if (entry.isDirectory()) {
-        await walk(full);
-      } else if (entry.isFile() && entry.name.endsWith(".mdx")) {
-        const slug = rel.replace(/\.mdx$/, '').split(path.sep).join('/');
-        const source = await fs.readFile(full, 'utf8');
-        const { data } = matter(source);
-        const draftFlag = (() => {
-          const v = data?.draft as unknown;
-          if (typeof v === 'boolean') return v;
-          if (typeof v === 'number') return v === 1;
-          if (typeof v === 'string') {
-            const s = v.trim().toLowerCase();
-            return s === 'true' || s === 'yes' || s === '1';
-          }
-          return false;
-        })();
-        if (draftFlag) {
-          results.push({
-            title: data.title || slug,
-            slug,
-            path: full,
-            publishedAt: data.publishedAt || '',
-            updatedAt: data.updatedAt || '',
-          });
-        }
+  const keys = await storage.list(prefix);
+  for (const key of keys) {
+    if (!key.endsWith('.mdx')) continue;
+    // key: posts/zh/2025/08/slug.mdx -> slug: 2025/08/slug
+    const rel = key.substring(prefix.length);
+    const slug = rel.replace(/\.mdx$/, '');
+    const source = await storage.read(key);
+    if (!source) continue;
+    const { data } = matter(source);
+    const draftFlag = (() => {
+      const v = data?.draft as unknown;
+      if (typeof v === 'boolean') return v;
+      if (typeof v === 'number') return v === 1;
+      if (typeof v === 'string') {
+        const s = v.trim().toLowerCase();
+        return s === 'true' || s === 'yes' || s === '1';
       }
+      return false;
+    })();
+    if (draftFlag) {
+      results.push({
+        title: (data as any).title || slug,
+        slug,
+        path: key,
+        publishedAt: (data as any).publishedAt || '',
+        updatedAt: (data as any).updatedAt || '',
+      });
     }
-  }
-  try {
-    await walk(baseDir);
-  } catch {
-    // ignore if directory not exists
   }
   // Sort by last updated time desc (updatedAt fallback to publishedAt)
   results.sort((a, b) => {
@@ -164,9 +187,11 @@ export async function GET(req: NextRequest) {
   const slug = (searchParams.get('slug') || '').trim();
   if (slug) {
     // Load single draft content
-    const filePath = path.join(CONTENT_ROOT, locale, `${slug}.mdx`);
+    const storage = getStorage();
+    const key = postKey(locale, `${slug}`);
     try {
-      const source = await fs.readFile(filePath, 'utf8');
+      const source = await storage.read(key);
+      if (!source) return badRequest('Failed to read draft: not found', 404);
       const parsed = matter(source);
       const fm = parsed.data || {};
       const isDraft = (() => {
@@ -211,9 +236,11 @@ export async function POST(req: NextRequest) {
   if (!body.slug) return badRequest('Missing slug');
   if (body.action !== 'publish') return badRequest('Invalid action');
 
-  const filePath = path.join(CONTENT_ROOT, locale, `${body.slug}.mdx`);
+  const storage = getStorage();
+  const key = postKey(locale, body.slug);
   try {
-    const source = await fs.readFile(filePath, 'utf8');
+    const source = await storage.read(key);
+    if (!source) return badRequest('Failed to publish draft: not found', 404);
     const parsed = matter(source);
     if (!parsed.data || parsed.data.draft !== true) {
       return badRequest('Not a draft');
@@ -227,9 +254,12 @@ export async function POST(req: NextRequest) {
       publishedAt: dateTime,
     };
     const nextContent = matter.stringify(parsed.content, newData);
-    await fs.writeFile(filePath, nextContent, 'utf8');
+    await storage.write(key, nextContent);
+    // Invalidate caches for this post and the posts list in this locale
+    revalidateTag(`post-${locale}-${body.slug}`);
+    revalidateTag(`posts-${locale}`);
     const url = locale === 'zh' ? `/blog/${body.slug}` : `/en/blog/${body.slug}`;
-    return NextResponse.json({ ok: true, path: filePath, url, slug: body.slug });
+    return NextResponse.json({ ok: true, path: key, url, slug: body.slug });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     return badRequest(`Failed to publish draft: ${errorMessage}`, 500);
