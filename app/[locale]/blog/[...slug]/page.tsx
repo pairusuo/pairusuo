@@ -3,6 +3,7 @@ import { getPost, getAllPostMeta, hasPost } from "@/lib/posts";
 import { getTranslations } from "next-intl/server";
 import { formatDateTime } from "@/lib/utils";
 import type { Metadata } from "next";
+import { MdxContentProvider } from "@/components/mdx";
 import { getBaseUrl, absoluteUrl } from "@/lib/site";
 
 export const revalidate = 300;
@@ -156,7 +157,9 @@ export default async function BlogDetail({
       <p className="text-sm text-muted-foreground">
         {formatDateTime(post.meta.publishedAt, locale)} · {t("readingTime", { minutes: post.meta.readingMinutes })}
       </p>
-      <div className="mt-6">{post.content}</div>
+      <div className="mt-6">
+        <MdxContentProvider>{post.content}</MdxContentProvider>
+      </div>
     </article>
   );
 }

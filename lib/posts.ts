@@ -1,6 +1,7 @@
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import rehypeImageDimensions from '@/lib/rehype/imageDimensions';
 import { cache } from 'react';
 import remarkGfm from 'remark-gfm';
 import remarkFrontmatter from 'remark-frontmatter';
@@ -147,6 +148,8 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
     compiledNode = devHit.node;
   } else {
     if (DEBUG_POSTS) console.time(`[posts] mdx ${key}`);
+    // Defer importing client MDX components until actually rendering a post
+    const { MDXComponents } = await import('@/components/mdx');
     const mdx = await compileMDX<Record<string, unknown>>({
       source: content,
       options: {
@@ -156,6 +159,8 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
           rehypePlugins: [
             rehypeSlug,
             [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }],
+            // Auto add width/height for images from our CDN so next/image can be used
+            [rehypeImageDimensions as any, { hosts: ['image.pairusuo.top'] }],
             [
               rehypePrettyCode,
               {
@@ -170,6 +175,7 @@ export const getPost = cache(async function getPost(locale: 'zh' | 'en', slug: s
           ],
         },
       },
+      components: MDXComponents as any,
     });
     if (DEBUG_POSTS) console.timeEnd(`[posts] mdx ${key}`);
     compiledNode = mdx.content;

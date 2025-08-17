@@ -11,15 +11,8 @@ const intl = createMiddleware({
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hasPrefix = /^\/(zh|en)(?=\/|$)/.test(pathname);
-  const response = intl(request);
-  // For unprefixed paths, force cookie to zh so '/' remains Chinese even if cookie was en before
-  if (!hasPrefix) {
-    response.headers.append(
-      'set-cookie',
-      'NEXT_LOCALE=zh; Path=/; Max-Age=31536000; SameSite=Lax'
-    );
-  }
-  return response;
+  // Keep locale resolution via next-intl; avoid setting cookies to maximize cacheability
+  return intl(request);
 }
 
 export const config = {
