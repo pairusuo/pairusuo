@@ -63,7 +63,6 @@ class CF_R2Storage {
 // 简化的文章元数据获取（保持原逻辑但去除缓存依赖）
 async function getAllPostMeta(storage: CF_R2Storage, locale: 'zh' | 'en') {
   const { default: matter } = await import('gray-matter');
-  const { default: readingTime } = await import('reading-time');
   
   const prefix = `posts/${locale}/`;
   const keys = await storage.list(prefix);
