@@ -60,10 +60,40 @@ class CF_R2Storage {
   }
 }
 
+// 简化的 frontmatter 解析器（避免 gray-matter 兼容性问题）
+function parseFrontmatter(source: string) {
+  const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+  if (!match) return { data: {}, content: source };
+  
+  const [, frontmatter, content] = match;
+  const data: Record<string, any> = {};
+  
+  // 简单解析 YAML frontmatter
+  frontmatter.split('\n').forEach(line => {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // 去除引号
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      
+      // 处理布尔值
+      if (value === 'true') value = true;
+      else if (value === 'false') value = false;
+      
+      data[key] = value;
+    }
+  });
+  
+  return { data, content };
+}
+
 // 简化的文章元数据获取（保持原逻辑但去除缓存依赖）
 async function getAllPostMeta(storage: CF_R2Storage, locale: 'zh' | 'en') {
-  const { default: matter } = await import('gray-matter');
-  
   const prefix = `posts/${locale}/`;
   const keys = await storage.list(prefix);
   const mdxKeys = keys.filter((k) => k.endsWith('.mdx'));
@@ -73,13 +103,13 @@ async function getAllPostMeta(storage: CF_R2Storage, locale: 'zh' | 'en') {
     const source = await storage.read(key);
     if (!source) return null;
     
-    const { content, data } = matter(source);
+    const { data } = parseFrontmatter(source);
     return {
-      title: (data as any).title || slug,
+      title: data.title || slug,
       slug,
-      publishedAt: (data as any).publishedAt ? String((data as any).publishedAt) : '',
-      updatedAt: (data as any).updatedAt ? String((data as any).updatedAt) : '',
-      draft: (data as any).draft ?? false,
+      publishedAt: data.publishedAt ? String(data.publishedAt) : '',
+      updatedAt: data.updatedAt ? String(data.updatedAt) : '',
+      draft: data.draft ?? false,
     };
   });
   
@@ -148,9 +178,7 @@ export async function onRequestDelete(context: { request: Request; env: Env }) {
     const source = await storage.read(key);
     if (!source) return badRequest('Post not found', 404);
     
-    const { default: matter } = await import('gray-matter');
-    const parsed = matter(source);
-    const fm = parsed.data || {};
+    const { data: fm } = parseFrontmatter(source);
     
     const isDraft = (() => {
       const v = fm.draft as unknown;

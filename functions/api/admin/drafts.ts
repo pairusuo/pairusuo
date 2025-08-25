@@ -55,6 +55,38 @@ function shanghaiDateTime() {
   return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
 }
 
+// 简化的 frontmatter 解析器（避免 gray-matter 兼容性问题）
+function parseFrontmatter(source: string) {
+  const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+  if (!match) return { data: {}, content: source };
+  
+  const [, frontmatter, content] = match;
+  const data: Record<string, any> = {};
+  
+  // 简单解析 YAML frontmatter
+  frontmatter.split('\n').forEach(line => {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // 去除引号
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      
+      // 处理布尔值
+      if (value === 'true') value = true;
+      else if (value === 'false') value = false;
+      
+      data[key] = value;
+    }
+  });
+  
+  return { data, content };
+}
+
 // R2 存储操作类
 class CF_R2Storage {
   constructor(private bucket: R2Bucket) {}
@@ -87,7 +119,6 @@ class CF_R2Storage {
 
 // 草稿列表功能
 async function listDrafts(storage: CF_R2Storage, locale: "zh" | "en") {
-  const { default: matter } = await import('gray-matter');
   const prefix = localePrefix(locale);
   const results: Array<{ title: string; slug: string; path: string; publishedAt?: string; updatedAt?: string }> = [];
   const keys = await storage.list(prefix);
@@ -99,7 +130,7 @@ async function listDrafts(storage: CF_R2Storage, locale: "zh" | "en") {
     const source = await storage.read(key);
     if (!source) continue;
     
-    const { data } = matter(source);
+    const { data } = parseFrontmatter(source);
     const draftFlag = (() => {
       const v = data?.draft as unknown;
       if (typeof v === 'boolean') return v;
@@ -166,9 +197,7 @@ export async function onRequestGet(context: { request: Request; env: Env }) {
       const source = await storage.read(key);
       if (!source) return badRequest('Failed to read draft: not found', 404);
       
-      const { default: matter } = await import('gray-matter');
-      const parsed = matter(source);
-      const fm = parsed.data || {};
+      const { data: fm, content } = parseFrontmatter(source);
       const isDraft = (() => {
         const v = fm.draft as unknown;
         if (typeof v === 'boolean') return v;
@@ -185,7 +214,7 @@ export async function onRequestGet(context: { request: Request; env: Env }) {
           slug,
           title: (fm.title as string) || slug,
           summary: (fm.summary as string) || '',
-          content: parsed.content,
+          content: content,
           publishedAt: (fm.publishedAt as string) || '',
           updatedAt: (fm.updatedAt as string) || '',
         },
@@ -224,9 +253,7 @@ export async function onRequestDelete(context: { request: Request; env: Env }) {
     const source = await storage.read(key);
     if (!source) return badRequest('Draft not found', 404);
     
-    const { default: matter } = await import('gray-matter');
-    const parsed = matter(source);
-    const fm = parsed.data || {};
+    const { data: fm } = parseFrontmatter(source);
     const isDraft = (() => {
       const v = fm.draft as unknown;
       if (typeof v === 'boolean') return v;
@@ -271,9 +298,7 @@ export async function onRequestPut(context: { request: Request; env: Env }) {
     const source = await storage.read(key);
     if (!source) return badRequest('Not a draft', 404);
     
-    const { default: matter } = await import('gray-matter');
-    const parsed = matter(source);
-    const fm = parsed.data || {};
+    const { data: fm, content } = parseFrontmatter(source);
     const isDraft = (() => {
       const v = fm.draft as unknown;
       if (typeof v === 'boolean') return v;
@@ -294,8 +319,18 @@ export async function onRequestPut(context: { request: Request; env: Env }) {
       publishedAt: fm.publishedAt || dateTime,
     };
     
-    const newContent = body.content ?? parsed.content;
-    const nextFile = matter.stringify(newContent, newData);
+    const newContent = body.content ?? content;
+    const frontmatterLines = [
+      '---',
+      ...Object.entries(newData).map(([key, value]) => {
+        if (typeof value === 'string' && (value.includes(':') || value.includes('\n'))) {
+          return `${key}: "${value.replace(/"/g, '\\"')}"`;
+        }
+        return `${key}: ${value}`;
+      }),
+      '---'
+    ];
+    const nextFile = `${frontmatterLines.join('\n')}\n\n${newContent}\n`;
     await storage.write(key, nextFile);
     
     return new Response(JSON.stringify({ ok: true, path: key, slug: body.slug }), {
@@ -331,21 +366,30 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const source = await storage.read(key);
     if (!source) return badRequest('Failed to publish draft: not found', 404);
     
-    const { default: matter } = await import('gray-matter');
-    const parsed = matter(source);
-    if (!parsed.data || parsed.data.draft !== true) {
+    const { data, content } = parseFrontmatter(source);
+    if (!data || data.draft !== true) {
       return badRequest('Not a draft');
     }
     
     const dateTime = shanghaiDateTime();
     const newData = {
-      ...parsed.data,
+      ...data,
       draft: false,
       updatedAt: dateTime,
       publishedAt: dateTime,
     };
     
-    const nextContent = matter.stringify(parsed.content, newData);
+    const frontmatterLines = [
+      '---',
+      ...Object.entries(newData).map(([key, value]) => {
+        if (typeof value === 'string' && (value.includes(':') || value.includes('\n'))) {
+          return `${key}: "${value.replace(/"/g, '\\"')}"`;
+        }
+        return `${key}: ${value}`;
+      }),
+      '---'
+    ];
+    const nextContent = `${frontmatterLines.join('\n')}\n\n${content}\n`;
     await storage.write(key, nextContent);
     
     const url = locale === 'zh' ? `/blog/${body.slug}` : `/en/blog/${body.slug}`;

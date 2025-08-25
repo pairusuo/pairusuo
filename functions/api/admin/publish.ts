@@ -26,6 +26,38 @@ function postKey(locale: 'zh' | 'en', slug: string) {
   return `posts/${locale}/${slug}.mdx`;
 }
 
+// 简化的 frontmatter 解析器（避免 gray-matter 兼容性问题）
+function parseFrontmatter(source: string) {
+  const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+  if (!match) return { data: {}, content: source };
+  
+  const [, frontmatter, content] = match;
+  const data: Record<string, any> = {};
+  
+  // 简单解析 YAML frontmatter
+  frontmatter.split('\n').forEach(line => {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // 去除引号
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      
+      // 处理布尔值
+      if (value === 'true') value = true;
+      else if (value === 'false') value = false;
+      
+      data[key] = value;
+    }
+  });
+  
+  return { data, content };
+}
+
 // R2 存储操作类
 class CF_R2Storage {
   constructor(private bucket: R2Bucket) {}
@@ -147,9 +179,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const source = await storage.read(key);
       if (!source) return badRequest("Failed to write file: existing file unreadable", 500);
       
-      const { default: matter } = await import('gray-matter');
-      const parsed = matter(source);
-      const fm = parsed.data || {};
+      const { data: fm } = parseFrontmatter(source);
       const isDraft = (() => {
         const v = fm.draft as unknown;
         if (typeof v === 'boolean') return v;
@@ -176,7 +206,17 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       } as Record<string, unknown>;
       
       const nextContent = content || parsed.content || '';
-      const nextFile = matter.stringify(nextContent, newData);
+      const frontmatterLines = [
+        '---',
+        ...Object.entries(newData).map(([key, value]) => {
+          if (typeof value === 'string' && (value.includes(':') || value.includes('\n'))) {
+            return `${key}: "${value.replace(/"/g, '\\"')}"`;
+          }
+          return `${key}: ${value}`;
+        }),
+        '---'
+      ];
+      const nextFile = `${frontmatterLines.join('\n')}\n\n${nextContent}\n`;
       await storage.write(key, nextFile);
     } else {
       await storage.write(key, fileContent);
