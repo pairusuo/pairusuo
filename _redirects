@@ -1,0 +1,11 @@
+# Cloudflare Pages 重定向规则
+
+# API 路由重定向到 Functions
+/api/* /api/:splat 200
+
+# RSS 和 sitemap 处理
+/rss.xml /rss.xml 200
+/sitemap.xml /sitemap.xml 200
+
+# 404 处理
+/* /404.html 404

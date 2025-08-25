@@ -6,6 +6,11 @@ import type { Metadata } from "next";
 type LinkItem = { url: string; name: string; desc?: string };
 const links = rawLinks as LinkItem[];
 
+// Generate static params for locale
+export function generateStaticParams() {
+  return [{ locale: 'zh' }, { locale: 'en' }];
+}
+
 // Generate dynamic metadata for the links page
 export async function generateMetadata({
   params

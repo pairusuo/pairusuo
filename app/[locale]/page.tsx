@@ -15,6 +15,11 @@ type PersonalTagType = {
   tooltip?: string;
 };
 
+// Generate static params for locale
+export function generateStaticParams() {
+  return [{ locale: 'zh' }, { locale: 'en' }];
+}
+
 // Generate dynamic metadata for the home page
 export async function generateMetadata({ 
   params 
@@ -122,10 +127,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           ) : (
             <ul className="space-y-4">
               {posts.map((p) => (
-                <li key={p.slug} className="border rounded p-4 hover:bg-muted/50 overflow-hidden">
+                <li key={p.slug} className="border rounded-lg p-4 hover-lift card-glow animate-border overflow-hidden">
                   <Link
                     href={`/${locale}/blog/${p.slug}`}
-                    className="font-medium break-words inline-block outline-none rounded-sm underline-offset-4 transition-[text-decoration-color,text-decoration-thickness,color] duration-150 hover:underline hover:decoration-1 focus-visible:underline focus-visible:decoration-1 focus-visible:ring-2 focus-visible:ring-primary/40"
+                    className="font-medium break-words inline-block outline-none rounded-sm enhanced-link focus-visible:ring-2 focus-visible:ring-primary/40"
                   >
                     {p.title}
                   </Link>
@@ -144,9 +149,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         {/* Sidebar: personal info and other content */}
         <aside className="space-y-4">
           {/* Personal Info Card */}
-          <div className="border rounded p-4 space-y-3">
+          <div className="border rounded-lg p-4 space-y-3 card-glow hover-lift">
             <div className="flex items-center gap-3">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0 pulse-glow">
                 <Image
                   src="/info.png"
                   alt="pairusuo"
@@ -158,7 +163,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 />
               </div>
               <div className="min-w-0">
-                <h3 className="font-medium">{t("personalInfo.name")}</h3>
+                <h3 className="font-medium gradient-text">{t("personalInfo.name")}</h3>
                 <p className="text-sm text-muted-foreground">{t("personalInfo.title")}</p>
               </div>
             </div>
@@ -168,7 +173,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
           
           {/* Tags */}
-          <div className="border rounded p-4">
+          <div className="border rounded-lg p-4 card-glow hover-lift">
             <div className="text-sm font-medium mb-2">{t("tagsTitle")}</div>
             {allTags.length === 0 ? (
               <p className="text-sm text-muted-foreground">—</p>
@@ -182,10 +187,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
 
           {/* WeChat Official Account */}
-          <div className="border rounded p-4">
+          <div className="border rounded-lg p-4 card-glow hover-lift">
             <div className="text-sm font-medium mb-3 text-center">{t("personalInfo.qrcode.label")}</div>
             <div className="flex items-center justify-center">
-              <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white">
+              <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white hover-lift">
                 <Image
                   src="/qrcode.jpg"
                   alt={t("personalInfo.qrcode.alt")}

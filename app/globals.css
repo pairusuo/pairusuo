@@ -205,3 +205,185 @@
   width: 100%;
   max-width: var(--content-max);
 }
+
+/* ========== 新增美化样式 ========== */
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, 
+    hsl(var(--background)) 0%,
+    hsl(var(--background)/0.98) 25%,
+    hsl(var(--background)/0.95) 50%,
+    hsl(var(--background)/0.98) 75%,
+    hsl(var(--background)) 100%
+  );
+}
+
+/* 玻璃拟态效果 */
+.glass-morphism {
+  background: hsl(var(--background)/0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--border)/0.2);
+  box-shadow: 0 8px 32px 0 hsl(var(--foreground)/0.1);
+}
+
+/* 悬停动画 - 轻微上浮 */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px hsl(var(--foreground)/0.1),
+              0 8px 10px -6px hsl(var(--foreground)/0.1);
+}
+
+/* 渐变文字 */
+.gradient-text {
+  background: linear-gradient(135deg, 
+    hsl(var(--primary)), 
+    hsl(var(--primary)/0.8),
+    hsl(var(--foreground))
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 脉冲动画 */
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* 微妙的边框动画 */
+@keyframes border-dance {
+  0%, 100% { border-color: hsl(var(--border)); }
+  50% { border-color: hsl(var(--primary)/0.3); }
+}
+
+.animate-border {
+  animation: border-dance 3s ease-in-out infinite;
+}
+
+/* 按钮悬停效果 */
+.btn-hover {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    hsl(var(--primary)/0.1), 
+    transparent
+  );
+  transition: left 0.5s ease-in-out;
+}
+
+.btn-hover:hover::before {
+  left: 100%;
+}
+
+/* 卡片发光效果 */
+.card-glow {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    hsl(var(--primary)/0.1), 
+    transparent 50%, 
+    hsl(var(--primary)/0.1)
+  );
+  opacity: 0;
+  border-radius: inherit;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+/* 平滑的过渡效果 */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 链接的增强悬停效果 */
+.enhanced-link {
+  position: relative;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.enhanced-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    hsl(var(--primary)), 
+    hsl(var(--primary)/0.5)
+  );
+  transition: width 0.3s ease-in-out;
+}
+
+.enhanced-link:hover::after {
+  width: 100%;
+}
+
+/* 暗黑模式下的增强效果 */
+.dark .glass-morphism {
+  background: hsl(var(--background)/0.7);
+  border: 1px solid hsl(var(--border)/0.3);
+  box-shadow: 0 8px 32px 0 hsl(var(--background)/0.3);
+}
+
+.dark .hover-lift:hover {
+  box-shadow: 0 20px 40px -8px hsl(var(--background)/0.3),
+              0 8px 16px -6px hsl(var(--primary)/0.2);
+}
+
+/* 响应式调整 */
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift,
+  .pulse-glow,
+  .animate-border,
+  .btn-hover,
+  .card-glow,
+  .smooth-transition,
+  .enhanced-link {
+    animation: none;
+    transition: none;
+  }
+}

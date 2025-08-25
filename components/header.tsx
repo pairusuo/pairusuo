@@ -19,13 +19,13 @@ function NavItem({ href, label, isActive }: { href: string; label: string; isAct
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={[
-        "px-1 py-0.5",
-        "transition-colors",
+        "px-3 py-2 rounded-md",
+        "enhanced-link smooth-transition",
         "underline-offset-4",
         isActive
-          ? "font-medium underline decoration-foreground"
-          : "text-muted-foreground hover:underline hover:text-foreground",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm",
+          ? "font-medium text-foreground bg-accent/50"
+          : "text-muted-foreground hover:text-foreground hover:bg-accent/30",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       ].join(" ")}
     >
       {label}
@@ -52,9 +52,9 @@ export default function Header({ locale, translations }: {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="site-container h-14 flex items-center justify-between border-b">
-        <Logo href={homeHref} width={32} height={32} showText={true} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm" />
+    <header className="sticky top-0 z-40 glass-morphism">
+      <div className="site-container h-14 flex items-center justify-between border-b border-border/20">
+        <Logo href={homeHref} width={32} height={32} showText={true} className="hover-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-sm" />
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-4 text-sm">
           {items.map((it) => (
@@ -78,7 +78,7 @@ export default function Header({ locale, translations }: {
             aria-expanded={open}
             aria-controls={menuId}
             onClick={() => setOpen((v) => !v)}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-border hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-9 w-9 inline-flex items-center justify-center rounded-md border border-border btn-hover hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span className="sr-only">Menu</span>
             {/* Hamburger icon */}

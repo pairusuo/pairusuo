@@ -2,6 +2,11 @@ import { getTranslations } from "next-intl/server";
 import { getBaseUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
+// Generate static params for locale
+export function generateStaticParams() {
+  return [{ locale: 'zh' }, { locale: 'en' }];
+}
+
 // Generate dynamic metadata for the about page
 export async function generateMetadata({
   params

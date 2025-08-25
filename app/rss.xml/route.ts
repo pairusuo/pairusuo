@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAllPostMeta } from '@/lib/posts';
 import { getBaseUrl } from '@/lib/site';
 
+export const dynamic = 'force-static';
 export const revalidate = 300;
 
 function escape(str: string) {

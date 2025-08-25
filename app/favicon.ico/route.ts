@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getLogoSvgString } from "@/components/logo";
 
+export const dynamic = 'force-static';
+
 export function GET() {
   // Generate SVG from the single source of truth component
   const svg = getLogoSvgString(32, 32);

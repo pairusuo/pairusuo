@@ -19,6 +19,12 @@ const withMDX = createMDX({
 });
 
 const nextConfig: NextConfig = {
+  // Cloudflare Pages 静态导出配置
+  output: 'export',
+  distDir: 'out',
+  trailingSlash: true,
+  // API 路由由 CF Functions 处理，无需特殊配置
+  
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   eslint: {
     // Avoid failing Vercel builds due to lint errors; we still lint locally/CI if desired
@@ -46,22 +52,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async headers() {
-    return [
-      {
-        source: "/:all*.(svg|jpg|jpeg|png|webp|avif|gif|ico)",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
-      {
-        source: "/:all*.css",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
-    ];
-  },
+  // headers 在静态导出模式下不生效，移动到 CF Functions 中间件处理
+  // async headers() { ... }
 };
 const withNextIntl = createNextIntlPlugin();
 

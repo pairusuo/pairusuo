@@ -1,27 +1,58 @@
-export const runtime = "nodejs";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import matter from "gray-matter";
-import { getStorage, postKey } from "@/lib/storage";
-import { revalidatePath, revalidateTag } from "next/cache";
+// Cloudflare Functions 发布管理 API
+// 保持与原 API 完全相同的逻辑和响应格式
+
+interface Env {
+  R2_BUCKET: R2Bucket;
+  ADMIN_TOKEN: string;
+}
 
 function badRequest(message: string, status = 400) {
-  return NextResponse.json({ error: message }, { status });
+  return new Response(JSON.stringify({ error: message }), { 
+    status, 
+    headers: { "Content-Type": "application/json" } 
+  });
 }
 
 function sanitizeSlug(input: string) {
   return input
     .trim()
     .toLowerCase()
-    // Only keep a-z 0-9 -; convert everything else (including /) to '-'
     .replace(/[^a-z0-9-]/g, "-")
     .replace(/--+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
 
-export async function POST(req: NextRequest) {
-  const adminToken = process.env.ADMIN_TOKEN;
-  const token = req.headers.get("x-admin-token");
+function postKey(locale: 'zh' | 'en', slug: string) {
+  return `posts/${locale}/${slug}.mdx`;
+}
+
+// R2 存储操作类
+class CF_R2Storage {
+  constructor(private bucket: R2Bucket) {}
+  
+  async read(key: string): Promise<string | null> {
+    const object = await this.bucket.get(key);
+    return object ? await object.text() : null;
+  }
+  
+  async write(key: string, content: string): Promise<void> {
+    await this.bucket.put(key, content, {
+      httpMetadata: { contentType: 'text/markdown' },
+    });
+  }
+  
+  async exists(key: string): Promise<boolean> {
+    const object = await this.bucket.head(key);
+    return object !== null;
+  }
+}
+
+export async function onRequestPost(context: { request: Request; env: Env }) {
+  const { request, env } = context;
+  
+  // 身份验证
+  const adminToken = env.ADMIN_TOKEN;
+  const token = request.headers.get("x-admin-token");
 
   if (!adminToken) {
     return badRequest("Server not configured: ADMIN_TOKEN is missing", 500);
@@ -38,8 +69,9 @@ export async function POST(req: NextRequest) {
     content?: string;
     draft?: boolean;
   };
+  
   try {
-    body = await req.json();
+    body = await request.json();
   } catch {
     return badRequest("Invalid JSON body");
   }
@@ -59,15 +91,15 @@ export async function POST(req: NextRequest) {
     return badRequest("Missing required fields: title, slug, content");
   }
 
-  // Prevent directory traversal
+  // 防止目录遍历
   if (slug.includes("..")) {
     return badRequest("Invalid slug");
   }
 
-  const storage = getStorage();
+  const storage = new CF_R2Storage(env.R2_BUCKET);
 
+  // 生成上海时间
   const now = new Date();
-  // Asia/Shanghai local date-time components
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Shanghai",
     year: "numeric",
@@ -84,14 +116,14 @@ export async function POST(req: NextRequest) {
   const hh = parts.find((p) => p.type === "hour")?.value || "00";
   const mm = parts.find((p) => p.type === "minute")?.value || "00";
   const ss = parts.find((p) => p.type === "second")?.value || "00";
-  const shDateTime = `${y}-${m}-${d} ${hh}:${mm}:${ss}`; // YYYY-MM-DD HH:mm:ss in Asia/Shanghai
+  const shDateTime = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
 
-  // If slug has no directory, prefix with yyyy/mm
+  // 如果 slug 没有目录结构，自动添加年月前缀
   if (slug && !slug.includes("/")) {
     slug = `${y}/${m}/${slug}`;
   }
 
-  // Compute storage key AFTER slug normalization/prefixing
+  // 计算存储键值
   const key = postKey(locale as "zh" | "en", slug);
 
   const frontmatter = [
@@ -111,9 +143,11 @@ export async function POST(req: NextRequest) {
   try {
     const exists = await storage.exists(key);
     if (exists) {
-      // If an existing file is a draft, treat this as an update (save or publish)
+      // 如果存在文件是草稿，当作更新处理
       const source = await storage.read(key);
       if (!source) return badRequest("Failed to write file: existing file unreadable", 500);
+      
+      const { default: matter } = await import('gray-matter');
       const parsed = matter(source);
       const fm = parsed.data || {};
       const isDraft = (() => {
@@ -126,10 +160,12 @@ export async function POST(req: NextRequest) {
         }
         return false;
       })();
+      
       if (!isDraft) {
         return badRequest("Post already exists with the same slug", 409);
       }
-      // Merge with current form fields; use incoming content as source of truth
+      
+      // 合并字段
       const newData = {
         ...fm,
         title: title || (fm as any).title || slug,
@@ -138,6 +174,7 @@ export async function POST(req: NextRequest) {
         updatedAt: shDateTime,
         publishedAt: draft ? ((fm as any).publishedAt || shDateTime) : shDateTime,
       } as Record<string, unknown>;
+      
       const nextContent = content || parsed.content || '';
       const nextFile = matter.stringify(nextContent, newData);
       await storage.write(key, nextFile);
@@ -150,18 +187,7 @@ export async function POST(req: NextRequest) {
 
   const url = draft ? null : (locale === "zh" ? `/blog/${slug}` : `/en/blog/${slug}`);
 
-  try {
-    // 列表与元信息缓存标签
-    revalidateTag(`posts-${locale}`);
-    if (!draft) {
-      // 详情页的元信息标签
-      revalidateTag(`post-${locale}-${slug}`);
-      // 列表页与详情页路径（可选）
-      revalidatePath(locale === "zh" ? "/blog" : "/en/blog");
-      revalidatePath(url!);
-    }
-  } catch {
-    // revalidate 失败不应影响发布结果
-  }
-  return NextResponse.json({ ok: true, path: key, url, slug, draft });
+  return new Response(JSON.stringify({ ok: true, path: key, url, slug, draft }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }

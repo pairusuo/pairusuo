@@ -7,6 +7,11 @@ import type { Metadata } from "next";
 
 export const revalidate = 300; // ISR for blog list page
 
+// Generate static params for locale
+export function generateStaticParams() {
+  return [{ locale: 'zh' }, { locale: 'en' }];
+}
+
 // Generate dynamic metadata for the blog page
 export async function generateMetadata({
   params

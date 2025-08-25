@@ -128,11 +128,11 @@ export function Logo({
   return (
     <Link
       href={href}
-      className={("flex items-center gap-2 hover:opacity-80 transition-opacity " + (className || "")).trim()}
+      className={("flex items-center gap-2 smooth-transition " + (className || "")).trim()}
       {...props}
     >
-      <LogoSVG width={logoWidth} height={logoHeight} className="object-contain" />
-      {showText && <span className="font-semibold text-lg text-foreground">pairusuo</span>}
+      <LogoSVG width={logoWidth} height={logoHeight} className="object-contain smooth-transition hover:scale-110" />
+      {showText && <span className="font-semibold text-lg gradient-text">pairusuo</span>}
     </Link>
   );
 }
