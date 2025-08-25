@@ -79,6 +79,7 @@ export async function generateMetadata({
   };
 }
 
+export const dynamic = 'force-static';
 // Revalidate the home list periodically to pick up new posts without a full rebuild.
 export const revalidate = 300; // seconds
 

@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { getBaseUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
+export const dynamic = 'force-static';
+
 type LinkItem = { url: string; name: string; desc?: string };
 const links = rawLinks as LinkItem[];
 

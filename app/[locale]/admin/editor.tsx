@@ -6,7 +6,17 @@ import { useTranslations } from "next-intl";
 export default function Editor({ adminToken, initialLocale }: { adminToken: string; initialLocale: string }) {
   const router = useRouter();
   const [locale, setLocale] = useState<string>(initialLocale || "zh");
+  const [actualToken, setActualToken] = useState<string>("");
   const t = useTranslations("admin");
+  
+  // 从客户端 URL 参数中读取 token
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenFromUrl = urlParams.get('token') || urlParams.get('t') || urlParams.get('admin_token') || adminToken || "";
+      setActualToken(tokenFromUrl);
+    }
+  }, [adminToken]);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [summary, setSummary] = useState("");
@@ -32,7 +42,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
     setPubLoading(true);
     try {
       const res = await fetch(`/api/admin/posts?locale=${encodeURIComponent(locale)}&page=${page}&pageSize=${pubPageSize}` , {
-        headers: { "X-Admin-Token": adminToken },
+        headers: { "X-Admin-Token": actualToken },
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
@@ -58,7 +68,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
     setDraftsLoading(true);
     try {
       const res = await fetch(`/api/admin/drafts?locale=${encodeURIComponent(locale)}`, {
-        headers: { "X-Admin-Token": adminToken },
+        headers: { "X-Admin-Token": actualToken },
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
@@ -88,7 +98,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
             fd.append('locale', locale);
             const res = await fetch('/api/admin/upload', {
               method: 'POST',
-              headers: { 'X-Admin-Token': adminToken },
+              headers: { 'X-Admin-Token': actualToken },
               body: fd,
             });
             if (!res.ok) throw new Error(await res.text());
@@ -131,7 +141,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Admin-Token': adminToken,
+          'X-Admin-Token': actualToken,
         },
         body: JSON.stringify({ locale, slug: editingSlug, action: 'publish' }),
       });
@@ -185,7 +195,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Admin-Token": adminToken,
+          "X-Admin-Token": actualToken,
         },
         body: JSON.stringify({ locale, title, slug, summary, content, draft }),
       });
@@ -213,7 +223,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
   const loadDraftForEdit = async (slugToLoad: string) => {
     try {
       const res = await fetch(`/api/admin/drafts?locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slugToLoad)}`, {
-        headers: { "X-Admin-Token": adminToken },
+        headers: { "X-Admin-Token": actualToken },
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
@@ -244,7 +254,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'X-Admin-Token': adminToken,
+          'X-Admin-Token': actualToken,
         },
         body: JSON.stringify({ locale, slug: editingSlug, title, summary, content }),
       });
@@ -390,7 +400,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
 
     <PublishedSection
       locale={locale}
-      adminToken={adminToken}
+      adminToken={actualToken}
       t={t}
       loading={pubLoading}
       error={pubError}
@@ -411,7 +421,7 @@ export default function Editor({ adminToken, initialLocale }: { adminToken: stri
 
     <DraftsSection
       locale={locale}
-      adminToken={adminToken}
+      adminToken={actualToken}
       t={t}
       drafts={drafts}
       draftsLoading={draftsLoading}

@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { MdxContentProvider } from "@/components/mdx";
 import { getBaseUrl, absoluteUrl } from "@/lib/site";
 
+export const dynamic = 'force-static';
 export const revalidate = 300;
 
 // Generate static params for all posts

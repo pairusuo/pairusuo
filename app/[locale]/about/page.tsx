@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { getBaseUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
+export const dynamic = 'force-static';
+
 // Generate static params for locale
 export function generateStaticParams() {
   return [{ locale: 'zh' }, { locale: 'en' }];

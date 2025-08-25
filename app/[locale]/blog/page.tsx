@@ -5,6 +5,7 @@ import { getBaseUrl } from "@/lib/site";
 import { formatDateTime } from "@/lib/utils";
 import type { Metadata } from "next";
 
+export const dynamic = 'force-static';
 export const revalidate = 300; // ISR for blog list page
 
 // Generate static params for locale

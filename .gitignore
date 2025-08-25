@@ -41,5 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 # 自定义部份
-/dev_restart.sh
+dev_restart.sh
 docs/editor-markdown-plan.md
+run_claude.sh

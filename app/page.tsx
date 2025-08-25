@@ -1,7 +1,6 @@
-import { redirect } from "next/navigation";
+export const dynamic = 'force-static';
 
 export default function Home() {
-  // With localePrefix: 'as-needed', default locale (zh) lives at '/'.
-  // Redirect to '/' to avoid legacy '/zh' behavior.
-  redirect("/");
+  // This is handled by middleware redirect
+  return null;
 }
