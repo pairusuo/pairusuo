@@ -179,7 +179,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const source = await storage.read(key);
       if (!source) return badRequest("Failed to write file: existing file unreadable", 500);
       
-      const { data: fm } = parseFrontmatter(source);
+      const { data: fm, content: existingContent } = parseFrontmatter(source);
       const isDraft = (() => {
         const v = fm.draft as unknown;
         if (typeof v === 'boolean') return v;
@@ -205,7 +205,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         publishedAt: draft ? ((fm as any).publishedAt || shDateTime) : shDateTime,
       } as Record<string, unknown>;
       
-      const nextContent = content || parsed.content || '';
+      const nextContent = content || existingContent || '';
       const frontmatterLines = [
         '---',
         ...Object.entries(newData).map(([key, value]) => {
