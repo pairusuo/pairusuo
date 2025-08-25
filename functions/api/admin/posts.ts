@@ -73,7 +73,7 @@ function parseFrontmatter(source: string) {
     const colonIndex = line.indexOf(':');
     if (colonIndex > 0) {
       const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
+      let value: string | boolean = line.substring(colonIndex + 1).trim();
       
       // 去除引号
       if ((value.startsWith('"') && value.endsWith('"')) || 
