@@ -1,5 +1,8 @@
 # Cloudflare Pages 重定向规则
 
+# 根路径重定向到默认语言 (中文)
+/ /zh 302
+
 # API 路由重定向到 Functions
 /api/* /api/:splat 200
 
@@ -7,5 +10,9 @@
 /rss.xml /rss.xml 200
 /sitemap.xml /sitemap.xml 200
 
+# SPA 路由回退 - 确保动态路由正常工作
+/zh/* /zh/index.html 200
+/en/* /en/index.html 200
+
 # 404 处理
-/* /404.html 404
+/* /_not-found/index.html 404
