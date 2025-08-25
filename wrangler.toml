@@ -4,7 +4,19 @@ pages_build_output_dir = "out"
 compatibility_date = "2024-10-01"  
 compatibility_flags = ["nodejs_compat"]
 
-# R2 绑定（如果需要在 Functions 中直接访问）
+# R2 绑定 - 原生 Cloudflare R2 访问
 [[r2_buckets]]
 binding = "R2_BUCKET"
 bucket_name = "pairusuo-top"
+preview_bucket_name = "pairusuo-top"
+
+# 环境变量配置 - 在 Cloudflare Pages Dashboard 中设置对应的值
+[vars]
+# 管理员 token
+ADMIN_TOKEN = "85a57db90cfce9d9c5e3b938f8ede3797b59b7ba24ec7be84404f037cc9d2137"
+# 公共访问 URL
+R2_PUBLIC_BASE = "https://image.pairusuo.top"
+# 网站基础 URL
+NEXT_PUBLIC_SITE_URL = "https://pairusuo.top"
+# 调试开关
+DEBUG_POSTS = "1"

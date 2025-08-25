@@ -1,47 +1,4 @@
-// R2-only storage implementation
-
-// R2 (S3-compatible)
-let S3Client: typeof import('@aws-sdk/client-s3').S3Client | undefined;
-let PutObjectCommand: typeof import('@aws-sdk/client-s3').PutObjectCommand | undefined;
-let GetObjectCommand: typeof import('@aws-sdk/client-s3').GetObjectCommand | undefined;
-let HeadObjectCommand: typeof import('@aws-sdk/client-s3').HeadObjectCommand | undefined;
-let ListObjectsV2Command: typeof import('@aws-sdk/client-s3').ListObjectsV2Command | undefined;
-let DeleteObjectCommand: typeof import('@aws-sdk/client-s3').DeleteObjectCommand | undefined;
-type ListObjectsV2CommandOutput = import('@aws-sdk/client-s3').ListObjectsV2CommandOutput;
-
-async function initAWS() {
-  if (S3Client && PutObjectCommand && GetObjectCommand && HeadObjectCommand && ListObjectsV2Command && DeleteObjectCommand) return;
-  const aws = await import('@aws-sdk/client-s3');
-  S3Client = aws.S3Client;
-  PutObjectCommand = aws.PutObjectCommand;
-  GetObjectCommand = aws.GetObjectCommand;
-  HeadObjectCommand = aws.HeadObjectCommand;
-  ListObjectsV2Command = aws.ListObjectsV2Command;
-  DeleteObjectCommand = aws.DeleteObjectCommand;
-}
-
-// Ensure AWS constructors are available with non-optional types
-async function getAWS(): Promise<{
-  S3Client: typeof import('@aws-sdk/client-s3').S3Client;
-  PutObjectCommand: typeof import('@aws-sdk/client-s3').PutObjectCommand;
-  GetObjectCommand: typeof import('@aws-sdk/client-s3').GetObjectCommand;
-  HeadObjectCommand: typeof import('@aws-sdk/client-s3').HeadObjectCommand;
-  ListObjectsV2Command: typeof import('@aws-sdk/client-s3').ListObjectsV2Command;
-  DeleteObjectCommand: typeof import('@aws-sdk/client-s3').DeleteObjectCommand;
-}> {
-  await initAWS();
-  if (!S3Client || !PutObjectCommand || !GetObjectCommand || !HeadObjectCommand || !ListObjectsV2Command || !DeleteObjectCommand) {
-    throw new Error('Failed to load @aws-sdk/client-s3');
-  }
-  return {
-    S3Client: S3Client!,
-    PutObjectCommand: PutObjectCommand!,
-    GetObjectCommand: GetObjectCommand!,
-    HeadObjectCommand: HeadObjectCommand!,
-    ListObjectsV2Command: ListObjectsV2Command!,
-    DeleteObjectCommand: DeleteObjectCommand!,
-  };
-}
+// Native Cloudflare R2 binding storage implementation
 
 export interface Storage {
   list(prefix: string): Promise<string[]>; // returns keys under prefix
@@ -51,89 +8,147 @@ export interface Storage {
   delete(key: string): Promise<void>;
 }
 
-function isR2Enabled() {
-  return Boolean(
-    process.env.R2_BUCKET &&
-    (process.env.R2_ACCOUNT_ID || process.env.CF_ACCOUNT_ID) &&
-    (process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID) &&
-    (process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY)
-  );
+// Cloudflare R2Bucket interface
+interface R2Bucket {
+  list(options?: { prefix?: string; cursor?: string; delimiter?: string; include?: string[] }): Promise<R2Objects>;
+  get(key: string, options?: { onlyIf?: R2Conditional; range?: R2Range | R2RangeHeader }): Promise<R2ObjectBody | null>;
+  put(key: string, value: ReadableStream | ArrayBuffer | ArrayBufferView | string | null | Blob, options?: R2PutOptions): Promise<R2Object | null>;
+  head(key: string, options?: { onlyIf?: R2Conditional }): Promise<R2Object | null>;
+  delete(keys: string | string[]): Promise<void>;
 }
 
-let cachedS3: import('@aws-sdk/client-s3').S3Client | null = null;
-async function r2Client() {
-  const { S3Client } = await getAWS();
-  if (!cachedS3) {
-    const accountId = process.env.R2_ACCOUNT_ID || process.env.CF_ACCOUNT_ID!;
-    const endpoint = process.env.R2_ENDPOINT || `https://${accountId}.r2.cloudflarestorage.com`;
-    cachedS3 = new S3Client({
-      region: 'auto',
-      endpoint,
-      forcePathStyle: true,
-      credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY!,
-      },
-    });
+interface R2Objects {
+  objects: R2Object[];
+  truncated: boolean;
+  cursor?: string;
+  delimitedPrefixes: string[];
+}
+
+interface R2Object {
+  key: string;
+  version: string;
+  size: number;
+  etag: string;
+  httpEtag: string;
+  uploaded: Date;
+  httpMetadata?: R2HTTPMetadata;
+  customMetadata?: Record<string, string>;
+  range?: R2Range;
+}
+
+interface R2ObjectBody extends R2Object {
+  body: ReadableStream;
+  bodyUsed: boolean;
+  arrayBuffer(): Promise<ArrayBuffer>;
+  text(): Promise<string>;
+  json<T = unknown>(): Promise<T>;
+  blob(): Promise<Blob>;
+}
+
+interface R2HTTPMetadata {
+  contentType?: string;
+  contentLanguage?: string;
+  contentDisposition?: string;
+  contentEncoding?: string;
+  cacheControl?: string;
+  cacheExpiry?: Date;
+}
+
+interface R2Conditional {
+  etagMatches?: string;
+  etagDoesNotMatch?: string;
+  uploadedBefore?: Date;
+  uploadedAfter?: Date;
+}
+
+interface R2Range {
+  offset?: number;
+  length?: number;
+  suffix?: number;
+}
+
+interface R2RangeHeader {
+  range: string;
+}
+
+interface R2PutOptions {
+  httpMetadata?: R2HTTPMetadata | Headers;
+  customMetadata?: Record<string, string>;
+  md5?: ArrayBuffer | string;
+  sha1?: ArrayBuffer | string;
+  sha256?: ArrayBuffer | string;
+  sha384?: ArrayBuffer | string;
+  sha512?: ArrayBuffer | string;
+  onlyIf?: R2Conditional;
+}
+
+// Check if we're in Cloudflare runtime with R2 binding
+function isR2BindingAvailable(): boolean {
+  // Check if we're in Cloudflare Workers/Pages environment
+  try {
+    return typeof globalThis !== 'undefined' && 
+           'R2_BUCKET' in globalThis &&
+           (globalThis as any).R2_BUCKET != null;
+  } catch {
+    return false;
   }
-  const bucket = process.env.R2_BUCKET!;
-  return { client: cachedS3, bucket };
+}
+
+function getR2Bucket(): R2Bucket {
+  if (!isR2BindingAvailable()) {
+    throw new Error('R2_BUCKET binding is not available. Make sure R2 binding is configured in wrangler.toml');
+  }
+  return (globalThis as any).R2_BUCKET;
 }
 
 const r2Storage: Storage = {
   async list(prefix: string) {
-    const { client, bucket } = await r2Client();
-    const { ListObjectsV2Command } = await getAWS();
+    const bucket = getR2Bucket();
     const keys: string[] = [];
-    let ContinuationToken: string | undefined = undefined;
+    let cursor: string | undefined = undefined;
+    
     do {
-      const cmd = new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix, ContinuationToken });
-      const res: ListObjectsV2CommandOutput = await client.send(cmd);
-      (res.Contents || []).forEach((o: { Key?: string | undefined }) => {
-        if (o && o.Key) keys.push(o.Key);
-      });
-      ContinuationToken = res.IsTruncated ? (res.NextContinuationToken ?? undefined) : undefined;
-    } while (ContinuationToken);
+      const result = await bucket.list({ prefix, cursor });
+      result.objects.forEach(obj => keys.push(obj.key));
+      cursor = result.truncated ? result.cursor : undefined;
+    } while (cursor);
+    
     return keys;
   },
+  
   async read(key: string) {
-    const { client, bucket } = await r2Client();
-    const { GetObjectCommand } = await getAWS();
+    const bucket = getR2Bucket();
     try {
-      const cmd = new GetObjectCommand({ Bucket: bucket, Key: key });
-      const res = await client.send(cmd);
-      // Node.js runtime: Body is Readable. SDK v3 provides helper to string on Web streams;
-      // in Node 18+, use transformToString when available, otherwise buffer manually.
-      const body: string = typeof (res.Body as any)?.transformToString === 'function'
-        ? await (res.Body as any).transformToString('utf-8')
-        : Buffer.from(await (res.Body as any).arrayBuffer()).toString('utf-8');
-      return body as string;
+      const object = await bucket.get(key);
+      if (!object) return null;
+      return await object.text();
     } catch {
       return null;
     }
   },
+  
   async write(key: string, content: string) {
-    const { client, bucket } = await r2Client();
-    const { PutObjectCommand } = await getAWS();
-    const cmd = new PutObjectCommand({ Bucket: bucket, Key: key, Body: content, ContentType: 'text/markdown' });
-    await client.send(cmd);
+    const bucket = getR2Bucket();
+    await bucket.put(key, content, {
+      httpMetadata: {
+        contentType: 'text/markdown',
+      },
+    });
   },
+  
   async exists(key: string) {
-    const { client, bucket } = await r2Client();
+    const bucket = getR2Bucket();
     try {
-      const { HeadObjectCommand } = await getAWS();
-      const cmd = new HeadObjectCommand({ Bucket: bucket, Key: key });
-      await client.send(cmd);
-      return true;
+      const object = await bucket.head(key);
+      return object !== null;
     } catch {
       return false;
     }
   },
+  
   async delete(key: string) {
-    const { client, bucket } = await r2Client();
-    const { DeleteObjectCommand } = await getAWS();
-    const cmd = new DeleteObjectCommand({ Bucket: bucket, Key: key });
-    await client.send(cmd);
+    const bucket = getR2Bucket();
+    await bucket.delete(key);
   },
 };
 
@@ -141,15 +156,15 @@ export function getStorage(): Storage {
   // 只有在构建时使用模拟存储，运行时优先使用 R2
   const isBuildTime = process.env.NODE_ENV !== 'production' || process.env.NEXT_PHASE === 'phase-production-build';
   
-  if (!isR2Enabled()) {
+  if (!isR2BindingAvailable()) {
     if (isBuildTime) {
-      console.warn('[Storage] Using dev mock storage for build - R2 not configured');
+      console.warn('[Storage] Using dev mock storage for build - R2 binding not available');
       const { DevMockStorage } = require('./storage-dev');
       return new DevMockStorage();
     } else {
-      // 运行时应该有 R2 配置
+      // 运行时应该有 R2 绑定
       throw new Error(
-        'R2 is not configured. Please set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, and R2_BUCKET environment variables.'
+        'R2_BUCKET binding is not available. Please configure R2 binding in wrangler.toml and Cloudflare Pages settings.'
       );
     }
   }
