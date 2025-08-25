@@ -154,7 +154,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <div className="flex items-center gap-3">
               <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0 pulse-glow">
                 <Image
-                  src="/info.png"
+                  src="https://image.pairusuo.top/uploads/public/info.png"
                   alt="pairusuo"
                   width={64}
                   height={64}
@@ -193,7 +193,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <div className="flex items-center justify-center">
               <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white hover-lift">
                 <Image
-                  src="/qrcode.jpg"
+                  src="https://image.pairusuo.top/uploads/public/qrcode.jpg"
                   alt={t("personalInfo.qrcode.alt")}
                   width={96}
                   height={96}

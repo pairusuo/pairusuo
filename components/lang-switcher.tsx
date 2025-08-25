@@ -18,8 +18,8 @@ export default function LangSwitcher({ currentLocale }: { currentLocale: string 
     const isBlogDetail = basePath.startsWith("/blog/");
     const normalizedBase = isBlogDetail ? "/blog" : basePath;
     if (target === "zh") {
-      // zh is default (no prefix). If base is empty, go to root.
-      const nextPath = normalizedBase === "" ? "/" : normalizedBase;
+      // zh pages are under /zh/ prefix in static export
+      const nextPath = normalizedBase === "" ? "/" : `/zh${normalizedBase}`;
       try { router.prefetch(nextPath); } catch {}
       router.replace(nextPath);
     } else if (target === "en") {

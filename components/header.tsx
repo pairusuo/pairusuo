@@ -41,9 +41,9 @@ export default function Header({ locale, translations }: {
   const [open, setOpen] = useState(false);
   const menuId = useId();
 
-  // For default locale 'zh', drop the locale prefix from URLs
-  const base = locale === 'zh' ? '' : `/${locale}`;
-  const homeHref = base || '/';
+  // Build proper locale-aware URLs for static export
+  const base = `/${locale}`;
+  const homeHref = locale === 'zh' ? '/' : base;
   const items = [
     { href: homeHref, key: "home" as keyof HeaderTranslations, match: (p: string) => p === homeHref },
     { href: `${base}/blog`, key: "blog" as keyof HeaderTranslations, match: (p: string) => p.startsWith(`${base}/blog`) },
