@@ -140,14 +140,9 @@ const r2Storage: Storage = {
 export function getStorage(): Storage {
   // 在开发环境或构建时，如果 R2 未配置，使用模拟存储
   if (!isR2Enabled()) {
-    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV !== 'production') {
-      console.warn('[Storage] Using dev mock storage - R2 not configured');
-      const { DevMockStorage } = require('./storage-dev');
-      return new DevMockStorage();
-    }
-    throw new Error(
-      'R2 is not configured. Please set R2_ACCOUNT_ID/CF_ACCOUNT_ID, R2_ACCESS_KEY_ID/AWS_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY/AWS_SECRET_ACCESS_KEY, and R2_BUCKET.'
-    );
+    console.warn('[Storage] Using dev mock storage - R2 not configured');
+    const { DevMockStorage } = require('./storage-dev');
+    return new DevMockStorage();
   }
   return r2Storage;
 }
