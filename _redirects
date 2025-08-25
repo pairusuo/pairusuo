@@ -7,8 +7,7 @@
 # API 路由重定向到 Functions  
 /api/* /api/:splat 200
 
-# 根路径显示中文内容（不更改 URL）
-/ /zh/index.html 200
+# 根路径现在有自己的 index.html，不需要重定向
 
 # SPA 路由回退 - 针对特定路径
 /zh/* /zh/index.html 200
