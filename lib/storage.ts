@@ -138,11 +138,20 @@ const r2Storage: Storage = {
 };
 
 export function getStorage(): Storage {
-  // 在开发环境或构建时，如果 R2 未配置，使用模拟存储
+  // 只有在构建时使用模拟存储，运行时优先使用 R2
+  const isBuildTime = process.env.NODE_ENV !== 'production' || process.env.NEXT_PHASE === 'phase-production-build';
+  
   if (!isR2Enabled()) {
-    console.warn('[Storage] Using dev mock storage - R2 not configured');
-    const { DevMockStorage } = require('./storage-dev');
-    return new DevMockStorage();
+    if (isBuildTime) {
+      console.warn('[Storage] Using dev mock storage for build - R2 not configured');
+      const { DevMockStorage } = require('./storage-dev');
+      return new DevMockStorage();
+    } else {
+      // 运行时应该有 R2 配置
+      throw new Error(
+        'R2 is not configured. Please set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, and R2_BUCKET environment variables.'
+      );
+    }
   }
   return r2Storage;
 }
