@@ -36,6 +36,8 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
   images: {
+    // 静态导出时禁用图片优化
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     // Tune responsive image size buckets to match our layouts
     // deviceSizes are widths for srcSet on layout-responsive images

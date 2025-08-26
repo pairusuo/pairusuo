@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { getBaseUrl } from "@/lib/site";
 import { loadBase } from "@/lib/messages";
@@ -153,14 +152,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <div className="border rounded-lg p-4 space-y-3 card-glow hover-lift">
             <div className="flex items-center gap-3">
               <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted shrink-0 pulse-glow">
-                <Image
+                <img
                   src="https://image.pairusuo.top/uploads/public/info.png"
                   alt="pairusuo"
                   width={64}
                   height={64}
                   className="object-cover object-center w-full h-full"
-                  priority
-                  sizes="64px"
                 />
               </div>
               <div className="min-w-0">
@@ -192,13 +189,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <div className="text-sm font-medium mb-3 text-center">{t("personalInfo.qrcode.label")}</div>
             <div className="flex items-center justify-center">
               <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white hover-lift">
-                <Image
+                <img
                   src="https://image.pairusuo.top/uploads/public/qrcode.jpg"
                   alt={t("personalInfo.qrcode.alt")}
                   width={96}
                   height={96}
                   className="object-contain w-full h-full"
-                  sizes="96px"
                 />
               </div>
             </div>
