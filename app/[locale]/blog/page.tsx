@@ -80,7 +80,7 @@ export default async function BlogList({ params, searchParams }: { params: Promi
             {posts.map((p: PostMeta) => (
               <li key={p.slug} className="border rounded p-4 hover:bg-muted/50 overflow-hidden">
                 <Link
-                  href={locale === 'zh' ? `/blog/${p.slug}` : `/${locale}/blog/${p.slug}`}
+                  href={`/${locale}/blog/${p.slug}`}
                   className="font-medium break-words inline-block outline-none rounded-sm underline-offset-4 transition-[text-decoration-color,text-decoration-thickness,color] duration-150 hover:underline hover:decoration-1 focus-visible:underline focus-visible:decoration-1 focus-visible:ring-2 focus-visible:ring-primary/40"
                 >
                   {p.title}

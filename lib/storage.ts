@@ -153,20 +153,33 @@ const r2Storage: Storage = {
 };
 
 export function getStorage(): Storage {
-  // 只有在构建时使用模拟存储，运行时优先使用 R2
+  // 在构建时优先尝试使用 S3 API 连接 R2
   const isBuildTime = process.env.NODE_ENV !== 'production' || process.env.NEXT_PHASE === 'phase-production-build';
   
-  if (!isR2BindingAvailable()) {
-    if (isBuildTime) {
-      console.warn('[Storage] Using dev mock storage for build - R2 binding not available');
-      const { DevMockStorage } = require('./storage-dev');
-      return new DevMockStorage();
-    } else {
-      // 运行时应该有 R2 绑定
-      throw new Error(
-        'R2_BUCKET binding is not available. Please configure R2 binding in wrangler.toml and Cloudflare Pages settings.'
-      );
+  if (isBuildTime) {
+    // 尝试使用 S3 API 连接 R2
+    try {
+      const { getBuildTimeR2Storage } = require('./storage-r2-build');
+      const r2Storage = getBuildTimeR2Storage();
+      if (r2Storage) {
+        console.log('[Storage] Using S3 API to connect R2 for build');
+        return r2Storage;
+      }
+    } catch (error) {
+      console.warn('[Storage] Failed to use S3 R2 storage:', error);
     }
+    
+    // 回退到 mock 存储
+    console.warn('[Storage] Using dev mock storage for build - R2 S3 API not available');
+    const { DevMockStorage } = require('./storage-dev');
+    return new DevMockStorage();
+  }
+  
+  // 运行时使用原生 R2 绑定
+  if (!isR2BindingAvailable()) {
+    throw new Error(
+      'R2_BUCKET binding is not available. Please configure R2 binding in wrangler.toml and Cloudflare Pages settings.'
+    );
   }
   return r2Storage;
 }
