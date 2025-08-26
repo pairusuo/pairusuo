@@ -8,7 +8,9 @@
     "build:cf": "next build && cp _redirects out/",
     "start": "next start",
     "lint": "next lint",
-    "preview": "npm run build:cf && npx serve out"
+    "preview": "npm run build:cf && npx serve out",
+    "deploy": "npm run build:cf && npx wrangler pages deploy out --project-name=pairusuo",
+    "deploy:preview": "npm run build:cf && npx wrangler pages deploy out --project-name=pairusuo --branch=preview"
   },
   "dependencies": {
     "@next/mdx": "^15.4.6",

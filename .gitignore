@@ -44,3 +44,11 @@ next-env.d.ts
 dev_restart.sh
 docs/editor-markdown-plan.md
 run_claude.sh
+
+# Cloudflare 配置文件（包含敏感信息）
+wrangler.toml
+*.toml.local
+
+# 上传脚本（包含敏感信息）
+upload_posts.js
+upload_test_posts.js
