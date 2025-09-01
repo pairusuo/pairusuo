@@ -26,8 +26,6 @@ pnpm install
 3. 在 `src/lib/i18n.ts` 中添加新语言的支持
 4. 修改 `src/config/locale.js` 使用新语言
 
-修改 `src/config/locale.js` 文件：
-
 ```javascript
 // 选择你的语言: 'zh' | 'ja' | 'en'
 export const LOCALE = 'zh';
