@@ -16,8 +16,11 @@ export const metadata: Metadata = {
   creator: t('meta.author'),
   publisher: t('meta.author'),
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
+    icon: [
+      { url: '/info.png', sizes: '256x256', type: 'image/png' },
+      { url: '/favicon.ico', sizes: '256x256', type: 'image/x-icon' }
+    ],
+    shortcut: '/info.png',
     apple: '/info.png',
   },
   formatDetection: {
