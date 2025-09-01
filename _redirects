@@ -1,17 +1,5 @@
-# Cloudflare Pages 重定向规则
+# Redirect old URLs (if any)
+# /old-path/* /new-path/:splat 301
 
-# RSS 和 sitemap 处理 (放在前面优化性能)
-/rss.xml /rss.xml 200
-/sitemap.xml /sitemap.xml 200
-
-# API 路由重定向到 Functions  
-/api/* /api/:splat 200
-
-# 根路径现在有自己的 index.html，不需要重定向
-
-# SPA 路由回退 - 针对特定路径
-/zh/* /zh/index.html 200
-/en/* /en/index.html 200
-
-# 404 处理
-/* /_not-found/index.html 404
+# SPA fallback for client-side routing
+/* /index.html 200

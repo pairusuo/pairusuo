@@ -1,4 +1,0 @@
-# Cloudflare Pages deployment marker
-# This file ensures CF Pages picks up the latest commit
-BUILD_TIMESTAMP=2025-08-25T07:30:00Z
-COMMIT_HASH=99c11e0

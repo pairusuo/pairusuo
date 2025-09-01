@@ -1,0 +1,145 @@
+{
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "links": "Links",
+    "tags": "Tags"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Explore the world of technology and share learning insights",
+    "postsCount": "{count} posts in total",
+    "noPosts": "No posts yet",
+    "author": "Author",
+    "readMore": "Read More",
+    "publishedAt": "Published at",
+    "updatedAt": "Updated at",
+    "tags": "Tags",
+    "backToList": "Back to Blog List",
+    "searchPlaceholder": "Search blogs...",
+    "noResults": "No related blogs found",
+    "allPosts": "All Posts",
+    "latestPosts": "Latest Posts"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist. It may be a broken link or the page has been deleted.",
+    "backHome": "Back to Home"
+  },
+  "home": {
+    "title": "Welcome to My Blog",
+    "subtitle": "Sharing thoughts and experiences",
+    "latestPosts": "Latest Posts",
+    "viewAllPosts": "View All Posts",
+    "intro": {
+      "title": "Welcome to My Blog",
+      "description": "Here I document my technical practices, product thinking, and overseas journey. I hope to explore and grow together with you.",
+      "features": [
+        "💻 Full-stack development experience",
+        "🚀 Passionate about new technology exploration",
+        "📝 Technical article sharing",
+        "🌱 Continuous learning and growth"
+      ],
+      "contact": "Scan to add WeChat",
+      "avatar": "Blogger Avatar"
+    },
+    "author": {
+      "name": "pairusuo",
+      "bio": "Overseas newcomer, follower of GeFei",
+      "description": "Personal blog, sharing technical insights and overseas experience"
+    },
+    "tagList": [
+      {
+        "text": "Aspiring overseas entrepreneur",
+        "url": "",
+        "color": "bg-muted"
+      },
+      {
+        "text": "GitHub veteran new contributor",
+        "url": "https://github.com",
+        "color": "bg-muted"
+      },
+      {
+        "text": "Labubu holder",
+        "url": "https://www.popmart.com",
+        "color": "bg-pink-100 text-pink-800"
+      },
+      {
+        "text": "ShipAny promoter",
+        "url": "https://shipany.com",
+        "color": "bg-green-100 text-green-800"
+      }
+    ],
+    "wechat": "WeChat Official Account",
+    "readTime": "min read"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "notFound": "Page Not Found",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "toggleTheme": "Toggle Theme"
+  },
+  "footer": {
+    "copyright": "All Rights Reserved",
+    "poweredBy": "Built with Next.js"
+  },
+  "meta": {
+    "title": "My Blog",
+    "description": "A personal blog sharing technology and life",
+    "keywords": "blog,technology,life,sharing",
+    "author": "Blogger"
+  },
+  "tags": {
+    "title": "Tags",
+    "subtitle": "Browse articles by tags, {count} tags in total",
+    "noTags": "No tags yet",
+    "postsCount": "{count} posts",
+    "backToList": "Back to Tags List",
+    "tagPrefix": "Tag:",
+    "totalPosts": "{count} posts in total",
+    "browseDescription": "Browse all articles about {tag}, {count} related articles in total.",
+    "keywords": "tags,articles,blog"
+  },
+  "links": {
+    "title": "Links",
+    "subtitle": "Tech stack used by this site and recommended links",
+    "techStack": "Tech Stack",
+    "recommended": "Recommended Links",
+    "description": "Description",
+    "aboutLinks": "About Links",
+    "aboutLinksDesc": "The above links showcase the tech stack used by this blog and some recommended development resources. If you're also building projects with similar tech stacks, feel free to connect with me. You can customize this page content by modifying the corresponding files.",
+    "categories": {
+      "framework": "framework",
+      "language": "language",
+      "styling": "styling",
+      "ui": "ui",
+      "content": "content",
+      "hosting": "hosting",
+      "storage": "storage",
+      "tool": "tool",
+      "development": "development",
+      "documentation": "documentation",
+      "resource": "resource"
+    },
+    "descriptions": {
+      "nextjs": "React full-stack framework",
+      "react": "User interface building library",
+      "typescript": "Superset of JavaScript",
+      "tailwind": "Utility-first CSS framework",
+      "shadcn": "Component library based on Radix UI",
+      "mdx": "Use JSX in Markdown",
+      "cloudflarePages": "Static website hosting platform",
+      "cloudflareR2": "Object storage service",
+      "vercel": "Frontend deployment platform",
+      "tailwindcolor": "Tailwind CSS color reference tool",
+      "pnpm": "Fast, disk space efficient package manager",
+      "github": "Code hosting platform",
+      "mdn": "Web development documentation",
+      "caniuse": "Browser compatibility queries",
+      "unsplash": "Free high-quality images"
+    }
+  }
+}

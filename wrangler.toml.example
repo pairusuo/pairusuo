@@ -1,45 +1,24 @@
-# Cloudflare Pages 项目配置模板
-# 复制此文件为 wrangler.toml 并填入真实配置
-
-name = "pairusuo"
+name = "pairusuo-blog"
+compatibility_date = "2025-08-31"
 pages_build_output_dir = "out"
-compatibility_date = "2024-10-01"  
-compatibility_flags = ["nodejs_compat"]
 
-# R2 绑定 - 原生 Cloudflare R2 访问
-[[r2_buckets]]
-binding = "R2_BUCKET"
-bucket_name = "pairusuo-top"
-preview_bucket_name = "pairusuo-top"
+[env.preview]
+name = "pairusuo-blog-preview"
 
-# 环境变量配置
-[vars]
-# 管理员 token - 用于博客管理 API 认证
-ADMIN_TOKEN = "your-admin-token-here"
+[env.preview.vars]
+NEXT_PUBLIC_SITE_URL = "https://pairusuo-blog-preview.pages.dev"
+NEXT_PUBLIC_SITE_NAME = "派入所 Preview"
 
-# 公共访问 URL - R2 图片 CDN 地址
-R2_PUBLIC_BASE = "https://image.pairusuo.top"
+[env.production]
+name = "pairusuo-blog"
 
-# 网站基础 URL
+[env.production.vars]
 NEXT_PUBLIC_SITE_URL = "https://pairusuo.top"
+NEXT_PUBLIC_SITE_NAME = "派入所"
 
-# 调试开关
-DEBUG_POSTS = "1"
-
-# === 构建时 R2 访问配置 ===
-# 以下配置用于构建时通过 S3 API 访问 R2，获取真实博客内容
-
-# Cloudflare 账户 ID
-# 获取方式：登录 Cloudflare Dashboard，右侧边栏可见
-CLOUDFLARE_ACCOUNT_ID = "your-cloudflare-account-id-here"
-
-# R2 API 访问密钥 ID  
-# 获取方式：R2 Dashboard -> Manage R2 API tokens -> Create API token
-R2_ACCESS_KEY_ID = "your-r2-access-key-id-here"
-
-# R2 API 秘密访问密钥
-# 获取方式：与上面同时生成，只显示一次，请妥善保存
-R2_SECRET_ACCESS_KEY = "your-r2-secret-access-key-here"
-
-# R2 存储桶名称（默认值，通常不需要修改）
-R2_BUCKET_NAME = "pairusuo-top"
+# Cloudflare R2 配置
+# R2_ACCOUNT_ID = ""
+# R2_ACCESS_KEY_ID = ""
+# R2_SECRET_ACCESS_KEY = ""
+# R2_BUCKET_NAME = ""
+# R2_PUBLIC_URL = ""

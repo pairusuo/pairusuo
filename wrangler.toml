@@ -1,38 +1,29 @@
-# Cloudflare Pages 项目配置
-name = "pairusuo"
+name = "pairusuo-blog"
+compatibility_date = "2025-08-31"
 pages_build_output_dir = "out"
-compatibility_date = "2024-10-01"  
-compatibility_flags = ["nodejs_compat"]
 
-# R2 绑定 - 原生 Cloudflare R2 访问
-[[r2_buckets]]
-binding = "R2_BUCKET"
-bucket_name = "pairusuo-top"
-preview_bucket_name = "pairusuo-top"
+[env.preview]
+name = "pairusuo-blog-preview"
 
-# 环境变量配置
-[vars]
-# 管理员 token
-ADMIN_TOKEN = "85a57db90cfce9d9c5e3b938f8ede3797b59b7ba24ec7be84404f037cc9d2137"
-# 公共访问 URL
-R2_PUBLIC_BASE = "https://image.pairusuo.top"
-# 网站基础 URL
+[env.preview.vars]
+NEXT_PUBLIC_SITE_URL = "https://pairusuo-blog-preview.pages.dev"
+NEXT_PUBLIC_SITE_NAME = "派入所 Preview"
+
+[env.production]
+name = "pairusuo-blog"
+
+[env.production.vars]
 NEXT_PUBLIC_SITE_URL = "https://pairusuo.top"
-# 调试开关
-DEBUG_POSTS = "1"
+NEXT_PUBLIC_SITE_NAME = "派入所"
 
-# === 构建时 R2 访问配置 ===
-# TODO: 填入你的真实 Cloudflare 配置
-# 获取步骤：
-# 1. 登录 Cloudflare Dashboard 获取 Account ID
-# 2. R2 Dashboard -> Manage R2 API tokens -> Create API token
-# 3. 配置权限：Object Read & Write，指定 bucket: pairusuo-top
+# 可选的社交媒体配置
+# NEXT_PUBLIC_TWITTER_HANDLE = "@pairusuo"
+# NEXT_PUBLIC_GITHUB_URL = "https://github.com/pairusuo"
+# NEXT_PUBLIC_EMAIL = "dirkchoumvp@gmail.com"
 
-# Cloudflare 账户 ID
-CLOUDFLARE_ACCOUNT_ID = "your-cloudflare-account-id-here"
-# R2 API 访问密钥 ID  
-R2_ACCESS_KEY_ID = "your-r2-access-key-id-here"
-# R2 API 秘密访问密钥
-R2_SECRET_ACCESS_KEY = "your-r2-secret-access-key-here"
-# R2 存储桶名称
-R2_BUCKET_NAME = "pairusuo-top"
+# Cloudflare R2 配置
+# R2_ACCOUNT_ID = "ea56e190e74f8a0bccb4796a7f743106"
+# R2_ACCESS_KEY_ID = "447245a88df7a5b479dfd0b7fb931f60"
+# R2_SECRET_ACCESS_KEY = "906bde863a648550098c4d3bee5f897231863cf4a68cb4dba5fc2c7506d2963a"
+# R2_BUCKET_NAME = "pairusuo-top"
+# R2_PUBLIC_URL = "https://image.pairusuo.top"

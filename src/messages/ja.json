@@ -1,0 +1,151 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "blog": "ブログ",
+    "links": "リンク",
+    "tags": "タグ"
+  },
+  "blog": {
+    "title": "ブログ",
+    "subtitle": "技術の世界を探求し、学習の洞察を共有する",
+    "postsCount": "合計 {count} 記事",
+    "noPosts": "まだ記事がありません",
+    "author": "著者",
+    "readMore": "続きを読む",
+    "publishedAt": "公開日",
+    "updatedAt": "更新日",
+    "tags": "タグ",
+    "backToList": "← ブログ一覧に戻る",
+    "searchPlaceholder": "ブログを検索...",
+    "noResults": "関連するブログが見つかりません",
+    "allPosts": "すべての記事",
+    "latestPosts": "最新記事"
+  },
+  "notFound": {
+    "title": "ページが見つかりません",
+    "description": "申し訳ございませんが、お探しのページは存在しません。リンクが間違っているか、ページが削除された可能性があります。",
+    "backHome": "ホームに戻る"
+  },
+  "home": {
+    "title": "私のブログへようこそ",
+    "subtitle": "思考と経験を共有する",
+    "latestPosts": "最新記事",
+    "viewAllPosts": "すべての記事を見る",
+    "tagUrls": {
+      "tag1": "https://twitter.com/gefei55",
+      "tag2": "https://github.com",
+      "tag3": "https://www.popmart.com",
+      "tag4": "https://shipany.com"
+    },
+    "intro": {
+      "title": "私のブログへようこそ",
+      "description": "ここでは私の技術実践、製品思考、海外進出の歴程を記録し、あなたと一緒に探求し成長していきたいと思います。",
+      "features": [
+        "💻 フルスタック開発経験",
+        "🚀 新技術探求への情熱",
+        "📝 技術記事の共有",
+        "🌱 継続的な学習と成長"
+      ],
+      "contact": "スキャンしてWeChatを追加",
+      "avatar": "ブロガーのアバター"
+    },
+    "author": {
+      "name": "pairusuo",
+      "bio": "海外新人、ゲフェイの追随者",
+      "description": "個人ブログ、技術的洞察と海外経験を共有"
+    },
+    "tagList": [
+      {
+        "text": "海外起業志望者",
+        "url": "",
+        "color": "bg-muted"
+      },
+      {
+        "text": "GitHubベテラン新貢献者",
+        "url": "https://github.com",
+        "color": "bg-muted"
+      },
+      {
+        "text": "Labubu保有者",
+        "url": "https://www.popmart.com",
+        "color": "bg-pink-100 text-pink-800"
+      },
+      {
+        "text": "ShipAnyプロモーター",
+        "url": "https://shipany.com",
+        "color": "bg-green-100 text-green-800"
+      }
+    ],
+    "wechat": "WeChat公式アカウント",
+    "readTime": "分読む"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "notFound": "ページが見つかりません",
+    "darkMode": "ダークモード",
+    "lightMode": "ライトモード",
+    "toggleTheme": "テーマを切り替え"
+  },
+  "footer": {
+    "copyright": "著作権",
+    "poweredBy": "Next.js で構築"
+  },
+  "meta": {
+    "title": "私のブログ",
+    "description": "技術と生活を共有する個人ブログ",
+    "keywords": "ブログ,技術,生活,共有",
+    "author": "ブロガー"
+  },
+  "tags": {
+    "title": "タグ",
+    "subtitle": "タグで記事を閲覧、合計 {count} タグ",
+    "noTags": "まだタグがありません",
+    "postsCount": "{count} 記事",
+    "backToList": "タグ一覧に戻る",
+    "tagPrefix": "タグ:",
+    "totalPosts": "合計 {count} 記事",
+    "browseDescription": "{tag} に関するすべての記事を閲覧、合計 {count} 関連記事。",
+    "keywords": "タグ,記事,ブログ"
+  },
+  "links": {
+    "title": "リンク",
+    "subtitle": "このサイトで使用している技術スタックと推奨リンク",
+    "techStack": "技術スタック",
+    "recommended": "推奨リンク",
+    "description": "説明",
+    "aboutLinks": "リンクについて",
+    "aboutLinksDesc": "上記のリンクは、このブログで使用している技術スタックと推奨する開発リソースを紹介しています。同様の技術スタックでプロジェクトを構築している場合は、お気軽にご連絡ください。対応するファイルを変更することで、このページの内容をカスタマイズできます。",
+    "categories": {
+      "framework": "フレームワーク",
+      "language": "言語",
+      "styling": "スタイリング",
+      "ui": "UIコンポーネント",
+      "content": "コンテンツ",
+      "hosting": "ホスティング",
+      "storage": "ストレージ",
+      "tool": "ツール",
+      "development": "開発",
+      "documentation": "ドキュメント",
+      "resource": "リソース"
+    },
+    "descriptions": {
+      "nextjs": "React フルスタックフレームワーク",
+      "react": "ユーザーインターフェース構築ライブラリ",
+      "typescript": "JavaScript のスーパーセット",
+      "tailwind": "ユーティリティファーストの CSS フレームワーク",
+      "shadcn": "Radix UI ベースのコンポーネントライブラリ",
+      "mdx": "Markdown で JSX を使用",
+      "cloudflarePages": "静的ウェブサイトホスティングプラットフォーム",
+      "cloudflareR2": "オブジェクトストレージサービス",
+      "vercel": "フロントエンドデプロイメントプラットフォーム",
+      "tailwindcolor": "Tailwind CSS カラーリファレンスツール",
+      "pnpm": "高速でディスク容量効率的なパッケージマネージャー",
+      "github": "コードホスティングプラットフォーム",
+      "mdn": "Web 開発ドキュメント",
+      "caniuse": "ブラウザ互換性クエリ",
+      "unsplash": "無料の高品質画像"
+    }
+  }
+}

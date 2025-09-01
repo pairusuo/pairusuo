@@ -1,0 +1,322 @@
+---
+title: "新博客发布指南"
+excerpt: "详细介绍如何在这个博客系统中创建和发布新的博客文章，包括文件格式、SEO优化、图片处理等完整流程。"
+createdAt: "2025-08-31 14:30"
+updatedAt: "2025-08-31 14:30"
+author: "博客系统"
+tags: ["教程", "博客", "MDX", "指南", "SEO"]
+featured: true
+draft: false
+---
+
+## 概述
+
+这个博客系统使用 MDX 格式编写文章，支持 Markdown 语法和 React 组件。本指南将详细说明如何创建和发布新的博客文章。
+
+## 1. 创建新博客文章
+
+### 1.1 文件位置
+所有博客文章都存放在 `content/blog/` 目录下，文件名格式为：`文章标题.mdx`
+
+### 1.2 文件命名规范
+- 使用有意义的文件名，建议使用英文或拼音
+- 避免使用特殊字符和空格
+- 示例：`next-js-blog-tutorial.mdx`、`react-hooks-guide.mdx`
+
+### 1.3 创建文件
+在 `content/blog/` 目录下创建新的 `.mdx` 文件：
+
+```bash
+touch content/blog/your-new-post.mdx
+```
+
+## 2. 文章格式和结构
+
+### 2.1 Frontmatter（文章元数据）
+每篇文章必须以 YAML frontmatter 开头，包含以下字段：
+
+```yaml
+---
+title: "文章标题"
+excerpt: "文章摘要，用于SEO和文章列表显示"
+createdAt: "2025-08-31 10:00"
+updatedAt: "2025-81-31 10:00"
+author: "作者名称"
+tags: ["标签1", "标签2", "标签3"]
+featured: false
+draft: false
+---
+```
+
+#### 字段说明：
+- `title`: 文章标题（必填）
+- `excerpt`: 文章摘要，建议100-200字（必填）
+- `createdAt`: 创建日期，格式：YYYY-MM-DD（必填）
+- `updatedAt`: 更新日期，格式：YYYY-MM-DD（可选）
+- `author`: 作者名称（可选）
+- `tags`: 标签数组，用于分类（可选）
+- `featured`: 是否为精选文章（可选，默认false）
+- `draft`: 是否为草稿（可选，默认false，设为true时不会显示）
+
+### 2.2 文章内容
+Frontmatter 之后就是文章正文，支持：
+
+#### Markdown 语法
+```markdown
+# 一级标题
+## 二级标题
+### 三级标题
+
+**粗体文本**
+*斜体文本*
+`行内代码`
+
+- 无序列表项1
+- 无序列表项2
+
+1. 有序列表项1
+2. 有序列表项2
+
+[链接文本](https://example.com)
+
+![图片描述](图片URL)
+```
+
+#### 代码块
+````markdown
+```javascript
+function hello() {
+  console.log('Hello, World!');
+}
+```
+````
+
+#### 引用
+```markdown
+> 这是一个引用块
+> 可以包含多行内容
+```
+
+#### 表格
+```markdown
+| 列1 | 列2 | 列3 |
+|-----|-----|-----|
+| 内容1 | 内容2 | 内容3 |
+| 内容4 | 内容5 | 内容6 |
+```
+
+### 2.3 React 组件（MDX 特性）
+由于使用 MDX，你可以在文章中嵌入 React 组件：
+
+```jsx
+import { Alert } from '@/components/ui/alert'
+
+<Alert>
+  这是一个提示框组件
+</Alert>
+```
+
+## 3. 图片处理
+
+### 3.1 图片存储
+图片建议存储在 Cloudflare R2 对象存储中，获得更好的加载性能。
+
+### 3.2 图片引用
+在文章中引用图片：
+
+```markdown
+![图片描述](https://your-r2-domain.com/images/your-image.jpg)
+```
+
+### 3.3 本地图片（临时方案）
+如果暂时使用本地图片，可以放在 `public/images/` 目录下：
+
+```markdown
+![图片描述](/images/your-image.jpg)
+```
+
+## 4. 完整示例
+
+创建文件 `content/blog/my-first-post.mdx`：
+
+```mdx
+---
+title: "我的第一篇博客文章"
+excerpt: "这是我在这个博客上发布的第一篇文章，介绍了如何使用这个博客系统。"
+createdAt: "2025-08-31 15:20"
+updatedAt: "2025-08-31 15:20"
+author: "张三"
+tags: ["博客", "教程", "入门"]
+featured: true
+draft: false
+---
+
+# 欢迎来到我的博客
+
+这是我的第一篇博客文章！我很兴奋能够开始分享我的想法和经验。
+
+## 关于这个博客
+
+这个博客使用了现代化的技术栈：
+
+- **Next.js 14**: 强大的 React 框架
+- **MDX**: 支持 React 组件的 Markdown
+- **Tailwind CSS**: 实用优先的 CSS 框架
+
+## 代码示例
+
+这里是一个简单的 JavaScript 函数：
+
+```javascript
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+console.log(greet('World'));
+```
+
+## 总结
+
+我期待在这个平台上分享更多内容。如果你有任何问题或建议，欢迎联系我！
+
+> 感谢阅读我的第一篇文章！
+```
+
+## 5. 发布流程
+
+### 5.1 本地预览
+在发布前，先在本地预览文章：
+
+```bash
+# 启动开发服务器
+pnpm dev
+
+# 访问 http://localhost:3000 查看效果
+```
+
+### 5.2 检查文章
+确保：
+- [ ] Frontmatter 格式正确
+- [ ] 所有必填字段都已填写
+- [ ] 图片链接有效
+- [ ] 代码块语法正确
+- [ ] 文章在本地正常显示
+
+### 5.3 构建和部署
+```bash
+# 构建静态文件
+pnpm build
+
+# 部署到 Cloudflare Pages 或其他平台
+```
+
+## 6. SEO 优化建议
+
+### 6.1 标题优化
+- 使用描述性的标题
+- 长度控制在50-60字符内
+- 包含关键词但避免堆砌
+
+### 6.2 摘要优化
+- 摘要长度150-200字符
+- 包含文章核心内容
+- 吸引读者点击阅读
+
+### 6.3 标签使用
+- 每篇文章3-5个标签
+- 使用相关性强的标签
+- 保持标签体系的一致性
+
+### 6.4 内容结构
+- 使用清晰的标题层级
+- 适当使用列表和引用
+- 保持段落长度适中
+
+## 7. 常见问题
+
+### Q: 如何修改已发布的文章？
+A: 直接编辑对应的 `.mdx` 文件，更新 `updatedAt` 字段，然后重新构建部署。
+
+### Q: 如何删除文章？
+A: 删除对应的 `.mdx` 文件，或者将 `draft` 字段设为 `true`。
+
+### Q: 如何设置文章为草稿？
+A: 在 frontmatter 中设置 `draft: true`，草稿文章不会在网站上显示。
+
+### Q: 如何添加新的标签？
+A: 直接在文章的 `tags` 字段中添加新标签，系统会自动识别并创建标签页面。
+
+### Q: 图片加载慢怎么办？
+A: 建议使用 Cloudflare R2 或其他 CDN 服务来存储图片，提高加载速度。
+
+## 8. 高级功能
+
+### 8.1 自定义组件
+你可以创建自定义的 React 组件并在文章中使用：
+
+```jsx
+// components/blog/CustomAlert.tsx
+export function CustomAlert({ children, type = 'info' }) {
+  return (
+    <div className={`alert alert-${type}`}>
+      {children}
+    </div>
+  );
+}
+
+// 在 MDX 文章中使用
+import { CustomAlert } from '@/components/blog/CustomAlert'
+
+<CustomAlert type="warning">
+  这是一个自定义警告组件
+</CustomAlert>
+```
+
+### 8.2 数学公式
+如果需要支持数学公式，可以集成 KaTeX 或 MathJax。
+
+### 8.3 代码高亮
+系统已经支持代码语法高亮，支持多种编程语言。
+
+## 9. 性能优化
+
+### 9.1 图片优化
+- 使用适当的图片格式（WebP、AVIF）
+- 压缩图片大小
+- 使用响应式图片
+
+### 9.2 内容优化
+- 控制文章长度，避免过长
+- 合理使用代码块
+- 优化图片数量和大小
+
+## 10. 备份和版本控制
+
+建议使用 Git 来管理你的博客内容：
+
+```bash
+# 添加新文章到版本控制
+git add content/blog/your-new-post.mdx
+git commit -m "Add new blog post: Your Post Title"
+git push origin main
+```
+
+这样可以：
+- 跟踪文章的修改历史
+- 防止内容丢失
+- 方便团队协作
+
+---
+
+## 总结
+
+通过遵循这个指南，你可以轻松地创建和发布高质量的博客文章。记住：
+
+1. **内容为王**: 专注于创作有价值的内容
+2. **用户体验**: 确保文章易读易懂
+3. **SEO 友好**: 优化标题、摘要和标签
+4. **持续改进**: 根据读者反馈不断优化
+
+如果你在使用过程中遇到任何问题，欢迎查看项目文档或提交 Issue。
+
+祝你写作愉快！ 🎉

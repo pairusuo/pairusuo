@@ -1,0 +1,9 @@
+1. Do not deploy directly to production environment, only deploy to preview environment for debugging and testing
+2. Do not commit code to GitHub unless human approval is obtained
+3. Do not modify existing styles casually unless human approval is obtained
+4. Do not treat symptoms instead of root causes, maintain a global perspective and understand problems at the architectural level
+5. Do not modify configuration files casually unless human approval is obtained
+6. After completing each feature modification, output a summary document in md format and save it to the local tmp directory, and add tmp directory to .gitignore
+7. Always consider mobile-friendly styles, not high priority but affects SEO, so needs consideration
+8. Use pnpm, not npm or yarn
+9. Before deployment, clean up temporary files, test files, and intermediate build artifacts, then package after cleanup is complete
