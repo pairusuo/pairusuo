@@ -84,7 +84,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 }
 
 /**
- * Get all tags
+ * Get all tags - 支持所有UTF-8字符（中文、日语、韩语等）
  */
 export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
   try {
@@ -95,8 +95,9 @@ export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
       if (post.tags && Array.isArray(post.tags)) {
         post.tags.forEach((tag) => {
           if (tag && typeof tag === 'string' && tag.trim()) {
-            const cleanTag = tag.trim()
-            tagCounts[cleanTag] = (tagCounts[cleanTag] || 0) + 1
+            // 标准化UTF-8字符，确保一致性
+            const normalizedTag = tag.trim().normalize('NFC')
+            tagCounts[normalizedTag] = (tagCounts[normalizedTag] || 0) + 1
           }
         })
       }
@@ -112,18 +113,44 @@ export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
 }
 
 /**
- * Get posts by tag
+ * Get posts by tag - 支持所有UTF-8字符（中文、日语、韩语等），解决双重编码问题
  */
 export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
   try {
+
+    
     const posts = await getAllPosts()
-    return posts.filter((post) => 
-      post.tags && 
-      Array.isArray(post.tags) && 
-      post.tags.some(postTag => postTag && postTag.trim() === tag.trim())
-    )
+
+    
+    // 标准化搜索标签的UTF-8字符
+    const normalizedSearchTag = tag.trim().normalize('NFC')
+
+    
+    const filteredPosts = posts.filter((post) => {
+      if (!post.tags || !Array.isArray(post.tags)) {
+        return false
+      }
+      
+
+      
+      return post.tags.some(postTag => {
+        if (!postTag || typeof postTag !== 'string') return false
+        
+        // 标准化文章标签的UTF-8字符
+        const normalizedPostTag = postTag.trim().normalize('NFC')
+        const isMatch = normalizedPostTag === normalizedSearchTag
+        
+
+        
+        return isMatch
+      })
+    })
+    
+
+    return filteredPosts
   } catch (error) {
     console.error('Error getting posts by tag:', error)
+    console.error('Error stack:', (error as Error).stack)
     return []
   }
 }

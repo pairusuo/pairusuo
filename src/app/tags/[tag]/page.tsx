@@ -15,9 +15,33 @@ interface TagPageProps {
 export async function generateStaticParams() {
   try {
     const tags = await getAllTags()
-    return tags.map((tagData) => ({
-      tag: encodeURIComponent(tagData.tag),
-    }))
+    // console.log('=== generateStaticParams Debug ===')
+    // console.log('All tags found:', tags)
+    
+    // 为每个标签生成多个参数变体，解决URL编码问题
+    const params: { tag: string }[] = []
+    
+    tags.forEach((tagData) => {
+      const originalTag = tagData.tag.normalize('NFC')
+      
+      // 1. 添加原始标签
+      params.push({ tag: originalTag })
+      
+      // 2. 添加URL编码后的标签
+      const encodedTag = encodeURIComponent(originalTag)
+      if (encodedTag !== originalTag) {
+        params.push({ tag: encodedTag })
+      }
+      
+      // 3. 添加双重编码的标签（处理某些边缘情况）
+      const doubleEncodedTag = encodeURIComponent(encodedTag)
+      if (doubleEncodedTag !== encodedTag && doubleEncodedTag !== originalTag) {
+        params.push({ tag: doubleEncodedTag })
+      }
+    })
+    
+    console.log('Generated params with encoding variants:', params)
+    return params
   } catch (error) {
     console.error('Error generating static params for tags:', error)
     return []
@@ -25,7 +49,25 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: TagPageProps) {
-  const tag = decodeURIComponent(params.tag)
+  // 处理可能的双重编码问题
+  let tag = params.tag
+  try {
+    // 尝试解码，如果是双重编码则需要解码两次
+    tag = decodeURIComponent(params.tag)
+    // 检查是否还需要再次解码
+    if (tag.includes('%')) {
+      try {
+        tag = decodeURIComponent(tag)
+      } catch (e) {
+        // 第二次解码失败，使用第一次解码的结果
+      }
+    }
+    // 标准化UTF-8字符
+    tag = tag.normalize('NFC')
+  } catch (e) {
+    tag = params.tag
+  }
+  
   const posts = await getPostsByTag(tag)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
   
@@ -52,7 +94,28 @@ export async function generateMetadata({ params }: TagPageProps) {
 
 export default async function TagPage({ params }: TagPageProps) {
   try {
-    const tag = decodeURIComponent(params.tag)
+    // 处理UTF-8字符，支持所有语言，解决静态导出的双重编码问题
+    let tag = params.tag
+    
+    // 处理Next.js静态导出时的编码问题
+    // 在静态导出模式下，中文字符可能被多次编码
+    while (tag.includes('%')) {
+      try {
+        const decoded = decodeURIComponent(tag)
+        if (decoded === tag) {
+          // 解码后没有变化，说明不是编码字符串
+          break
+        }
+        tag = decoded
+      } catch (e) {
+        // 解码失败，停止解码
+        break
+      }
+    }
+    
+    // 标准化UTF-8字符，确保一致性
+    tag = tag.normalize('NFC')
+    
     const posts = await getPostsByTag(tag)
 
     if (posts.length === 0) {
