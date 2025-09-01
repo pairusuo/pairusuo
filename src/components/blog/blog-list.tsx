@@ -36,14 +36,14 @@ export function BlogList({ posts }: BlogListProps) {
                 {post.excerpt}
               </p>
               
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                   <span>{new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })} {new Date(post.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
                   {post.author && <span>{t('blog.author')}: {post.author}</span>}
                 </div>
                 
                 {post.tags.length > 0 && (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     {post.tags.map((tag) => (
                       <TagLink key={tag} tag={tag} />
                     ))}

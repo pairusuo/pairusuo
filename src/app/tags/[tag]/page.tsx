@@ -13,10 +13,15 @@ interface TagPageProps {
 }
 
 export async function generateStaticParams() {
-  const tags = await getAllTags()
-  return tags.map((tagData) => ({
-    tag: encodeURIComponent(tagData.tag),
-  }))
+  try {
+    const tags = await getAllTags()
+    return tags.map((tagData) => ({
+      tag: encodeURIComponent(tagData.tag),
+    }))
+  } catch (error) {
+    console.error('Error generating static params for tags:', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: TagPageProps) {
@@ -46,41 +51,46 @@ export async function generateMetadata({ params }: TagPageProps) {
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-  const tag = decodeURIComponent(params.tag)
-  const posts = await getPostsByTag(tag)
+  try {
+    const tag = decodeURIComponent(params.tag)
+    const posts = await getPostsByTag(tag)
 
-  if (posts.length === 0) {
-    notFound()
-  }
+    if (posts.length === 0) {
+      notFound()
+    }
 
-  return (
-    <div className="container mx-auto max-w-6xl px-6 py-8">
-      <div className="bg-content-background rounded-xl shadow-sm border p-8">
-        <div className="space-y-8">
-        {/* Back Button */}
-        <div>
-          <Button variant="ghost" asChild>
-            <Link href="/tags" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              {t('tags.backToList')}
-            </Link>
-          </Button>
-        </div>
+    return (
+      <div className="container mx-auto max-w-6xl px-6 py-8">
+        <div className="bg-content-background rounded-xl shadow-sm border p-8">
+          <div className="space-y-8">
+            {/* Back Button */}
+            <div>
+              <Button variant="ghost" asChild>
+                <Link href="/tags" className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  {t('tags.backToList')}
+                </Link>
+              </Button>
+            </div>
 
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold">
-            {t('tags.tagPrefix')} <span className="text-primary">{tag}</span>
-          </h1>
-          <p className="text-muted-foreground">
-            {t('tags.totalPosts').replace('{count}', posts.length.toString())}
-          </p>
-        </div>
+            {/* Header */}
+            <div className="text-center space-y-4">
+              <h1 className="text-3xl font-bold">
+                {t('tags.tagPrefix')} <span className="text-primary">{tag}</span>
+              </h1>
+              <p className="text-muted-foreground">
+                {t('tags.totalPosts').replace('{count}', posts.length.toString())}
+              </p>
+            </div>
 
-        {/* Posts List */}
-        <BlogList posts={posts} />
+            {/* Posts List */}
+            <BlogList posts={posts} />
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } catch (error) {
+    console.error('Error in TagPage:', error)
+    notFound()
+  }
 }

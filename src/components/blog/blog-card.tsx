@@ -24,12 +24,12 @@ export function BlogCard({ post }: BlogCardProps) {
         </p>
       </div>
       
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {post.tags.map((tag) => (
           <Link
             key={tag}
             href={`/tags/${encodeURIComponent(tag)}`}
-            className="inline-block px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 transition-colors"
+            className="inline-flex items-center px-2 py-1 sm:px-2.5 sm:py-0.5 text-xs bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 transition-colors whitespace-nowrap"
           >
             {tag}
           </Link>

@@ -87,26 +87,45 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
  * Get all tags
  */
 export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
-  const posts = await getAllPosts()
-  const tagCounts: Record<string, number> = {}
-  
-  posts.forEach((post) => {
-    post.tags.forEach((tag) => {
-      tagCounts[tag] = (tagCounts[tag] || 0) + 1
+  try {
+    const posts = await getAllPosts()
+    const tagCounts: Record<string, number> = {}
+    
+    posts.forEach((post) => {
+      if (post.tags && Array.isArray(post.tags)) {
+        post.tags.forEach((tag) => {
+          if (tag && typeof tag === 'string' && tag.trim()) {
+            const cleanTag = tag.trim()
+            tagCounts[cleanTag] = (tagCounts[cleanTag] || 0) + 1
+          }
+        })
+      }
     })
-  })
-  
-  return Object.entries(tagCounts)
-    .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count)
+    
+    return Object.entries(tagCounts)
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+  } catch (error) {
+    console.error('Error getting all tags:', error)
+    return []
+  }
 }
 
 /**
  * Get posts by tag
  */
 export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
-  const posts = await getAllPosts()
-  return posts.filter((post) => post.tags.includes(tag))
+  try {
+    const posts = await getAllPosts()
+    return posts.filter((post) => 
+      post.tags && 
+      Array.isArray(post.tags) && 
+      post.tags.some(postTag => postTag && postTag.trim() === tag.trim())
+    )
+  } catch (error) {
+    console.error('Error getting posts by tag:', error)
+    return []
+  }
 }
 
 /**
