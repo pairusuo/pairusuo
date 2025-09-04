@@ -74,7 +74,12 @@
       {
         "text": "准出海人",
         "url": "",
-        "color": "bg-muted"
+        "color": "#79716b"
+      },
+      {
+        "text": "我的第一个网站",
+        "url": "https://randomchinesenames.com",
+        "color": "#e7000b"
       },
       {
         "text": "GitHub老玩家新提交者",
@@ -90,11 +95,20 @@
         "text": "ShipAny推广员",
         "url": "https://shipany.ai/i/pairusuo",
         "color": "#e17100"
+      },{
+        "text": "AI Coding推广员",
+        "url": "https://aicoding.sh/i/pdCx6Q2t5",
+        "color": "#1c1917"
       },
       {
         "text": "Hackathon作品",
         "url": "https://survival-challenge-game.online/register?code=INVEHPQIUNB2",
         "color": "#51a2ff"
+      },
+      {
+        "text": "迟到的文生图网站",
+        "url": "https://www.aicoverimage.com",
+        "color": "#00bcff"
       }
     ],
     "wechat": "微信公众号",

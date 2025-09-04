@@ -149,20 +149,18 @@ export default async function HomePage() {
                   
                   return tagList.map((tag: any, i: number) => {
                     const hasUrl = tag.url && tag.url.trim() !== '';
-                    
+
                     // 判断是否为十六进制颜色
                     const isHexColor = tag.color && tag.color.startsWith('#');
-                    
+
                     // 设置样式
-                    const tagStyle = isHexColor ? {
-                      backgroundColor: tag.color,
-                      color: '#ffffff'
-                    } : {};
-                    
-                    const tagClassName = hasUrl 
-                      ? (isHexColor ? '' : (tag.color || 'bg-muted'))
-                      : 'bg-muted';
-                    
+                    const tagStyle = isHexColor
+                      ? { backgroundColor: tag.color, color: '#ffffff' }
+                      : {};
+
+                    // 类名：若使用十六进制颜色则不添加颜色类，否则使用提供的类或默认值
+                    const tagClassName = isHexColor ? '' : (tag.color || 'bg-muted');
+
                     return hasUrl ? (
                       <Link
                         key={i}
@@ -177,7 +175,8 @@ export default async function HomePage() {
                     ) : (
                       <span
                         key={i}
-                        className="px-3 py-1 bg-muted rounded-full text-sm cursor-default"
+                        className={`px-3 py-1 ${tagClassName} rounded-full text-sm cursor-default`}
+                        style={tagStyle}
                       >
                         {tag.text}
                       </span>
