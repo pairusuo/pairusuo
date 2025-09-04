@@ -89,7 +89,12 @@
       {
         "text": "ShipAny推广员",
         "url": "https://shipany.ai/i/pairusuo",
-        "color": "bg-green-100 text-green-800"
+        "color": "#e17100"
+      },
+      {
+        "text": "Hackathon作品",
+        "url": "https://survival-challenge-game.online/register?code=INVEHPQIUNB2",
+        "color": "#51a2ff"
       }
     ],
     "wechat": "微信公众号",
