@@ -22,7 +22,7 @@ Stripe是全球领先的在线支付处理平台，支持香港用户注册个�
 
 ## 2. 创建account及Webhooks等
 
-> **重要提醒：** 建议每个网站一个account，这样STRIPE_PUBLIC_KEY、STRIPE_PRIVATE_KEY、STRIPE_WEBHOOK_SECRET都是独立的，更安全，也更方便查日志。
+> **重要提醒：** 建议每个网站一个account，这样`STRIPE_PUBLIC_KEY`、`STRIPE_PRIVATE_KEY`、`STRIPE_WEBHOOK_SECRET`都是独立的，更安全，也更方便查日志。
 
 1. **访问Stripe官网**
    - 打开 [https://stripe.com](https://stripe.com)，登录后点击页面左侧的Create account，不是右侧的“➕”号
@@ -46,34 +46,34 @@ Stripe是全球领先的在线支付处理平台，支持香港用户注册个�
 
 ## 3. 创建Webhooks
 
-  - Dashboard页面，左下角点击Developers，选择Webhooks，Add Destination，监听什么事件以你的网站实现为准，Endoint URL 也是
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-23-46.jpg)
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/111.jpg)
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/222.jpg)
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/333.jpg)
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/444.jpg)
+- Dashboard页面，左下角点击Developers，选择Webhooks，Add Destination，监听什么事件以你的网站实现为准，`Endoint URL` 也是
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-23-46.jpg)
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/111.jpg)
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/222.jpg)
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/333.jpg)
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/444.jpg)
 
 ## 4. 创建API Keys
 
-  - Dashboard页面，左下角点击Developers，选择API keys，创建一个你自己的网站用的，Building your own integration
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-30-40.jpg)
-  - SECRET KEY 只显示一次，请妥善保管（本文的SECRET KEY和PRIVATE_KEY一般是一个意思）
-  - WEBHOOK_SECRET可能有人找不到，我也找了很久，在这里，webhook endpoint点进去
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/555.jpg)
+- Dashboard页面，左下角点击Developers，选择API keys，创建一个你自己的网站用的，Building your own integration
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-30-40.jpg)
+- `SECRET KEY` 只显示一次，请妥善保管（本文的`SECRET KEY`和`PRIVATE_KEY`一般是一个意思）
+- `WEBHOOK_SECRET`可能有人找不到，我也找了很久，在这里，`webhook endpoint`点进去
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/555.jpg)
 
-### 3. 其他
+## 3. 其他
 
-  - 未实名认证，钱只能进不能出
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-17-56.jpg)
-  - 修改币种
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-33-57.jpg)
-  - 不同币种费用不一样，以实际为准，我还没算明白
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-37-05.jpg)
-  - 很多信息支持后续在设置页面修改
-  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-43-11.jpg)
-  - stripe最低交易0.5美金
-  - tax的问题后续需要重点关注，涉及合规
-  - 提现支持手动提，也可以设置自动提
+- 未实名认证，钱只能进不能出
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-17-56.jpg)
+- 修改币种
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-33-57.jpg)
+- 不同币种费用不一样，以实际为准，我还没算明白
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-37-05.jpg)
+- 很多信息支持后续在设置页面修改
+- ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-43-11.jpg)
+- stripe最低交易0.5美金
+- tax的问题后续需要重点关注，涉及合规
+- 提现支持手动提，也可以设置自动提
 
 如果在过程中遇到问题，建议：
 1. 仔细查阅Stripe官方文档
