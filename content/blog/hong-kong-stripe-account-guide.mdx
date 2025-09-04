@@ -1,0 +1,86 @@
+---
+title: "香港个人Stripe账号注册使用完全攻略"
+excerpt: "详细介绍如何注册和使用香港个人Stripe账号，包括准备材料、注册流程、常见问题解决方案以及重要注意事项，助你顺利开通收款服务。"
+createdAt: "2025-09-03 14:30"
+updatedAt: "2025-09-03 14:30"
+author: "支付指南"
+tags: ["Stripe", "Payment", "Webhooks", "香港", "香港银行卡", "支付", "收款", "个人账户", "攻略", "护照"]
+featured: true
+draft: false
+---
+
+## 概述
+
+Stripe是全球领先的在线支付处理平台，支持香港用户注册个人账户进行收款。本攻略将详细介绍香港个人Stripe账号注册成功后配置收款的步骤，不包含注册过程。
+
+## 1. 前期准备
+
+> **重要提醒：** Stripe账号已注册通过，香港银行卡已激活完毕，可正常使用，护照在有效期内。
+
+- 体现到本地银行卡免手续费，所以需要香港银行卡
+- 护照用来做实名认证，未认证只能Payin 不能Payout，即只能收款不能提现
+
+## 2. 创建account及Webhooks等
+
+> **重要提醒：** 建议每个网站一个account，这样STRIPE_PUBLIC_KEY、STRIPE_PRIVATE_KEY、STRIPE_WEBHOOK_SECRET都是独立的，更安全，也更方便查日志。
+
+1. **访问Stripe官网**
+   - 打开 [https://stripe.com](https://stripe.com)，登录后点击页面左侧的Create account，不是右侧的“➕”号
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_08-37-13.jpg)
+   - 下一步Create a separate account，个人没必要创建organization，搞复杂了
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_08-55-56.jpg)
+
+2. **填写基本信息**
+   - 基本信息比较多，但是没啥难度，很多都是文本框你自己输入，如实填写即可，有些还支持后期修改
+   - 可以留内地手机号、香港身份证ID使用港澳通行证号码
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_10-18-04.jpg)
+   - 收据上不显示手机号
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_10-45-37.jpg)
+   - tax相关的先跳过，我还没研究，这个支持后续补充
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_10-49-07.jpg)
+   - 献爱心看你自己
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_10-49-52.jpg)
+   - 如果有信息没有填写完整，这里会有提示
+   - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_10-52-35.jpg)
+   - 创建完成后，一般会进入sandbox页面，也就是沙盒模拟，可以先创建用来测试的STRIPE_PUBLIC_KEY、STRIPE_PRIVATE_KEY、STRIPE_WEBHOOK_SECRET，也可以跳过，右上角选择切换到live account
+
+## 3. 创建Webhooks
+
+  - Dashboard页面，左下角点击Developers，选择Webhooks，Add Destination，监听什么事件以你的网站实现为准，Endoint URL 也是
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-23-46.jpg)
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/111.jpg)
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/222.jpg)
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/333.jpg)
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/444.jpg)
+
+## 4. 创建API Keys
+
+  - Dashboard页面，左下角点击Developers，选择API keys，创建一个你自己的网站用的，Building your own integration
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-30-40.jpg)
+  - SECRET KEY 只显示一次，请妥善保管（本文的SECRET KEY和PRIVATE_KEY一般是一个意思）
+  - WEBHOOK_SECRET可能有人找不到，我也找了很久，在这里，webhook endpoint点进去
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/555.jpg)
+
+### 3. 其他
+
+  - 未实名认证，钱只能进不能出
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-17-56.jpg)
+  - 修改币种
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-33-57.jpg)
+  - 不同币种费用不一样，以实际为准，我还没算明白
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-03_11-37-05.jpg)
+  - 很多信息支持后续在设置页面修改
+  - ![image](https://image.pairusuo.top/uploads/2025/stripe/Xnip2025-09-04_09-43-11.jpg)
+  - stripe最低交易0.5美金
+  - tax的问题后续需要重点关注，涉及合规
+  - 提现支持手动提，也可以设置自动提
+
+如果在过程中遇到问题，建议：
+1. 仔细查阅Stripe官方文档
+2. 联系Stripe客服寻求帮助
+3. 咨询专业的支付顾问
+4. 与其他用户交流经验
+
+> **免责声明：** 本攻略仅供参考，具体要求可能因政策变化而调整。建议在注册前查看Stripe官方最新要求，必要时咨询专业人士。
+
+祝你顺利开通香港Stripe账号，收款无忧！🎉
