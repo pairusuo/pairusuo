@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/layout/theme-provider'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { t } from '@/lib/i18n'
+import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/jsonld'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -68,9 +69,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
   return (
     <html lang="zh" suppressHydrationWarning>
       <body className={inter.className}>
+        {/* GEO: JSON-LD for WebSite and Organization to help LLMs understand the site */}
+        <WebSiteJsonLd name={t('meta.title')} url={baseUrl} />
+        <OrganizationJsonLd
+          name={t('meta.title')}
+          url={baseUrl}
+          logo={`${baseUrl}/info.png`}
+          sameAs={[
+            'https://x.com/pairusuo',
+            'https://github.com/pairusuo',
+          ]}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

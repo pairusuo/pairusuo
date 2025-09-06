@@ -6,6 +6,7 @@ import { MDXContent } from '@/components/blog/mdx-content'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/jsonld'
 
 interface BlogPostPageProps {
   params: {
@@ -71,11 +72,30 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     notFound()
   }
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
       <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
         <div className="max-w-4xl mx-auto">
+        {/* GEO: Structured data to improve AI comprehension and citation */}
+        <BreadcrumbJsonLd
+          items={[
+            { name: t('nav.home'), item: baseUrl },
+            { name: t('blog.title'), item: `${baseUrl}/blog` },
+            { name: post.title, item: `${baseUrl}/blog/${post.slug}` },
+          ]}
+        />
+        <ArticleJsonLd
+          url={`${baseUrl}/blog/${post.slug}`}
+          title={post.title}
+          description={post.excerpt}
+          images={post.coverImage ? [post.coverImage] : undefined}
+          datePublished={post.createdAt}
+          dateModified={post.updatedAt}
+          authorName={post.author}
+          keywords={post.tags}
+        />
         {/* Back Button */}
         <div className="mb-8">
           <Button variant="ghost" asChild>
