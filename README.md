@@ -1,4 +1,4 @@
-出海新人，哥飞追随者 ｜ Freshman in the field of website builder, a follower of Ge Fei
+出海新人 ｜ Freshman in the field of website builder
 
 简洁的个人博客，快速切换语言 ｜ Simple personal blog, switching languages quickly
 

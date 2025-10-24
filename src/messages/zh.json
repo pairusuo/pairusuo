@@ -67,7 +67,7 @@
     },
     "author": {
       "name": "pairusuo",
-      "bio": "出海新人，哥飞追随者",
+      "bio": "出海新人",
       "description": "个人博客，分享技术心得与出海经验"
     },
     "tagList": [
@@ -114,6 +114,16 @@
         "text": "迟到的文生图网站",
         "url": "https://www.aicoverimage.com",
         "color": "#00bcff"
+      },
+      {
+        "text": "2048",
+        "url": "https://2048.pairusuo.top",
+        "color": "#ffdf20"
+      },
+      {
+        "text": "记牌器",
+        "url": "https://cardcounter.pairusuo.top",
+        "color": "#fe9a00"
       }
     ],
     "wechat": "微信公众号",
