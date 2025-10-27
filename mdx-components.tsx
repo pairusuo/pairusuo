@@ -1,8 +1,10 @@
 import type { MDXComponents } from 'mdx/types'
 import Image from 'next/image'
+import { RawHtmlFile } from '@/components/blog/raw-html'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
+    RawHtmlFile: (props: any) => <RawHtmlFile {...props} />,
     // 自定义组件
     h1: ({ children }) => (
       <h1 className="text-3xl font-bold mb-6 mt-8 text-foreground">
@@ -55,12 +57,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </blockquote>
     ),
     code: ({ children }) => (
-      <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">
+      <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono text-foreground">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-4">
+      <pre className="bg-muted text-foreground p-4 rounded-lg overflow-x-auto mb-4 border border-border">
         {children}
       </pre>
     ),
