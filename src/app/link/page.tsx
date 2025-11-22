@@ -65,16 +65,10 @@ const techStackLinks = [
     category: 'content'
   },
   {
-    name: 'Cloudflare Pages',
-    url: 'https://pages.cloudflare.com',
-    descriptionKey: 'cloudflarePages',
+    name: 'Cloudflare',
+    url: 'https://cloudflare.com',
+    descriptionKey: 'cloudflare',
     category: 'hosting'
-  },
-  {
-    name: 'Cloudflare R2',
-    url: 'https://developers.cloudflare.com/r2',
-    descriptionKey: 'cloudflareR2',
-    category: 'storage'
   },
   {
     name: 'Vercel',
@@ -121,7 +115,19 @@ const recommendedLinks = [
     url: 'https://tailwindcolor.com',
     descriptionKey: 'tailwindcolor',
     category: 'tool'
-  }
+  },
+  {
+    name: 'Whoiscx',
+    url: 'https://whoiscx.com',
+    descriptionKey: 'whoiscx',
+    category: 'tool'
+  },
+  {
+    name: 'A Real Me',
+    url: 'https://www.arealme.com',
+    descriptionKey: 'arealme',
+    category: 'tool'
+  },
 ]
 
 function LinkCard({ name, url, descriptionKey, category }: { 

@@ -119,6 +119,11 @@
         "text": "记牌器",
         "url": "https://cardcounter.pairusuo.top",
         "color": "#fe9a00"
+      },
+      {
+        "text": "China Brush",
+        "url": "https://chinabrush.art",
+        "color": "#a6a09b"
       }
     ],
     "wechat": "微信公众号",
@@ -165,13 +170,16 @@
       "mdx": "Markdown 中使用 JSX",
       "cloudflarePages": "静态网站托管平台",
       "cloudflareR2": "对象存储服务",
+      "cloudflare": "网络基础设施和安全服务",
       "vercel": "前端部署平台",
       "tailwindcolor": "Tailwind CSS颜色参考工具",
       "pnpm": "快速、节省磁盘空间的包管理器",
       "github": "代码托管平台",
       "mdn": "Web 开发文档",
       "caniuse": "浏览器兼容性查询",
-      "unsplash": "免费高质量图片"
+      "unsplash": "免费高质量图片",
+      "whoiscx": "实用工具集合网站",
+      "arealme": "在线测试和趣味工具平台"
     }
   }
 }
