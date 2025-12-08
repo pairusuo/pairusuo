@@ -41,7 +41,8 @@
         "🌱 Continuous learning and growth"
       ],
       "contact": "Scan to add WeChat",
-      "avatar": "Blogger Avatar"
+      "avatar": "Blogger Avatar",
+      "jike": "Follow on Jike"
     },
     "author": {
       "name": "pairusuo",
@@ -71,6 +72,7 @@
       }
     ],
     "wechat": "WeChat Official Account",
+    "jike": "Jike Account",
     "readTime": "min read"
   },
   "common": {

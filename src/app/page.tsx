@@ -192,8 +192,20 @@ export default async function HomePage() {
               <Image
                 src="/qrcode.jpg"
                 alt={t('home.intro.contact')}
-                width={120}
-                height={120}
+                width={180}
+                height={180}
+                className="mx-auto border border-muted rounded-lg object-cover"
+              />
+            </div>
+
+            {/* Jike QR */}
+            <div className="border rounded-lg p-6 text-center">
+              <h3 className="font-semibold mb-4">{t('home.jike')}</h3>
+              <Image
+                src="/qrcode.png"
+                alt={t('home.intro.jike')}
+                width={180}
+                height={180}
                 className="mx-auto border border-muted rounded-lg object-cover"
               />
             </div>

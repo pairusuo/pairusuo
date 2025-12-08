@@ -48,7 +48,7 @@ const techStackLinks = [
   },
   {
     name: 'Tailwind CSS',
-    url: 'https://tailwindcss.com',
+    url: 'https://tailwindcss.com/plus',
     descriptionKey: 'tailwind',
     category: 'styling'
   },
