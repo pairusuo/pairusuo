@@ -54,9 +54,57 @@ export default async function HomePage() {
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             {t('home.intro.title')}
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          <p className="text-lg text-muted-foreground leading-relaxed">
             {t('home.intro.description')}
           </p>
+        </section>
+
+        {/* Tags Section */}
+        <section className="mb-12">
+          <h3 className="font-semibold text-xl mb-4">{t('nav.tags')}</h3>
+          <div className="flex flex-wrap gap-2">
+            {(() => {
+              // 直接获取tagList数组
+              const messages = require(`@/messages/zh.json`);
+              const tagList = messages.home.tagList || [];
+
+              return tagList.map((tag: any, i: number) => {
+                const hasUrl = tag.url && tag.url.trim() !== '';
+
+                // 判断是否为十六进制颜色
+                const isHexColor = tag.color && tag.color.startsWith('#');
+
+                // 设置样式
+                const tagStyle = isHexColor
+                  ? { backgroundColor: tag.color, color: '#ffffff' }
+                  : {};
+
+                // 类名：若使用十六进制颜色则不添加颜色类，否则使用提供的类或默认值
+                const tagClassName = isHexColor ? '' : (tag.color || 'bg-muted');
+
+                return hasUrl ? (
+                  <Link
+                    key={i}
+                    href={tag.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`px-3 py-1 ${tagClassName} rounded-full text-sm hover:opacity-80 transition-opacity`}
+                    style={tagStyle}
+                  >
+                    {tag.text}
+                  </Link>
+                ) : (
+                  <span
+                    key={i}
+                    className={`px-3 py-1 ${tagClassName} rounded-full text-sm cursor-default`}
+                    style={tagStyle}
+                  >
+                    {tag.text}
+                  </span>
+                );
+              });
+            })()}
+          </div>
         </section>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -135,54 +183,6 @@ export default async function HomePage() {
                     </svg>
                   </div>
                 </Link>
-              </div>
-            </div>
-
-            {/* Tags */}
-            <div className="border rounded-lg p-6">
-              <h3 className="font-semibold mb-4">{t('nav.tags')}</h3>
-              <div className="flex flex-wrap gap-2">
-                {(() => {
-                  // 直接获取tagList数组
-                  const messages = require(`@/messages/zh.json`);
-                  const tagList = messages.home.tagList || [];
-                  
-                  return tagList.map((tag: any, i: number) => {
-                    const hasUrl = tag.url && tag.url.trim() !== '';
-
-                    // 判断是否为十六进制颜色
-                    const isHexColor = tag.color && tag.color.startsWith('#');
-
-                    // 设置样式
-                    const tagStyle = isHexColor
-                      ? { backgroundColor: tag.color, color: '#ffffff' }
-                      : {};
-
-                    // 类名：若使用十六进制颜色则不添加颜色类，否则使用提供的类或默认值
-                    const tagClassName = isHexColor ? '' : (tag.color || 'bg-muted');
-
-                    return hasUrl ? (
-                      <Link
-                        key={i}
-                        href={tag.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`px-3 py-1 ${tagClassName} rounded-full text-sm hover:opacity-80 transition-opacity`}
-                        style={tagStyle}
-                      >
-                        {tag.text}
-                      </Link>
-                    ) : (
-                      <span
-                        key={i}
-                        className={`px-3 py-1 ${tagClassName} rounded-full text-sm cursor-default`}
-                        style={tagStyle}
-                      >
-                        {tag.text}
-                      </span>
-                    );
-                  });
-                })()}
               </div>
             </div>
 
