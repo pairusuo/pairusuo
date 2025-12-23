@@ -116,6 +116,7 @@
     "subtitle": "このサイトで使用している技術スタックと推奨リンク",
     "techStack": "技術スタック",
     "recommended": "推奨リンク",
+    "toolSharing": "ツール共有",
     "description": "説明",
     "aboutLinks": "リンクについて",
     "aboutLinksDesc": "上記のリンクは、このブログで使用している技術スタックと推奨する開発リソースを紹介しています。同様の技術スタックでプロジェクトを構築している場合は、お気軽にご連絡ください。対応するファイルを変更することで、このページの内容をカスタマイズできます。",
@@ -130,7 +131,13 @@
       "tool": "ツール",
       "development": "開発",
       "documentation": "ドキュメント",
-      "resource": "リソース"
+      "resource": "リソース",
+      "editor": "エディター",
+      "api": "APIツール",
+      "design": "デザインツール",
+      "devops": "DevOps",
+      "versionControl": "バージョン管理",
+      "productivity": "生産性"
     },
     "descriptions": {
       "nextjs": "React フルスタックフレームワーク",
@@ -147,7 +154,13 @@
       "github": "コードホスティングプラットフォーム",
       "mdn": "Web 開発ドキュメント",
       "caniuse": "ブラウザ互換性クエリ",
-      "unsplash": "無料の高品質画像"
+      "unsplash": "無料の高品質画像",
+      "vscode": "強力なコードエディター",
+      "postman": "API開発・テストツール",
+      "figma": "共同インターフェースデザインツール",
+      "docker": "コンテナ化アプリケーションプラットフォーム",
+      "git": "分散バージョン管理システム",
+      "notion": "オールインワン協働ワークスペース"
     }
   }
 }

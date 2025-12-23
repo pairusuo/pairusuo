@@ -153,12 +153,13 @@
     "subtitle": "本站使用的技术栈和推荐链接",
     "techStack": "技术栈",
     "recommended": "推荐链接",
+    "toolSharing": "工具分享",
     "description": "描述",
     "aboutLinks": "关于链接",
     "aboutLinksDesc": "以上链接展示了本博客使用的技术栈和一些推荐的开发资源。如果你也在使用类似的技术栈构建项目，欢迎与我交流。你可以通过修改相应文件来自定义这个页面的内容。",
     "categories": {
       "framework": "框架",
-      "language": "语言", 
+      "language": "语言",
       "styling": "样式",
       "ui": "UI组件",
       "content": "内容",
@@ -167,7 +168,14 @@
       "tool": "工具",
       "development": "开发",
       "documentation": "文档",
-      "resource": "资源"
+      "resource": "资源",
+      "editor": "编辑器",
+      "api": "API工具",
+      "design": "设计工具",
+      "devops": "DevOps",
+      "versionControl": "版本控制",
+      "productivity": "生产力",
+      "server": "服务器"
     },
     "descriptions": {
       "nextjs": "React 全栈框架",
@@ -187,7 +195,9 @@
       "caniuse": "浏览器兼容性查询",
       "unsplash": "免费高质量图片",
       "whoiscx": "实用工具集合网站",
-      "arealme": "在线测试和趣味工具平台"
+      "arealme": "在线测试和趣味工具平台",
+      "vscode": "强大的代码编辑器",
+      "hostinger": "优惠的主机托管服务"
     }
   }
 }

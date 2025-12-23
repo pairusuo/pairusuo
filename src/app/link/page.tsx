@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-react'
 
 export async function generateMetadata() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
-  
+
   return {
     title: `${t('nav.links')} - ${t('meta.title')}`,
     description: t('links.subtitle'),
@@ -25,6 +25,16 @@ export async function generateMetadata() {
     },
   }
 }
+
+// 工具分享链接数据
+const toolSharingLinks = [
+  {
+    name: 'Hostinger VPS',
+    url: 'https://hostinger.com?REFERRALCODE=pairusuo',
+    descriptionKey: 'hostinger',
+    category: 'server'
+  },
+]
 
 // 技术栈链接数据
 const techStackLinks = [
@@ -130,7 +140,7 @@ const recommendedLinks = [
   },
 ]
 
-function LinkCard({ name, url, descriptionKey, category }: { 
+function LinkCard({ name, url, descriptionKey, category }: {
   name: string
   url: string
   descriptionKey: string
@@ -168,6 +178,23 @@ export default function LinksPage() {
     <div className="container mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
       <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
         <div className="space-y-8">
+
+          {/* 工具分享 */}
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">{t('links.toolSharing')}</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {toolSharingLinks.map((link) => (
+                <LinkCard
+                  key={link.name}
+                  name={link.name}
+                  url={link.url}
+                  descriptionKey={link.descriptionKey}
+                  category={link.category}
+                />
+              ))}
+            </div>
+          </section>
+
           {/* 技术栈 */}
           <section>
             <h2 className="text-2xl font-semibold mb-6">{t('links.techStack')}</h2>

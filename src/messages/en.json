@@ -110,6 +110,7 @@
     "subtitle": "Tech stack used by this site and recommended links",
     "techStack": "Tech Stack",
     "recommended": "Recommended Links",
+    "toolSharing": "Tool Sharing",
     "description": "Description",
     "aboutLinks": "About Links",
     "aboutLinksDesc": "The above links showcase the tech stack used by this blog and some recommended development resources. If you're also building projects with similar tech stacks, feel free to connect with me. You can customize this page content by modifying the corresponding files.",
@@ -124,7 +125,13 @@
       "tool": "tool",
       "development": "development",
       "documentation": "documentation",
-      "resource": "resource"
+      "resource": "resource",
+      "editor": "editor",
+      "api": "API tool",
+      "design": "design",
+      "devops": "DevOps",
+      "versionControl": "version control",
+      "productivity": "productivity"
     },
     "descriptions": {
       "nextjs": "React full-stack framework",
@@ -141,7 +148,13 @@
       "github": "Code hosting platform",
       "mdn": "Web development documentation",
       "caniuse": "Browser compatibility queries",
-      "unsplash": "Free high-quality images"
+      "unsplash": "Free high-quality images",
+      "vscode": "Powerful code editor",
+      "postman": "API development and testing tool",
+      "figma": "Collaborative interface design tool",
+      "docker": "Platform for containerized applications",
+      "git": "Distributed version control system",
+      "notion": "All-in-one collaborative workspace"
     }
   }
 }
