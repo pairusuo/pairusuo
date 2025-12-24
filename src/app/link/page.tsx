@@ -34,6 +34,12 @@ const toolSharingLinks = [
     descriptionKey: 'hostinger',
     category: 'server'
   },
+  {
+    name: 'ZPCloud',
+    url: 'https://www.zpcloud01.site/auth/register?code=YF9j',
+    descriptionKey: 'zpcloud',
+    category: 'vpn'
+  },
 ]
 
 // 技术栈链接数据

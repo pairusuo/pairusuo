@@ -175,7 +175,8 @@
       "devops": "DevOps",
       "versionControl": "版本控制",
       "productivity": "生产力",
-      "server": "服务器"
+      "server": "服务器",
+      "vpn": "VPN"
     },
     "descriptions": {
       "nextjs": "React 全栈框架",
@@ -197,7 +198,8 @@
       "whoiscx": "实用工具集合网站",
       "arealme": "在线测试和趣味工具平台",
       "vscode": "强大的代码编辑器",
-      "hostinger": "优惠的主机托管服务"
+      "hostinger": "优惠的主机托管服务",
+      "zpcloud": "零点云"
     }
   }
 }
