@@ -42,21 +42,40 @@ export const metadata: Metadata = {
   },
 }
 
+import { TypewriterTitle } from '@/components/TypewriterTitle'
+
+
 export default async function HomePage() {
   const posts = await getAllPosts()
   const featuredPosts = posts.slice(0, 4)
+  const messages = require(`@/messages/zh.json`)
+  const features = messages.home.intro.features || []
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
       <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
         {/* Welcome Section */}
-        <section className="mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            {t('home.intro.title')}
-          </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            {t('home.intro.description')}
-          </p>
+        <section className="mb-16">
+          <div className="flex flex-col md:flex-row md:items-start mb-6">
+             <Image
+                src="/info.png"
+                alt="Logo"
+                width={120}
+                height={120}
+                className="rounded-full mr-8 mb-4 md:mb-0 shrink-0"
+             />
+             <div className="flex flex-col">
+                <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-slate-800 to-gray-500 dark:from-slate-100 dark:via-slate-300 dark:to-gray-400">
+                    {t('home.intro.title')}
+                </h1>
+                <div className="text-xl md:text-2xl font-medium text-black dark:text-white mt-1">
+                    <TypewriterTitle strings={features} />
+                </div>
+                <p className="text-lg text-muted-foreground leading-relaxed mt-4">
+                    {t('home.intro.description')}
+                </p>
+             </div>
+          </div>
         </section>
 
         {/* Tags Section */}
