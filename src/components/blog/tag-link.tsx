@@ -11,7 +11,7 @@ export function TagLink({ tag }: TagLinkProps) {
   const handleClick = (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    window.location.href = `/tags/${encodeURIComponent(tag)}`
+    window.location.href = `/tag/${encodeURIComponent(tag)}`
   }
 
   return (

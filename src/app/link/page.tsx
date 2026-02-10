@@ -8,7 +8,7 @@ export async function generateMetadata() {
   return {
     title: `${t('nav.links')} - ${t('meta.title')}`,
     description: t('links.subtitle'),
-    keywords: 'Next.js,React,TypeScript,Tailwind CSS,MDX,Cloudflare,友链,技术栈',
+    keywords: '',
     openGraph: {
       title: `${t('nav.links')} - ${t('meta.title')}`,
       description: t('links.subtitle'),
@@ -157,23 +157,18 @@ function LinkCard({ name, url, descriptionKey, category }: {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block p-4 border rounded-lg hover:shadow-md transition-all duration-200 hover:border-primary/50 group"
+      className="group block"
     >
-      <div className="flex items-start justify-between">
-        <div className="space-y-2 flex-1">
-          <div className="flex items-center space-x-2">
+      <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
               {name}
             </h3>
-            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground/50 group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100" />
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {t(`links.descriptions.${descriptionKey}`)}
           </p>
-          <span className="inline-block px-2 py-1 text-xs bg-muted rounded-md text-muted-foreground">
-            {t(`links.categories.${category}`)}
-          </span>
-        </div>
       </div>
     </Link>
   )
@@ -181,68 +176,73 @@ function LinkCard({ name, url, descriptionKey, category }: {
 
 export default function LinksPage() {
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
-      <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
-        <div className="space-y-8">
+    <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+      <div className="space-y-12">
+        {/* Header */}
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight">{t('links.title')}</h1>
+          <p className="text-xl text-muted-foreground">
+             {t('links.subtitle')}
+          </p>
+        </div>
 
-          {/* 工具分享 */}
-          <section>
-            <h2 className="text-2xl font-semibold mb-6">{t('links.toolSharing')}</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {toolSharingLinks.map((link) => (
-                <LinkCard
-                  key={link.name}
-                  name={link.name}
-                  url={link.url}
-                  descriptionKey={link.descriptionKey}
-                  category={link.category}
-                />
-              ))}
-            </div>
-          </section>
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            {/* 工具分享 */}
+            <section className="space-y-6">
+                <h2 className="text-xl font-semibold border-b pb-2">{t('links.toolSharing')}</h2>
+                <div className="space-y-6">
+                {toolSharingLinks.map((link) => (
+                    <LinkCard
+                    key={link.name}
+                    name={link.name}
+                    url={link.url}
+                    descriptionKey={link.descriptionKey}
+                    category={link.category}
+                    />
+                ))}
+                </div>
+            </section>
 
-          {/* 技术栈 */}
-          <section>
-            <h2 className="text-2xl font-semibold mb-6">{t('links.techStack')}</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {techStackLinks.map((link) => (
-                <LinkCard
-                  key={link.name}
-                  name={link.name}
-                  url={link.url}
-                  descriptionKey={link.descriptionKey}
-                  category={link.category}
-                />
-              ))}
-            </div>
-          </section>
+            {/* 技术栈 */}
+            <section className="space-y-6">
+                <h2 className="text-xl font-semibold border-b pb-2">{t('links.techStack')}</h2>
+                 <div className="space-y-6">
+                {techStackLinks.map((link) => (
+                    <LinkCard
+                    key={link.name}
+                    name={link.name}
+                    url={link.url}
+                    descriptionKey={link.descriptionKey}
+                    category={link.category}
+                    />
+                ))}
+                </div>
+            </section>
 
-          {/* 推荐链接 */}
-          <section>
-            <h2 className="text-2xl font-semibold mb-6">{t('links.recommended')}</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {recommendedLinks.map((link) => (
-                <LinkCard
-                  key={link.name}
-                  name={link.name}
-                  url={link.url}
-                  descriptionKey={link.descriptionKey}
-                  category={link.category}
-                />
-              ))}
-            </div>
-          </section>
+            {/* 推荐链接 */}
+            <section className="space-y-6">
+                <h2 className="text-xl font-semibold border-b pb-2">{t('links.recommended')}</h2>
+                 <div className="space-y-6">
+                {recommendedLinks.map((link) => (
+                    <LinkCard
+                    key={link.name}
+                    name={link.name}
+                    url={link.url}
+                    descriptionKey={link.descriptionKey}
+                    category={link.category}
+                    />
+                ))}
+                </div>
+            </section>
+        </div>
 
           {/* 说明 */}
-          <section className="mt-8">
-            <div className="p-6 border rounded-lg bg-muted/50">
-              <h3 className="font-semibold mb-3">{t('links.aboutLinks')}</h3>
-              <p className="text-muted-foreground leading-7 text-sm">
+          <section className="pt-8 border-t">
+              <h3 className="font-semibold mb-2">{t('links.aboutLinks')}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
                 {t('links.aboutLinksDesc')}
               </p>
-            </div>
           </section>
-        </div>
       </div>
     </div>
   )

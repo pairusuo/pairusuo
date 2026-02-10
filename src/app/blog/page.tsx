@@ -32,17 +32,21 @@ export default async function BlogPage() {
   const posts = await getAllPosts()
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
-      <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
-        <div className="space-y-8">
-          {/* Posts Count */}
-          <div className="text-center text-sm text-muted-foreground">
+    <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+      <div className="space-y-12">
+        {/* Header / Intro */}
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight">{t('blog.title')}</h1>
+          <p className="text-xl text-muted-foreground">
+             {t('blog.subtitle')}
+          </p>
+          <div className="text-sm text-muted-foreground pt-2">
             {t('blog.postsCount').replace('{count}', posts.length.toString())}
           </div>
-
-          {/* Posts List */}
-          <BlogList posts={posts} />
         </div>
+
+        {/* Posts List */}
+        <BlogList posts={posts} />
       </div>
     </div>
   )

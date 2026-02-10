@@ -27,7 +27,7 @@ export async function GET() {
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>${baseUrl}/tags</loc>
+    <loc>${baseUrl}/tag</loc>
     <lastmod>${latestPostDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

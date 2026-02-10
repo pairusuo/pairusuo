@@ -3,77 +3,25 @@
     "home": "Home",
     "blog": "Blog",
     "links": "Links",
-    "tags": "Tags"
+    "tags": "Tag"
   },
   "blog": {
     "title": "Blog",
     "subtitle": "Explore the world of technology and share learning insights",
+    "description": "Explore the world of technology, share learning insights and life realizations",
+    "keywords": "",
     "postsCount": "{count} posts in total",
     "noPosts": "No posts yet",
     "author": "Author",
     "readMore": "Read More",
     "publishedAt": "Published at",
     "updatedAt": "Updated at",
-    "tags": "Tags",
+    "tags": "Tag",
     "backToList": "Back to Blog List",
     "searchPlaceholder": "Search blogs...",
     "noResults": "No related blogs found",
     "allPosts": "All Posts",
     "latestPosts": "Latest Posts"
-  },
-  "notFound": {
-    "title": "Page Not Found",
-    "description": "Sorry, the page you are looking for does not exist. It may be a broken link or the page has been deleted.",
-    "backHome": "Back to Home"
-  },
-  "home": {
-    "title": "Welcome to My Blog",
-    "subtitle": "Sharing thoughts and experiences",
-    "latestPosts": "Latest Posts",
-    "viewAllPosts": "View All Posts",
-    "intro": {
-      "title": "Welcome to My Blog",
-      "description": "Here I document my technical practices, product thinking, and overseas journey. I hope to explore and grow together with you.",
-      "features": [
-        "💻 Full-stack development experience",
-        "🚀 Passionate about new technology exploration",
-        "📝 Technical article sharing",
-        "🌱 Continuous learning and growth"
-      ],
-      "contact": "Scan to add WeChat",
-      "avatar": "Blogger Avatar",
-      "jike": "Follow on Jike"
-    },
-    "author": {
-      "name": "pairusuo",
-      "bio": "Overseas newcomer, follower of GeFei",
-      "description": "Personal blog, sharing technical insights and overseas experience"
-    },
-    "tagList": [
-      {
-        "text": "Aspiring overseas entrepreneur",
-        "url": "",
-        "color": "bg-muted"
-      },
-      {
-        "text": "GitHub veteran new contributor",
-        "url": "https://github.com",
-        "color": "bg-muted"
-      },
-      {
-        "text": "Labubu holder",
-        "url": "https://www.popmart.com",
-        "color": "bg-pink-100 text-pink-800"
-      },
-      {
-        "text": "ShipAny promoter",
-        "url": "https://shipany.com",
-        "color": "bg-green-100 text-green-800"
-      }
-    ],
-    "wechat": "WeChat Official Account",
-    "jike": "Jike Account",
-    "readTime": "min read"
   },
   "common": {
     "loading": "Loading...",
@@ -84,26 +32,131 @@
     "lightMode": "Light Mode",
     "toggleTheme": "Toggle Theme"
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist. It may be a broken link or the page has been deleted.",
+    "backHome": "Back to Home",
+    "viewBlog": "View Blog"
+  },
   "footer": {
     "copyright": "All Rights Reserved",
     "poweredBy": "Built with Next.js"
   },
   "meta": {
-    "title": "My Blog",
+    "title": "pairusuo",
     "description": "A personal blog sharing technology and life",
-    "keywords": "blog,technology,life,sharing",
-    "author": "Blogger"
+    "keywords": "",
+    "author": "pairusuo"
+  },
+  "home": {
+    "title": "派入所",
+    "subtitle": "分享思考与经验",
+    "latestPosts": "最新文章",
+    "viewAllPosts": "View all articles",
+    "intro": {
+      "title": "Hi, I'm 派入所",
+      "description": "这里记录我的技术实践，产品思考与出海历程，也包括日常生活和股票投资，愿与你一起探索与成长。",
+      "features": [
+        "新独立开发者",
+        "Vibe Coding 选手",
+        "偶尔分享点经验",
+        "持续学习成长"
+      ],
+      "contact": "Scan to add WeChat",
+      "avatar": "Blogger Avatar",
+      "jike": "Follow on Jike"
+    },
+    "author": {
+      "name": "pairusuo",
+      "bio": "Global Expansion Newcomer",
+      "description": "Personal blog, sharing technical insights and global expansion experience"
+    },
+    "tagList": [
+      {
+        "text": "Aspiring Global Entrepreneur",
+        "url": "",
+        "color": "#79716b"
+      },
+      {
+        "text": "Wishing Wall",
+        "url": "https://bestwishes.click",
+        "color": "#fb64b6"
+      },
+      {
+        "text": "2048",
+        "url": "https://2048.pairusuo.top",
+        "color": "#ffdf20"
+      },
+      {
+        "text": "Card Counter",
+        "url": "https://cardcounter.pairusuo.top",
+        "color": "#fe9a00"
+      },
+      {
+        "text": "Desktop Clock",
+        "url": "https://clock.pairusuo.top",
+        "color": "#0c0a09"
+      },
+      {
+        "text": "Keyword ROI",
+        "url": "https://roi-calculator.pairusuo.top/",
+        "color": "#2b7fff"
+      },
+      {
+        "text": "Chinese Name Generator",
+        "url": "https://randomchinesenames.com?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#e7000b"
+      },
+      {
+        "text": "Let's Slack Off",
+        "url": "https://touchfish.click",
+        "color": "#155dfc"
+      },
+      {
+        "text": "GitHub Veteran Noob",
+        "url": "https://github.com/pairusuo",
+        "color": "#44403b"
+      },
+      {
+        "text": "ShipAny Promoter",
+        "url": "https://shipany.ai/i/pairusuo",
+        "color": "#e17100"
+      },
+      {
+        "text": "AI Coding Promoter",
+        "url": "https://aicoding.sh/i/pdCx6Q2t5",
+        "color": "#1c1917"
+      },
+      {
+        "text": "Strategy Sim Game",
+        "url": "https://survival-challenge-game.online",
+        "color": "#51a2ff"
+      },
+      {
+        "text": "Image Generator",
+        "url": "https://www.aicoverimage.com?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#00bcff"
+      },
+      {
+        "text": "China Brush",
+        "url": "https://chinabrush.art?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#a6a09b"
+      }
+    ],
+    "wechat": "WeChat Official Account",
+    "jike": "Jike Account",
+    "readTime": "min read"
   },
   "tags": {
-    "title": "Tags",
+    "title": "Tag",
     "subtitle": "Browse articles by tags, {count} tags in total",
     "noTags": "No tags yet",
     "postsCount": "{count} posts",
-    "backToList": "Back to Tags List",
+    "backToList": "Back to Tag List",
     "tagPrefix": "Tag:",
     "totalPosts": "{count} posts in total",
     "browseDescription": "Browse all articles about {tag}, {count} related articles in total.",
-    "keywords": "tags,articles,blog"
+    "keywords": ""
   },
   "links": {
     "title": "Links",
@@ -113,48 +166,50 @@
     "toolSharing": "Tool Sharing",
     "description": "Description",
     "aboutLinks": "About Links",
-    "aboutLinksDesc": "The above links showcase the tech stack used by this blog and some recommended development resources. If you're also building projects with similar tech stacks, feel free to connect with me. You can customize this page content by modifying the corresponding files.",
+    "aboutLinksDesc": "The above links showcase the tech stack used by this blog and some recommended development resources. If you're also building projects with similar tech stacks, feel free to connect with me.",
     "categories": {
-      "framework": "framework",
-      "language": "language",
-      "styling": "styling",
-      "ui": "ui",
-      "content": "content",
-      "hosting": "hosting",
-      "storage": "storage",
-      "tool": "tool",
-      "development": "development",
-      "documentation": "documentation",
-      "resource": "resource",
-      "editor": "editor",
-      "api": "API tool",
-      "design": "design",
+      "framework": "Framework",
+      "language": "Language",
+      "styling": "Styling",
+      "ui": "UI Component",
+      "content": "Content",
+      "hosting": "Hosting",
+      "storage": "Storage",
+      "tool": "Tool",
+      "development": "Development",
+      "documentation": "Documentation",
+      "resource": "Resource",
+      "editor": "Editor",
+      "api": "API Tool",
+      "design": "Design Tool",
       "devops": "DevOps",
-      "versionControl": "version control",
-      "productivity": "productivity"
+      "versionControl": "Version Control",
+      "productivity": "Productivity",
+      "server": "Server",
+      "vpn": "VPN"
     },
     "descriptions": {
-      "nextjs": "React full-stack framework",
-      "react": "User interface building library",
+      "nextjs": "React Full-stack Framework",
+      "react": "User Interface Building Library",
       "typescript": "Superset of JavaScript",
-      "tailwind": "Utility-first CSS framework",
-      "shadcn": "Component library based on Radix UI",
+      "tailwind": "Utility-first CSS Framework",
+      "shadcn": "Component Library based on Radix UI",
       "mdx": "Use JSX in Markdown",
-      "cloudflarePages": "Static website hosting platform",
-      "cloudflareR2": "Object storage service",
-      "vercel": "Frontend deployment platform",
-      "tailwindcolor": "Tailwind CSS color reference tool",
-      "pnpm": "Fast, disk space efficient package manager",
-      "github": "Code hosting platform",
-      "mdn": "Web development documentation",
-      "caniuse": "Browser compatibility queries",
-      "unsplash": "Free high-quality images",
-      "vscode": "Powerful code editor",
-      "postman": "API development and testing tool",
-      "figma": "Collaborative interface design tool",
-      "docker": "Platform for containerized applications",
-      "git": "Distributed version control system",
-      "notion": "All-in-one collaborative workspace"
+      "cloudflarePages": "Static Website Hosting Platform",
+      "cloudflareR2": "Object Storage Service",
+      "cloudflare": "Network Infrastructure and Security Service",
+      "vercel": "Frontend Deployment Platform",
+      "tailwindcolor": "Tailwind CSS Color Reference Tool",
+      "pnpm": "Fast, Disk Space Efficient Package Manager",
+      "github": "Code Hosting Platform",
+      "mdn": "Web Development Documentation",
+      "caniuse": "Browser Compatibility Queries",
+      "unsplash": "Free High-quality Images",
+      "whoiscx": "Useful Tools Collection",
+      "arealme": "Online Tests and Fun Tools Platform",
+      "vscode": "Powerful Code Editor",
+      "hostinger": "Affordable Hosting Service",
+      "zpcloud": "ZPCloud"
     }
   }
 }

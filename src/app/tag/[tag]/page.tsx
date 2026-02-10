@@ -70,8 +70,7 @@ export async function generateMetadata({ params }: TagPageProps) {
   
   const posts = await getPostsByTag(tag)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
-  
-  return {
+    return {
     title: `${tag} - ${t('nav.tags')} - ${t('meta.title')}`,
     description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
     keywords: `${tag},${t('tags.keywords')}`,
@@ -79,7 +78,7 @@ export async function generateMetadata({ params }: TagPageProps) {
       title: `${tag} - ${t('nav.tags')}`,
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
       type: 'website',
-      url: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
+      url: `${baseUrl}/tag/${encodeURIComponent(tag)}`,
     },
     twitter: {
       card: 'summary',
@@ -87,7 +86,7 @@ export async function generateMetadata({ params }: TagPageProps) {
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
     },
     alternates: {
-      canonical: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
+      canonical: `${baseUrl}/tag/${encodeURIComponent(tag)}`,
     },
   }
 }
@@ -123,32 +122,29 @@ export default async function TagPage({ params }: TagPageProps) {
     }
 
     return (
-      <div className="container mx-auto max-w-6xl px-6 py-8">
-        <div className="bg-content-background rounded-xl shadow-sm border p-8">
-          <div className="space-y-8">
-            {/* Back Button */}
-            <div>
-              <Button variant="ghost" asChild>
-                <Link href="/tags" className="flex items-center gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  {t('tags.backToList')}
-                </Link>
-              </Button>
-            </div>
-
+      <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+        <div className="space-y-12">
             {/* Header */}
-            <div className="text-center space-y-4">
-              <h1 className="text-3xl font-bold">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                  <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary" asChild>
+                    <Link href="/tag" className="flex items-center gap-2">
+                      <ArrowLeft className="h-4 w-4" />
+                      {t('tags.backToList')}
+                    </Link>
+                  </Button>
+              </div>
+
+              <h1 className="text-4xl font-bold tracking-tight">
                 {t('tags.tagPrefix')} <span className="text-primary">{tag}</span>
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-xl text-muted-foreground">
                 {t('tags.totalPosts').replace('{count}', posts.length.toString())}
               </p>
             </div>
 
             {/* Posts List */}
             <BlogList posts={posts} />
-          </div>
         </div>
       </div>
     )

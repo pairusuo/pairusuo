@@ -45,13 +45,11 @@ export const HeroSection = ({
     introDescription: string;
     features: string[];
 }) => {
+    console.log('HeroSection rendering', { title, features });
     return (
         <section className="relative flex flex-col md:flex-row items-center justify-between py-20 md:py-32">
              {/* Left Content */}
-             <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
+             <div 
                 className="w-full md:w-1/2 flex flex-col items-start z-10"
             >
                  <div className="flex items-center gap-2 mb-4">
@@ -81,15 +79,12 @@ export const HeroSection = ({
                  </p>
 
                  <SocialLinks />
-            </motion.div>
+            </div>
 
             {/* Right Visual / Tech Stack */}
             <div className="w-full md:w-1/2 relative h-[500px] flex items-center justify-center mt-10 md:mt-0 perspective-1000">
                 {/* Central Character/Logo */}
-                <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.8 }}
+                <div
                     className="relative z-10"
                 >
                      <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-background shadow-2xl">
@@ -101,7 +96,7 @@ export const HeroSection = ({
                             priority
                          />
                      </div>
-                </motion.div>
+                </div>
 
                 {/* Spherical Tech Icons Cloud */}
                 <IconCloud icons={techStackIcons} />
@@ -209,7 +204,7 @@ function IconCloud({ icons }: { icons: any[] }) {
                     }}
                  >
                       <div className="bg-background/80 backdrop-blur-md p-2 rounded-full shadow-lg border border-border/50">
-                         <point.icon.Icon size={24} style={{ color: point.icon.color }} />
+                         <point.icon.Icon size={24} style={{ color: point.icon.color }} className="dark:brightness-150 dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-all duration-300" />
                       </div>
                  </div>
             ))}

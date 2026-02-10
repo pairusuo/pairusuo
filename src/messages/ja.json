@@ -8,6 +8,8 @@
   "blog": {
     "title": "ブログ",
     "subtitle": "技術の世界を探求し、学習の洞察を共有する",
+    "description": "技術の世界を探求し、学習の洞察と人生の気づきを共有する",
+    "keywords": "ブログ,技術,共有,学習,記事",
     "postsCount": "合計 {count} 記事",
     "noPosts": "まだ記事がありません",
     "author": "著者",
@@ -15,71 +17,11 @@
     "publishedAt": "公開日",
     "updatedAt": "更新日",
     "tags": "タグ",
-    "backToList": "← ブログ一覧に戻る",
+    "backToList": "ブログ一覧に戻る",
     "searchPlaceholder": "ブログを検索...",
     "noResults": "関連するブログが見つかりません",
     "allPosts": "すべての記事",
     "latestPosts": "最新記事"
-  },
-  "notFound": {
-    "title": "ページが見つかりません",
-    "description": "申し訳ございませんが、お探しのページは存在しません。リンクが間違っているか、ページが削除された可能性があります。",
-    "backHome": "ホームに戻る"
-  },
-  "home": {
-    "title": "私のブログへようこそ",
-    "subtitle": "思考と経験を共有する",
-    "latestPosts": "最新記事",
-    "viewAllPosts": "すべての記事を見る",
-    "tagUrls": {
-      "tag1": "https://twitter.com/gefei55",
-      "tag2": "https://github.com",
-      "tag3": "https://www.popmart.com",
-      "tag4": "https://shipany.com"
-    },
-    "intro": {
-      "title": "私のブログへようこそ",
-      "description": "ここでは私の技術実践、製品思考、海外進出の歴程を記録し、あなたと一緒に探求し成長していきたいと思います。",
-      "features": [
-        "💻 フルスタック開発経験",
-        "🚀 新技術探求への情熱",
-        "📝 技術記事の共有",
-        "🌱 継続的な学習と成長"
-      ],
-      "contact": "スキャンしてWeChatを追加",
-      "avatar": "ブロガーのアバター",
-      "jike": "Jikeをフォロー"
-    },
-    "author": {
-      "name": "pairusuo",
-      "bio": "海外新人、ゲフェイの追随者",
-      "description": "個人ブログ、技術的洞察と海外経験を共有"
-    },
-    "tagList": [
-      {
-        "text": "海外起業志望者",
-        "url": "",
-        "color": "bg-muted"
-      },
-      {
-        "text": "GitHubベテラン新貢献者",
-        "url": "https://github.com",
-        "color": "bg-muted"
-      },
-      {
-        "text": "Labubu保有者",
-        "url": "https://www.popmart.com",
-        "color": "bg-pink-100 text-pink-800"
-      },
-      {
-        "text": "ShipAnyプロモーター",
-        "url": "https://shipany.com",
-        "color": "bg-green-100 text-green-800"
-      }
-    ],
-    "wechat": "WeChat公式アカウント",
-    "jike": "Jikeアカウント",
-    "readTime": "分読む"
   },
   "common": {
     "loading": "読み込み中...",
@@ -90,15 +32,120 @@
     "lightMode": "ライトモード",
     "toggleTheme": "テーマを切り替え"
   },
+  "notFound": {
+    "title": "ページが見つかりません",
+    "description": "申し訳ございませんが、お探しのページは存在しません。リンクが間違っているか、ページが削除された可能性があります。",
+    "backHome": "ホームに戻る",
+    "viewBlog": "ブログを見る"
+  },
   "footer": {
-    "copyright": "著作権",
+    "copyright": "All rights reserved",
     "poweredBy": "Next.js で構築"
   },
   "meta": {
-    "title": "私のブログ",
+    "title": "pairusuo",
     "description": "技術と生活を共有する個人ブログ",
     "keywords": "ブログ,技術,生活,共有",
-    "author": "ブロガー"
+    "author": "pairusuo"
+  },
+  "home": {
+    "title": "Pairusuo",
+    "subtitle": "思考と経験を共有する",
+    "latestPosts": "最新記事",
+    "viewAllPosts": "すべての記事を見る",
+    "intro": {
+      "title": "Hi, I'm Pairusuo",
+      "description": "ここでは私の技術実践、製品思考、海外進出の歴程を記録し、日常生活や株式投資も含めて、あなたと一緒に探求し成長していきたいと思います。",
+      "features": [
+        "新人個人開発者",
+        "Vibe Coding プレイヤー",
+        "時々経験を共有",
+        "継続的な学習と成長"
+      ],
+      "contact": "スキャンしてWeChatを追加",
+      "avatar": "ブロガーのアバター",
+      "jike": "Jikeをフォロー"
+    },
+    "author": {
+      "name": "pairusuo",
+      "bio": "海外進出の新人",
+      "description": "個人ブログ、技術的洞察と海外経験を共有"
+    },
+    "tagList": [
+      {
+        "text": "海外進出志望者",
+        "url": "",
+        "color": "#79716b"
+      },
+      {
+        "text": "願いの壁",
+        "url": "https://bestwishes.click",
+        "color": "#fb64b6"
+      },
+      {
+        "text": "2048",
+        "url": "https://2048.pairusuo.top",
+        "color": "#ffdf20"
+      },
+      {
+        "text": "カードカウンター",
+        "url": "https://cardcounter.pairusuo.top",
+        "color": "#fe9a00"
+      },
+      {
+        "text": "デスクトップ時計",
+        "url": "https://clock.pairusuo.top",
+        "color": "#0c0a09"
+      },
+      {
+        "text": "キーワードROI",
+        "url": "https://roi-calculator.pairusuo.top/",
+        "color": "#2b7fff"
+      },
+      {
+        "text": "中国語名ジェネレーター",
+        "url": "https://randomchinesenames.com?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#e7000b"
+      },
+      {
+        "text": "サボろう",
+        "url": "https://touchfish.click",
+        "color": "#155dfc"
+      },
+      {
+        "text": "GitHubベテラン初心者",
+        "url": "https://github.com/pairusuo",
+        "color": "#44403b"
+      },
+      {
+        "text": "ShipAnyプロモーター",
+        "url": "https://shipany.ai/i/pairusuo",
+        "color": "#e17100"
+      },
+      {
+        "text": "AI Codingプロモーター",
+        "url": "https://aicoding.sh/i/pdCx6Q2t5",
+        "color": "#1c1917"
+      },
+      {
+        "text": "戦略シミュレーションゲーム",
+        "url": "https://survival-challenge-game.online",
+        "color": "#51a2ff"
+      },
+      {
+        "text": "画像ジェネレーター",
+        "url": "https://www.aicoverimage.com?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#00bcff"
+      },
+      {
+        "text": "China Brush",
+        "url": "https://chinabrush.art?utm_source=pairusuo.top&utm_medium=referral",
+        "color": "#a6a09b"
+      }
+    ],
+    "wechat": "WeChat公式アカウント",
+    "jike": "Jikeアカウント",
+    "readTime": "分読む"
   },
   "tags": {
     "title": "タグ",
@@ -119,7 +166,7 @@
     "toolSharing": "ツール共有",
     "description": "説明",
     "aboutLinks": "リンクについて",
-    "aboutLinksDesc": "上記のリンクは、このブログで使用している技術スタックと推奨する開発リソースを紹介しています。同様の技術スタックでプロジェクトを構築している場合は、お気軽にご連絡ください。対応するファイルを変更することで、このページの内容をカスタマイズできます。",
+    "aboutLinksDesc": "上記のリンクは、このブログで使用している技術スタックと推奨する開発リソースを紹介しています。同様の技術スタックでプロジェクトを構築している場合は、お気軽にご連絡ください。",
     "categories": {
       "framework": "フレームワーク",
       "language": "言語",
@@ -137,7 +184,9 @@
       "design": "デザインツール",
       "devops": "DevOps",
       "versionControl": "バージョン管理",
-      "productivity": "生産性"
+      "productivity": "生産性",
+      "server": "サーバー",
+      "vpn": "VPN"
     },
     "descriptions": {
       "nextjs": "React フルスタックフレームワーク",
@@ -148,6 +197,7 @@
       "mdx": "Markdown で JSX を使用",
       "cloudflarePages": "静的ウェブサイトホスティングプラットフォーム",
       "cloudflareR2": "オブジェクトストレージサービス",
+      "cloudflare": "ネットワークインフラストラクチャおよびセキュリティサービス",
       "vercel": "フロントエンドデプロイメントプラットフォーム",
       "tailwindcolor": "Tailwind CSS カラーリファレンスツール",
       "pnpm": "高速でディスク容量効率的なパッケージマネージャー",
@@ -155,12 +205,11 @@
       "mdn": "Web 開発ドキュメント",
       "caniuse": "ブラウザ互換性クエリ",
       "unsplash": "無料の高品質画像",
+      "whoiscx": "便利なツール集",
+      "arealme": "オンラインテストと面白いツール",
       "vscode": "強力なコードエディター",
-      "postman": "API開発・テストツール",
-      "figma": "共同インターフェースデザインツール",
-      "docker": "コンテナ化アプリケーションプラットフォーム",
-      "git": "分散バージョン管理システム",
-      "notion": "オールインワン協働ワークスペース"
+      "hostinger": "手頃な価格のホスティングサービス",
+      "zpcloud": "ZPCloud"
     }
   }
 }

@@ -22,7 +22,8 @@ const messages = getMessages();
  * @returns Translated text
  */
 export function t(key: string): string {
-  return key.split('.').reduce((obj, k) => obj?.[k], messages) || key;
+  const value = key.split('.').reduce((obj, k) => obj?.[k], messages);
+  return value === undefined ? key : value;
 }
 
 /**

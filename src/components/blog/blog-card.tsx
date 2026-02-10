@@ -28,7 +28,7 @@ export function BlogCard({ post }: BlogCardProps) {
         {post.tags.map((tag) => (
           <Link
             key={tag}
-            href={`/tags/${encodeURIComponent(tag)}`}
+            href={`/tag/${encodeURIComponent(tag)}`}
             className="inline-flex items-center px-2 py-1 sm:px-2.5 sm:py-0.5 text-xs bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 transition-colors whitespace-nowrap"
           >
             {tag}

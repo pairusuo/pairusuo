@@ -17,40 +17,36 @@ export function BlogList({ posts }: BlogListProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col space-y-10">
       {posts.map((post) => (
         <Link 
           key={post.slug}
           href={`/blog/${post.slug}`}
-          className="block border rounded-lg p-6 hover:shadow-md transition-all duration-200 hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary group mb-6"
+          className="group block"
         >
-          <article>
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
-                  {post.title}
-                </h2>
-              </div>
-              
-              <p className="text-muted-foreground leading-relaxed">
-                {post.excerpt}
-              </p>
-              
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm text-muted-foreground">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                  <span>{new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })} {new Date(post.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
-                  {post.author && <span>{t('blog.author')}: {post.author}</span>}
-                </div>
-                
-                {post.tags.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    {post.tags.map((tag) => (
-                      <TagLink key={tag} tag={tag} />
-                    ))}
-                  </div>
-                )}
-              </div>
+          <article className="flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+              <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                {post.title}
+              </h2>
+              <time className="shrink-0 text-sm text-muted-foreground font-mono">
+                {new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+              </time>
             </div>
+            
+            <p className="text-muted-foreground leading-relaxed line-clamp-2">
+              {post.excerpt}
+            </p>
+            
+            {post.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                {post.tags.map((tag) => (
+                  <span key={tag} className="text-xs text-muted-foreground/60 group-hover:text-muted-foreground transition-colors">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </article>
         </Link>
       ))}
