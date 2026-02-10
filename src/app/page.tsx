@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { getAllPosts } from '@/lib/mdx'
 import { t } from '@/lib/i18n'
-import Image from 'next/image'
 import type { Metadata } from 'next'
+import { HeroSection } from '@/components/home/HeroSection'
+import { SocialLinks } from '@/components/home/SocialLinks'
 
 export const metadata: Metadata = {
   title: t('meta.title'),
@@ -42,195 +42,72 @@ export const metadata: Metadata = {
   },
 }
 
-import { TypewriterTitle } from '@/components/TypewriterTitle'
-
 
 export default async function HomePage() {
   const posts = await getAllPosts()
-  const featuredPosts = posts.slice(0, 4)
+  const featuredPosts = posts.slice(0, 10) // Show top 10 posts
   const messages = require(`@/messages/zh.json`)
   const features = messages.home.intro.features || []
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">
-      <div className="bg-content-background rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
-        {/* Welcome Section */}
-        <section className="mb-16">
-          <div className="flex flex-col md:flex-row md:items-start mb-6">
-             <Image
-                src="/info.png"
-                alt="Logo"
-                width={120}
-                height={120}
-                className="rounded-full mr-8 mb-4 md:mb-0 shrink-0"
-             />
-             <div className="flex flex-col">
-                <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-slate-800 to-gray-500 dark:from-slate-100 dark:via-slate-300 dark:to-gray-400">
-                    {t('home.intro.title')}
-                </h1>
-                <div className="text-xl md:text-2xl font-medium text-black dark:text-white mt-1">
-                    <TypewriterTitle strings={features} />
-                </div>
-                <p className="text-lg text-muted-foreground leading-relaxed mt-4">
-                    {t('home.intro.description')}
-                </p>
-             </div>
-          </div>
-        </section>
+    <div className="container mx-auto max-w-5xl px-4 pb-20">
+      
+      {/* Hero Section */}
+      <HeroSection 
+        title={t('home.intro.title')}
+        introDescription={t('home.intro.description')}
+        features={features}
+      />
 
-        {/* Tags Section */}
-        <section className="mb-12">
-          <h3 className="font-semibold text-xl mb-4">{t('nav.tags')}</h3>
-          <div className="flex flex-wrap gap-2">
-            {(() => {
-              // 直接获取tagList数组
-              const messages = require(`@/messages/zh.json`);
-              const tagList = messages.home.tagList || [];
-
-              return tagList.map((tag: any, i: number) => {
-                const hasUrl = tag.url && tag.url.trim() !== '';
-
-                // 判断是否为十六进制颜色
-                const isHexColor = tag.color && tag.color.startsWith('#');
-
-                // 设置样式
-                const tagStyle = isHexColor
-                  ? { backgroundColor: tag.color, color: '#ffffff' }
-                  : {};
-
-                // 类名：若使用十六进制颜色则不添加颜色类，否则使用提供的类或默认值
-                const tagClassName = isHexColor ? '' : (tag.color || 'bg-muted');
-
-                return hasUrl ? (
-                  <Link
-                    key={i}
-                    href={tag.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`px-3 py-1 ${tagClassName} rounded-full text-sm hover:opacity-80 transition-opacity`}
-                    style={tagStyle}
-                  >
-                    {tag.text}
-                  </Link>
-                ) : (
-                  <span
-                    key={i}
-                    className={`px-3 py-1 ${tagClassName} rounded-full text-sm cursor-default`}
-                    style={tagStyle}
-                  >
-                    {tag.text}
-                  </span>
-                );
-              });
-            })()}
-          </div>
-        </section>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left: Latest Posts */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">{t('blog.latestPosts')}</h2>
-              <Link 
-                href="/blog" 
-                className="text-primary hover:underline text-sm"
-              >
-                {t('home.viewAllPosts')}
-              </Link>
-            </div>
-            
-            <div className="space-y-6">
-              {featuredPosts.length > 0 ? (
-                featuredPosts.map((post) => (
-                  <Link 
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="block border rounded-lg p-6 hover:shadow-md transition-all duration-200 hover:border-primary/50 group"
-                  >
-                    <div className="space-y-3">
-                      <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
-                        {post.title}
-                      </h3>
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                        <span>{new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })} {new Date(post.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
-                        <span>• 3 {t('home.readTime')}</span>
-                      </div>
-                      <p className="text-muted-foreground leading-relaxed line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">{t('blog.noPosts')}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right: Sidebar */}
-          <div className="space-y-8">
-            {/* Author Card */}
-            <div className="border rounded-lg p-6">
-              <div className="flex items-center space-x-4 mb-4">
-                <Image
-                  src="/info.png"
-                  alt={t('home.intro.avatar')}
-                  width={60}
-                  height={60}
-                  className="rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="font-semibold text-lg">{t('home.author.name')}</h3>
-                  <p className="text-sm text-muted-foreground">{t('home.author.bio')}</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                {t('home.author.description')}
-              </p>
-              <div className="flex items-center space-x-3">
-                <Link
-                  href="https://x.com/pairusuo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <div className="w-4 h-4 bg-black rounded-sm flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 1200 1227" fill="white">
-                      <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/>
-                    </svg>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* WeChat QR */}
-            <div className="border rounded-lg p-6 text-center">
-              <h3 className="font-semibold mb-4">{t('home.wechat')}</h3>
-              <Image
-                src="/qrcode.jpg"
-                alt={t('home.intro.contact')}
-                width={180}
-                height={180}
-                className="mx-auto border border-muted rounded-lg object-cover"
-              />
-            </div>
-
-            {/* Jike QR */}
-            <div className="border rounded-lg p-6 text-center">
-              <h3 className="font-semibold mb-4">{t('home.jike')}</h3>
-              <Image
-                src="/qrcode.png"
-                alt={t('home.intro.jike')}
-                width={180}
-                height={180}
-                className="mx-auto border border-muted rounded-lg object-cover"
-              />
-            </div>
-          </div>
+      {/* Latest Posts Section */}
+      <section className="mt-12">
+        <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold tracking-tight">{t('blog.latestPosts')}</h2>
+            <Link 
+              href="/blog" 
+              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+            >
+              {t('home.viewAllPosts')} →
+            </Link>
         </div>
+
+        <div className="flex flex-col space-y-8">
+          {featuredPosts.length > 0 ? (
+            featuredPosts.map((post) => (
+              <Link 
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group block"
+              >
+                <article className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold group-hover:text-primary transition-colors mb-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                  </div>
+                  <div className="shrink-0 text-sm text-muted-foreground font-mono mt-1 sm:mt-0">
+                    {new Date(post.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                  </div>
+                </article>
+              </Link>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">{t('blog.noPosts')}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Social Links Footer (Mobile/Extra) */}
+      <div className="mt-20 pt-10 border-t flex flex-col items-center justify-center space-y-4">
+          <p className="text-sm text-muted-foreground">Find me on</p>
+          <SocialLinks />
       </div>
+
     </div>
   )
 }
