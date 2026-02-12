@@ -1,0 +1,106 @@
+---
+title: "Turso 数据库初体验：从开发环境到部署的避坑指南"
+excerpt: "记录第一次使用 Turso 数据库的实战经验，包括从 PostgreSQL 切换到 SQLite 的坑点、Cloudflare 部署配置，以及常用 CLI 命令整理。"
+createdAt: "2026-02-12 14:35"
+updatedAt: "2026-02-12 14:35"
+author: "pairusuo"
+tags:
+  [
+    "Turso",
+    "SQLite",
+    "PostgreSQL",
+    "Cloudflare",
+    "数据库",
+    "Vibe Coding",
+    "ShipAny",
+  ]
+featured: true
+draft: false
+---
+
+昨天第一次使用 Turso 数据库做了一个新项目 [OilPaintings](https://oilpaintings.work/?utm_source=pairusuo.top&utm_medium=referral)，踩了些坑，顺便记录一下。
+
+Turso 本质上是基于 libSQL（SQLite 的衍生版本）。对于新手来说，它的免费计划非常友好，可以创建多达 100 个实例，非常适合前期进行多项目探索。
+
+## 数据库一致性的挑战
+
+在开发过程中，我遇到了一个典型环境差异问题。
+
+我之前的项目习惯使用 Supabase (PostgreSQL)，本地环境也一直跑着 Postgres。当我尝试将新项目部署到 Cloudflare 时，按照 ShipAny 的文档，我需要修改 `./src/config/db/schema.ts` 文件以适配 SQLite：
+
+```typescript
+export * from "./schema.sqlite";
+```
+
+发布过程很顺利，但问题出在发布 MVP 版本之后。我切换回本地开发环境继续迭代时，系统报错了。
+
+### 环境切换的痛苦
+
+原因很简单：本地环境还在用 PostgreSQL，导致我不得不再次修改 `./src/config/db/schema.ts`：
+
+```typescript
+export * from "./schema.postgre";
+```
+
+这种频繁切换 Schema 的操作不仅麻烦，而且风险极高。一旦哪次忘记切换就执行部署，发布就会失败，或者更糟的是，本地开发环境的数据库需要重建，配置都没了，极度影响效率。
+
+**教训：** 数据库环境的一致性极其重要。作为独立开发者，如果不踩这个坑，可能根本意识不到环境差异带来的隐性成本。
+
+既然 Turso 是基于 SQLite 的，那么最简单的解决方案就是：**本地开发环境也全面转向 SQLite**。SQLite 只是一个本地文件，配置简单，且同样可以使用各种客户端工具进行管理。
+
+## Turso CLI 使用指南
+
+在 Turso 的网页后台，我一度找不到直接执行 SQL 语句的地方。最后通过 AI 的帮助，整理了一套基于 CLI 的高效管理流程。
+
+### 1. 安装与登录
+
+首先需要在本地安装 Turso CLI 并完成授权：
+
+```bash
+# macOS/Linux 安装
+curl -sSfL https://get.tur.so/install.sh | bash
+
+# 更新 PATH
+export PATH="$HOME/.turso:$PATH"
+
+# 登录（会跳转浏览器进行 OAuth 授权）
+turso auth login
+```
+
+### 2. 常用管理命令
+
+```bash
+# 查看数据库列表
+turso db list
+
+# 打开指定数据库的交互式 SQL shell
+turso db shell <database-name>
+
+# 执行 SQL 脚本文件
+turso db shell <database-name> < schema.sql
+```
+
+### 3. 在 Shell 中操作数据
+
+进入 `turso db shell` 后，你可以执行标准的 SQL 命令。例如，为管理员（Super Admin）手动增加积分：
+
+```sql
+select * from config;
+```
+
+> **注意：** 执行成功后通常没有显式提示。输入 `.quit` 即可退出 Shell。
+
+## 本地开发环境重置流程
+
+在本地使用 SQLite 开发时，如果需要重置数据库，可以遵循以下步骤（以 pnpm 为例）：
+
+1. **清理旧数据**：`rm local.db`
+2. **同步表结构**：`pnpm db:push`
+   - _提示：`db:push` 相当于 `generate` + `migrate` 的组合，它不生成 SQL 迁移文件而是直接生效。注意：生产环境务必走双步迁移流程。_
+3. **初始化权限**：`pnpm rbac:init`
+4. **创建管理员**：`pnpm rbac:assign --email=your-email@example.com --role=super_admin`
+5. **启动服务**：`pnpm dev`
+
+## 总结
+
+这些坑虽然都不是致命伤，但在熬夜赶进度时却极度消耗精力和效率。通过统一本地与线上数据库环境，并掌握 CLI 工具，可以显著提升独立开发的“丝滑感”。
