@@ -8,7 +8,7 @@ import { SocialLinks } from './SocialLinks'; // Ensure path is correct
 import { 
     SiReact, SiNextdotjs, SiTailwindcss, SiTypescript, SiNodedotjs, SiDocker,
     SiCloudflare, SiSupabase, SiShadcnui, SiVercel, SiGithub,
-    SiMysql, SiPostgresql
+    SiMysql, SiPostgresql, SiPython, SiPhp, SiLinux
 } from 'react-icons/si';
 
 // Define the icons data outside component to avoid re-creation
@@ -31,9 +31,12 @@ const techStackIcons = [
     { Icon: SiVercel, color: "var(--foreground)", x: 50, y: 100, delay: 0.9 },
     { Icon: SiGithub, color: "var(--foreground)", x: 120, y: -20, delay: 1.0 },
 
-    // Database additions
+    // 数据库与后端语言 (Database & Backend Languages)
     { Icon: SiMysql, color: "#4479A1", x: 0, y: 0, delay: 0 },
     { Icon: SiPostgresql, color: "#336791", x: 0, y: 0, delay: 0 },
+    { Icon: SiPython, color: "#3776AB", x: 0, y: 0, delay: 0 },
+    { Icon: SiPhp, color: "#777BB4", x: 0, y: 0, delay: 0 },
+    { Icon: SiLinux, color: "#FCC624", x: 0, y: 0, delay: 0 },
 ];
 
 export const HeroSection = ({ 
@@ -47,7 +50,7 @@ export const HeroSection = ({
 }) => {
     console.log('HeroSection rendering', { title, features });
     return (
-        <section className="relative flex flex-col md:flex-row items-center justify-between py-20 md:py-32">
+        <section className="relative flex flex-col md:flex-row items-center justify-between py-12 md:py-20">
              {/* Left Content */}
              <div 
                 className="w-full md:w-1/2 flex flex-col items-start z-10"
@@ -82,7 +85,7 @@ export const HeroSection = ({
             </div>
 
             {/* Right Visual / Tech Stack */}
-            <div className="w-full md:w-1/2 relative h-[500px] flex items-center justify-center mt-10 md:mt-0 perspective-1000">
+            <div className="w-full md:w-1/2 relative h-[500px] flex items-center justify-center mt-10 md:mt-0 perspective-1000 md:translate-x-12">
                 {/* Central Character/Logo */}
                 <div
                     className="relative z-10"
