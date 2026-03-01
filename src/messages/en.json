@@ -3,7 +3,7 @@
     "home": "Home",
     "blog": "Blog",
     "links": "Links",
-    "tags": "Tag"
+    "tags": "Tags"
   },
   "blog": {
     "title": "Blog",
@@ -16,7 +16,7 @@
     "readMore": "Read More",
     "publishedAt": "Published at",
     "updatedAt": "Updated at",
-    "tags": "Tag",
+    "tags": "Tags",
     "backToList": "Back to Blog List",
     "searchPlaceholder": "Search blogs...",
     "noResults": "No related blogs found",
@@ -148,7 +148,7 @@
     "readTime": "min read"
   },
   "tags": {
-    "title": "Tag",
+    "title": "Tags",
     "subtitle": "Browse articles by tags, {count} tags in total",
     "noTags": "No tags yet",
     "postsCount": "{count} posts",

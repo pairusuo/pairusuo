@@ -91,12 +91,6 @@ const techStackLinks = [
     url: 'https://vercel.com',
     descriptionKey: 'vercel',
     category: 'hosting'
-  },
-  {
-    name: 'pnpm',
-    url: 'https://pnpm.io',
-    descriptionKey: 'pnpm',
-    category: 'tool'
   }
 ]
 
@@ -180,8 +174,8 @@ export default function LinksPage() {
       <div className="space-y-12">
         {/* Header */}
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">{t('links.title')}</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight">{t('links.title')}</h1>
+          <p className="text-base text-muted-foreground">
              {t('links.subtitle')}
           </p>
         </div>

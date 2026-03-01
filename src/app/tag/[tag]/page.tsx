@@ -135,10 +135,10 @@ export default async function TagPage({ params }: TagPageProps) {
                   </Button>
               </div>
 
-              <h1 className="text-4xl font-bold tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight">
                 {t('tags.tagPrefix')} <span className="text-primary">{tag}</span>
               </h1>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 {t('tags.totalPosts').replace('{count}', posts.length.toString())}
               </p>
             </div>

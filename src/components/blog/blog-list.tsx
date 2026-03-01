@@ -26,7 +26,7 @@ export function BlogList({ posts }: BlogListProps) {
         >
           <article className="flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-              <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
+              <h2 className="text-xl font-semibold group-hover:text-primary transition-colors">
                 {post.title}
               </h2>
               <time className="shrink-0 text-sm text-muted-foreground font-mono">
@@ -34,7 +34,7 @@ export function BlogList({ posts }: BlogListProps) {
               </time>
             </div>
             
-            <p className="text-muted-foreground leading-relaxed line-clamp-2">
+            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
               {post.excerpt}
             </p>
             

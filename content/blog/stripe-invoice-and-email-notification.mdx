@@ -1,0 +1,73 @@
+---
+title: "Stripe 实战：开启邮件通知与自动发送 PDF 发票指南"
+excerpt: "为了提升客户体验，建议开启 Stripe 的邮件通知功能。本文将详细介绍如何在 Stripe Dashboard 中配置成功付款邮件，以及如何为用户自动发送 PDF 电子发票。"
+createdAt: "2026-03-01 15:10"
+updatedAt: "2026-03-01 15:10"
+author: "pairusuo"
+tags: ["Stripe", "支付", "Payment", "Invoice", "发票", "Email", "邮件通知"]
+featured: true
+draft: false
+---
+
+昨天看某个站的后台数据，发现有位用户的积分比较多，立马猜到他付费了，但是我没有收到邮件通知，于是就去研究了一下 Stripe 的邮件通知功能。
+
+其实之前已经配置过一次，但是只配置了用户支付成功后发送invoice邮件，没有配置发送通知给自己。
+
+## 首先说一下为什么要给用户发送invoice邮件
+
+对于用户来说，付完钱后立刻收到一封确认邮件是“安全感”的核心来源。
+
+- **确认交易**：用户无需担心扣费是否成功。
+- **专业形象**：统一的品牌邮件能显著提升项目专业感。
+- **减少客服**：自动化的收据和发票能减少用户手动索取凭证的需求。
+- **避免纠纷**：规避用户用完积分要求退款的纠纷，发送了invoice邮件后，纠纷仲裁时对自己更有利。
+
+## 如何开启成功付款邮件通知
+
+Stripe 默认可能不会给客户发送收据，你需要手动在后台开启。
+
+### 配置路径
+
+1. 登录 [Stripe Dashboard](https://dashboard.stripe.com/)。
+2. 点击右上角的 **Settings** 齿轮图标。
+3. 在“Business settings”下找到 **Customer emails**。
+4. 找到 **Successful payments** 选项并将其勾选。
+
+![Stripe Customer emails](https://image.pairusuo.top/posts/pairusuo/blog/customer-emails.webp)
+
+> **小贴士**：你也可以在这里同步开启 **Refunds** 邮件通知，确保全流程都有反馈。
+
+## 自动发送 PDF 发票 (invoices)
+
+除了简单的付款收据，很多 B端用户或需要报销的用户更倾向于收到一份正式的 PDF 发票。
+
+### 设置步骤
+
+1. 在 **Settings** -> **Billing** -> **Subscriptions and emails** 中。
+2. 找到 **Manage invoices sent to customers**。
+3. 勾选 **Send finalized invoices and credit notes to customers**。
+
+## 品牌化定制
+
+为了让邮件和发票更符合你的项目风格，别忘了在 **Branding** 设置中上传你的 Logo 和设置主题色。
+
+- **图标与 Logo**：建议使用透明背景的 PNG。
+- **主题色**：选择与你网站一致的品牌色。
+- **公共信息**：确保填写了正确的支持邮箱和官网地址，方便用户联系。
+
+## 如何知道invoice邮件是否发送成功
+
+左侧invoices菜单，点开一个具体的invoice，Recent activity里会显示邮件发送状态。
+
+![Stripe Invoice](https://image.pairusuo.top/posts/pairusuo/blog/invoice.webp)
+
+## 配置发送通知给自己
+
+1. 在 **Settings** -> **Communication preferences** -> **Transactions and Balances** 中。
+2. 找到 **Successful payments** 选项并将其勾选。
+
+![Stripe Payment succeeded](https://image.pairusuo.top/posts/pairusuo/blog/emails.webp)
+
+> **小贴士**：其实在 **Personal details** 里是可以配置语言的，支持简体中文，但是我刻意使用英文，是想让自己适应这种全英文的界面，毕竟很多工具都是英文的。
+
+最后，祝大家的 Stripe 账户每天都有新的 `Successful payments` 通知！

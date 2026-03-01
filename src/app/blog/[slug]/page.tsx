@@ -141,8 +141,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </header>
 
-        {/* Article Content */}
-        <article className="prose prose-lg max-w-none">
+        <article className="prose max-w-none">
           <MDXContent source={post.content} />
         </article>
 
