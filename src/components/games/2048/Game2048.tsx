@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent, TouchEvent } from "react";
 import { useMemo, useRef } from "react";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, RotateCcw } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useGame2048 } from "@/lib/games/2048/use-game-2048";
@@ -27,6 +27,7 @@ const MOVE_BUTTONS: Array<{ direction: Direction; label: string; icon: typeof Ar
 
 export function Game2048() {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
   const {
     activeSequenceLabels,
     autoPlayDelayMs,
@@ -49,8 +50,10 @@ export function Game2048() {
     score,
     setAutoPlayDelayMs,
     setCustomPattern,
+    setSoundEnabled,
     setStrategyKey,
     size,
+    soundEnabled,
     steps,
     strategyKey,
     target,
@@ -66,6 +69,56 @@ export function Game2048() {
     [size],
   );
 
+  function playMoveSound() {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const AudioContextCtor =
+      window.AudioContext ??
+      (window as Window & typeof globalThis & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) {
+      return;
+    }
+
+    const context = audioContextRef.current ?? new AudioContextCtor();
+    audioContextRef.current = context;
+
+    if (context.state === "suspended") {
+      void context.resume();
+    }
+
+    const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(880, now);
+    oscillator.frequency.exponentialRampToValueAtTime(740, now + 0.06);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1500, now);
+    filter.Q.value = 0.8;
+
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.075, now + 0.008);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+
+    oscillator.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.075);
+  }
+
+  function moveWithFeedback(direction: Direction) {
+    const moved = move(direction, "manual");
+    if (moved && soundEnabled && !isAutoPlaying) {
+      playMoveSound();
+    }
+  }
+
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     const mapping: Record<string, Direction | undefined> = {
       ArrowUp: 0,
@@ -80,7 +133,7 @@ export function Game2048() {
     }
 
     event.preventDefault();
-    move(direction);
+    moveWithFeedback(direction);
   }
 
   function onTouchStart(event: TouchEvent<HTMLDivElement>) {
@@ -104,9 +157,9 @@ export function Game2048() {
     }
 
     if (Math.abs(diffX) > Math.abs(diffY)) {
-      move(diffX > 0 ? 1 : 3);
+      moveWithFeedback(diffX > 0 ? 1 : 3);
     } else {
-      move(diffY > 0 ? 2 : 0);
+      moveWithFeedback(diffY > 0 ? 2 : 0);
     }
   }
 
@@ -156,7 +209,7 @@ export function Game2048() {
             </Button>
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_88px] items-end gap-2 sm:gap-3">
             <SelectCard
               label="Board Size"
               value={String(size)}
@@ -172,6 +225,38 @@ export function Game2048() {
                 { label: "Standard", value: "standard" },
               ]}
             />
+            <div className="block">
+              <span className="mb-2 block text-xs font-medium text-stone-700 dark:text-stone-200 sm:text-sm">Sound</span>
+              <button
+                type="button"
+                className={cn(
+                  "flex h-11 w-full items-center justify-center rounded-xl border px-1 transition-colors sm:px-2",
+                  soundEnabled
+                    ? "border-stone-300 bg-white text-stone-900 hover:border-stone-400 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:hover:border-stone-500"
+                    : "border-stone-200 bg-stone-100 text-stone-500 hover:border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-stone-600",
+                )}
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                aria-label={soundEnabled ? "Disable move sound" : "Enable move sound"}
+                aria-pressed={soundEnabled}
+                title={soundEnabled ? "Sound On" : "Sound Off"}
+              >
+                <span
+                  className={cn(
+                    "relative inline-flex h-7 w-11 items-center rounded-full transition-colors sm:w-12",
+                    soundEnabled ? "bg-stone-900 dark:bg-stone-100" : "bg-stone-300 dark:bg-stone-700",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "absolute left-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm transition-transform dark:bg-stone-900",
+                      soundEnabled ? "translate-x-5 text-stone-900 dark:text-stone-100" : "translate-x-0 text-stone-500 dark:text-stone-300",
+                    )}
+                  >
+                    {soundEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+                  </span>
+                </span>
+              </button>
+            </div>
           </div>
 
           <div className="mt-8 rounded-2xl bg-stone-100/80 p-4 dark:bg-stone-800/70">
@@ -183,6 +268,7 @@ export function Game2048() {
               Balanced scales the goal more aggressively as the board grows, so larger grids still feel challenging.
             </p>
           </div>
+
         </div>
 
         <div className="space-y-5">
@@ -247,15 +333,15 @@ export function Game2048() {
             ) : null}
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-4 gap-2 sm:gap-3">
             {MOVE_BUTTONS.map(({ direction, icon: Icon, label }) => (
               <Button
                 key={label}
                 variant="outline"
-                className="h-12 rounded-xl border-[#d8d4d0] bg-[#f7f3ed] text-[#776e65] hover:border-[#bbada0] hover:bg-[#eee4da] hover:text-[#5f574f] dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
-                onClick={() => move(direction)}
+                className="h-14 min-w-0 flex-col gap-1 rounded-xl border-[#d8d4d0] bg-[#f7f3ed] px-1 text-[11px] font-semibold text-[#776e65] hover:border-[#bbada0] hover:bg-[#eee4da] hover:text-[#5f574f] dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 sm:h-12 sm:flex-row sm:gap-2 sm:px-3 sm:text-sm"
+                onClick={() => moveWithFeedback(direction)}
               >
-                <Icon className="mr-2 h-4 w-4" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {label}
               </Button>
             ))}
@@ -377,9 +463,9 @@ function SelectCard({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">{label}</span>
+      <span className="mb-2 block text-xs font-medium text-stone-700 dark:text-stone-200 sm:text-sm">{label}</span>
       <select
-        className="w-full appearance-none rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+        className="h-11 w-full appearance-none rounded-xl border border-stone-200 bg-white px-2 text-xs outline-none focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 sm:px-3 sm:text-sm"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       >

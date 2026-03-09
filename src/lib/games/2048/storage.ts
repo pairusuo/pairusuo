@@ -10,6 +10,7 @@ const DEFAULT_PREFS: GamePrefs = {
   strategyKey: "ud",
   customPattern: "",
   autoPlayDelayMs: 200,
+  soundEnabled: true,
 };
 
 export function getDefaultPrefs(): GamePrefs {
@@ -35,6 +36,7 @@ export function loadPrefs(): GamePrefs {
         : DEFAULT_PREFS.strategyKey,
       customPattern: typeof parsed.customPattern === "string" ? parsed.customPattern : "",
       autoPlayDelayMs: clampDelay(parsed.autoPlayDelayMs),
+      soundEnabled: typeof parsed.soundEnabled === "boolean" ? parsed.soundEnabled : DEFAULT_PREFS.soundEnabled,
     };
   } catch {
     return getDefaultPrefs();

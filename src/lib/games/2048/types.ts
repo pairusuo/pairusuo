@@ -32,4 +32,5 @@ export interface GamePrefs {
   strategyKey: StrategyKey;
   customPattern: string;
   autoPlayDelayMs: number;
+  soundEnabled: boolean;
 }
