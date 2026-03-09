@@ -2,6 +2,7 @@
   "nav": {
     "home": "首页",
     "blog": "博客",
+    "games": "游戏",
     "links": "链接",
     "tags": "标签"
   },
@@ -84,7 +85,7 @@
       },
       {
         "text": "2048",
-        "url": "https://2048.pairusuo.top",
+        "url": "https://pairusuo.top/games/2048",
         "color": "#ffdf20"
       },
       {

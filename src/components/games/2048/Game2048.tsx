@@ -1,0 +1,468 @@
+"use client";
+
+import type { KeyboardEvent, TouchEvent } from "react";
+import { useMemo, useRef } from "react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useGame2048 } from "@/lib/games/2048/use-game-2048";
+import type { Direction, GameMode, StrategyKey } from "@/lib/games/2048/types";
+import styles from "./Game2048.module.css";
+
+const STRATEGY_OPTIONS: Array<{ key: StrategyKey; label: string; hint: string }> = [
+  { key: "ud", label: "UD", hint: "Up → Down" },
+  { key: "lr", label: "LR", hint: "Left → Right" },
+  { key: "udlr", label: "UDLR", hint: "Up → Down → Left → Right" },
+  { key: "lrud", label: "LRUD", hint: "Left → Right → Up → Down" },
+  { key: "cw", label: "CW", hint: "Clockwise" },
+  { key: "ccw", label: "CCW", hint: "Counterclockwise" },
+];
+
+const MOVE_BUTTONS: Array<{ direction: Direction; label: string; icon: typeof ArrowUp }> = [
+  { direction: 0, label: "Up", icon: ArrowUp },
+  { direction: 3, label: "Left", icon: ArrowLeft },
+  { direction: 2, label: "Down", icon: ArrowDown },
+  { direction: 1, label: "Right", icon: ArrowRight },
+];
+
+export function Game2048() {
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const {
+    activeSequenceLabels,
+    autoPlayDelayMs,
+    bestScore,
+    board,
+    canKeepPlaying,
+    changeMode,
+    changeSize,
+    customPattern,
+    elapsedSeconds,
+    isAutoPlaying,
+    isHydrated,
+    isTerminated,
+    keepPlaying,
+    mode,
+    move,
+    over,
+    parsedCustomCount,
+    restart,
+    score,
+    setAutoPlayDelayMs,
+    setCustomPattern,
+    setStrategyKey,
+    size,
+    steps,
+    strategyKey,
+    target,
+    toggleAutoPlay,
+    winSteps,
+    won,
+  } = useGame2048();
+
+  const boardStyle = useMemo(
+    () => ({
+      gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
+    }),
+    [size],
+  );
+
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const mapping: Record<string, Direction | undefined> = {
+      ArrowUp: 0,
+      ArrowRight: 1,
+      ArrowDown: 2,
+      ArrowLeft: 3,
+    };
+
+    const direction = mapping[event.key];
+    if (direction === undefined) {
+      return;
+    }
+
+    event.preventDefault();
+    move(direction);
+  }
+
+  function onTouchStart(event: TouchEvent<HTMLDivElement>) {
+    const touch = event.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function onTouchEnd(event: TouchEvent<HTMLDivElement>) {
+    const start = touchStartRef.current;
+    const touch = event.changedTouches[0];
+    if (!start || !touch) {
+      return;
+    }
+
+    const diffX = touch.clientX - start.x;
+    const diffY = touch.clientY - start.y;
+    const threshold = 24;
+
+    if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
+      return;
+    }
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      move(diffX > 0 ? 1 : 3);
+    } else {
+      move(diffY > 0 ? 2 : 0);
+    }
+  }
+
+  const shellClass = cn(
+    styles.shell,
+    "relative overflow-hidden rounded-[2rem] border border-stone-200/70 p-5 shadow-[0_24px_80px_-40px_rgba(120,53,15,0.45)] dark:border-stone-700/70 dark:shadow-[0_24px_80px_-40px_rgba(245,158,11,0.32)]",
+  );
+
+  return (
+    <div className={shellClass}>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.9fr)]">
+        <div className="grid h-full gap-5 rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70 lg:grid-cols-[minmax(0,1fr)_180px] lg:items-start">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-400">
+              pairusuo games
+            </p>
+            <h1 className="text-5xl font-black tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">2048</h1>
+            <p className="max-w-2xl text-base leading-8 text-stone-600 dark:text-stone-300">
+              Rebuilt as a native page inside the main site, with larger boards, difficulty modes, and auto-play strategies.
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              <TopMeta label="Goal" value={formatTileValue(target)} />
+              <TopMeta label="Mode" value={mode === "balanced" ? "Balanced" : "Standard"} />
+              <TopMeta label="Board" value={`${size} × ${size}`} />
+              <TopMeta label="Steps" value={String(steps)} />
+            </div>
+          </div>
+
+          <div className="grid w-full grid-cols-1 gap-2 self-stretch text-center lg:w-[180px]">
+            <StatCard label="Score" value={score} />
+            <StatCard label="Best" value={bestScore} />
+            <StatCard label="Time" value={`${elapsedSeconds}s`} />
+          </div>
+        </div>
+
+        <div className="h-full rounded-[1.5rem] bg-white/80 p-4 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-stone-900 dark:text-stone-100">Game Setup</p>
+              <p className="mt-1 text-xs leading-5 text-stone-500 dark:text-stone-400">
+                Changing board size or mode starts a fresh run.
+              </p>
+            </div>
+            <Button variant="ghost" size="icon" onClick={() => restart()} title="Restart">
+              <RotateCcw className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <SelectCard
+              label="Board Size"
+              value={String(size)}
+              onChange={(value) => changeSize(Number.parseInt(value, 10))}
+              options={[4, 5, 6, 7, 8, 9].map((item) => ({ label: `${item} × ${item}`, value: String(item) }))}
+            />
+            <SelectCard
+              label="Mode"
+              value={mode}
+              onChange={(value) => changeMode(value as GameMode)}
+              options={[
+                { label: "Balanced", value: "balanced" },
+                { label: "Standard", value: "standard" },
+              ]}
+            />
+          </div>
+
+          <div className="mt-8 rounded-2xl bg-stone-100/80 p-4 dark:bg-stone-800/70">
+            <div className="flex items-center justify-between text-sm font-medium text-stone-700 dark:text-stone-200">
+              <span>Goal</span>
+              <span>{formatTileValue(target)}</span>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-stone-500 dark:text-stone-400">
+              Balanced scales the goal more aggressively as the board grows, so larger grids still feel challenging.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          <div
+            className="relative rounded-[1.75rem] bg-[#bbada0] p-3 sm:p-4"
+            onKeyDown={onKeyDown}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            role="application"
+            aria-label="2048 game board"
+            tabIndex={0}
+          >
+            <div className="mb-3 flex items-center justify-between gap-3 px-1 text-sm font-medium text-stone-50/90">
+              <span>Target {formatTileValue(target)}</span>
+              <span>Steps {steps}</span>
+              <span>{mode === "balanced" ? "Balanced" : "Standard"}</span>
+            </div>
+
+            <div className={styles.board} style={boardStyle}>
+              {board.flatMap((row, rowIndex) =>
+                row.map((value, columnIndex) => (
+                  <div key={`${rowIndex}-${columnIndex}`} className={styles.cell}>
+                    {value > 0 ? (
+                      <div
+                        className={styles.tile}
+                        style={getTileStyle(value)}
+                        aria-label={`Tile ${value}`}
+                      >
+                        <span style={{ fontSize: getTileFontSize(size, value) }}>{formatTileValue(value)}</span>
+                      </div>
+                    ) : null}
+                  </div>
+                )),
+              )}
+            </div>
+
+            {isHydrated && isTerminated ? (
+              <div className={cn(styles.overlay, "absolute inset-0 flex items-center justify-center rounded-[1.75rem] p-6")}>
+                <div className="w-full max-w-sm rounded-[1.5rem] border border-stone-200/70 bg-white/90 p-6 text-center shadow-xl dark:border-stone-700/70 dark:bg-stone-900/90">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-400">
+                    {won ? "Victory" : "Game Over"}
+                  </p>
+                  <h2 className="mt-2 text-3xl font-black text-stone-900 dark:text-stone-100">
+                    {won ? `Reached ${formatTileValue(target)}` : "No more moves"}
+                  </h2>
+                  <p className="mt-3 text-sm leading-6 text-stone-600 dark:text-stone-300">
+                    {won && winSteps !== null ? `Target reached in ${winSteps} moves.` : "This run is over. Start a new game whenever you want."}
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                    {canKeepPlaying ? (
+                      <Button variant="outline" onClick={keepPlaying}>
+                        Keep Going
+                      </Button>
+                    ) : null}
+                    <Button onClick={() => restart()}>
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      New Game
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-4">
+            {MOVE_BUTTONS.map(({ direction, icon: Icon, label }) => (
+              <Button
+                key={label}
+                variant="outline"
+                className="h-12 rounded-xl border-[#d8d4d0] bg-[#f7f3ed] text-[#776e65] hover:border-[#bbada0] hover:bg-[#eee4da] hover:text-[#5f574f] dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
+                onClick={() => move(direction)}
+              >
+                <Icon className="mr-2 h-4 w-4" />
+                {label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex h-full flex-col rounded-[1.5rem] bg-white/80 p-4 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <div className="flex items-center gap-2">
+            <BrainCircuit className="h-4 w-4 text-amber-700 dark:text-amber-400" />
+            <p className="text-sm font-semibold text-stone-900 dark:text-stone-100">Auto Play</p>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {STRATEGY_OPTIONS.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className={cn(
+                  "rounded-full border px-3 py-2 text-xs font-semibold transition-colors",
+                  strategyKey === option.key && parsedCustomCount === 0
+                    ? "border-[#8f7a66] bg-[#8f7a66] text-[#f9f6f2] shadow-sm dark:border-[#edc22e] dark:bg-[#edc22e] dark:text-[#2f2a25]"
+                    : "border-[#d8d4d0] bg-[#f7f3ed] text-[#776e65] hover:border-[#bbada0] hover:bg-[#eee4da] dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700",
+                )}
+                onClick={() => setStrategyKey(option.key)}
+                title={option.hint}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <label className="mt-4 block text-sm font-medium text-stone-700 dark:text-stone-200" htmlFor="strategy-pattern">
+            Custom Pattern
+          </label>
+          <input
+            id="strategy-pattern"
+            className="mt-2 w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none ring-0 placeholder:text-stone-400 focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+            placeholder="U2,D2,L2,R2"
+            value={customPattern}
+            onChange={(event) => setCustomPattern(event.target.value)}
+          />
+          <p className="mt-2 text-xs leading-5 text-stone-500 dark:text-stone-400">
+            Supports patterns like `U R D L` or `U2,D2,L2,R2`. A valid custom sequence overrides the preset buttons.
+          </p>
+
+          <div className="mt-4">
+            <div className="mb-2 flex items-center justify-between text-sm font-medium text-stone-700 dark:text-stone-200">
+              <span>Speed</span>
+              <span>{autoPlayDelayMs}ms</span>
+            </div>
+            <input
+              type="range"
+              min={100}
+              max={2000}
+              step={50}
+              value={autoPlayDelayMs}
+              onChange={(event) => setAutoPlayDelayMs(Number.parseInt(event.target.value, 10))}
+              className="w-full accent-stone-900 dark:accent-stone-100"
+            />
+          </div>
+
+          <div className="mt-4 rounded-2xl bg-stone-100/80 p-4 dark:bg-stone-800/70">
+            <div className="flex items-center justify-between text-sm font-medium text-stone-700 dark:text-stone-200">
+              <span>Current Sequence</span>
+              <span>{parsedCustomCount > 0 ? `Custom × ${parsedCustomCount}` : strategyKey.toUpperCase()}</span>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-stone-500 dark:text-stone-400">{activeSequenceLabels || "No valid moves parsed yet."}</p>
+          </div>
+
+          <div className="mt-4 flex gap-3">
+            <Button
+              className="flex-1 bg-[#8f7a66] text-[#f9f6f2] hover:bg-[#7f6b58] dark:bg-[#edc22e] dark:text-[#2f2a25] dark:hover:bg-[#ddb01f]"
+              onClick={() => toggleAutoPlay(true)}
+              disabled={isAutoPlaying || parsedCustomCount === 0 && !strategyKey}
+            >
+              Start
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1 border-[#d8d4d0] bg-[#f7f3ed] text-[#776e65] hover:border-[#bbada0] hover:bg-[#eee4da] hover:text-[#5f574f] dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
+              onClick={() => toggleAutoPlay(false)}
+              disabled={!isAutoPlaying}
+            >
+              Stop
+            </Button>
+          </div>
+
+          <div className="mt-6 rounded-2xl bg-stone-100/80 p-4 text-sm leading-6 text-stone-600 dark:bg-stone-800/70 dark:text-stone-300">
+            <p>
+              <span className="font-semibold text-stone-800 dark:text-stone-100">How to play:</span> Use your arrow keys
+              or swipe gestures to move the tiles. When two tiles with the same number touch, they merge into one.
+            </p>
+            <p className="mt-3">
+              <span className="font-semibold text-stone-800 dark:text-stone-100">Tip:</span> You can also use the
+              strategy controls above to auto-play. Presets include <span className="font-semibold">UD</span>,{" "}
+              <span className="font-semibold">LR</span>, <span className="font-semibold">UDLR</span>,{" "}
+              <span className="font-semibold">LRUD</span>, <span className="font-semibold">CW</span>, and{" "}
+              <span className="font-semibold">CCW</span>. Choose <span className="font-semibold">Custom</span> to enter
+              sequences like <span className="font-mono text-[0.92em]">U2,D2,L2,R2</span>, adjust the speed, then start
+              or stop at any time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelectCard({
+  label,
+  onChange,
+  options,
+  value,
+}: {
+  label: string;
+  onChange: (value: string) => void;
+  options: Array<{ label: string; value: string }>;
+  value: string;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">{label}</span>
+      <select
+        className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+        onChange={(event) => onChange(event.target.value)}
+        value={value}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function StatCard({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-2xl border border-[#a39486] bg-[#bbada0] px-3 py-3 text-[#f9f6f2] shadow-sm dark:border-[#8c7b6c] dark:bg-[#a08f80] dark:text-[#fffaf4]">
+      <div className="text-left text-[10px] font-semibold uppercase tracking-[0.22em] text-[#eee4da] dark:text-[#f2e9df]">{label}</div>
+      <div className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-right text-lg font-black tabular-nums sm:text-xl">
+        {formatStatValue(value)}
+      </div>
+    </div>
+  );
+}
+
+function TopMeta({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-stone-700 dark:bg-stone-800/70">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">{label}</div>
+      <div className="mt-1 text-sm font-bold text-stone-900 dark:text-stone-100">{value}</div>
+    </div>
+  );
+}
+
+function formatStatValue(value: string | number): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (value >= 1_000_000) {
+    return `${(value / 1_000_000).toFixed(value >= 10_000_000 ? 0 : 1)}M`;
+  }
+
+  if (value >= 10_000) {
+    return `${(value / 1_000).toFixed(value >= 100_000 ? 0 : 1)}K`;
+  }
+
+  return String(value);
+}
+
+function formatTileValue(value: number): string {
+  if (value >= 1024 * 1024) {
+    return `${Math.round(value / (1024 * 1024))}M`;
+  }
+  if (value >= 4096) {
+    return `${Math.round(value / 1024)}K`;
+  }
+  return String(value);
+}
+
+function getTileFontSize(size: number, value: number): string {
+  const digits = formatTileValue(value).length;
+  const base = size >= 7 ? 0.98 : size >= 6 ? 1.14 : 1.32;
+  const reduced = base - Math.max(0, digits - 2) * 0.15;
+  return `${Math.max(0.65, reduced)}rem`;
+}
+
+function getTileStyle(value: number) {
+  const mapping: Record<number, { background: string; color: string }> = {
+    2: { background: "#eee4da", color: "#776e65" },
+    4: { background: "#ede0c8", color: "#776e65" },
+    8: { background: "#f2b179", color: "#f9f6f2" },
+    16: { background: "#f59563", color: "#f9f6f2" },
+    32: { background: "#f67c5f", color: "#f9f6f2" },
+    64: { background: "#f65e3b", color: "#f9f6f2" },
+    128: { background: "#edcf72", color: "#f9f6f2" },
+    256: { background: "#edcc61", color: "#f9f6f2" },
+    512: { background: "#edc850", color: "#f9f6f2" },
+    1024: { background: "#edc53f", color: "#f9f6f2" },
+    2048: { background: "#edc22e", color: "#f9f6f2" },
+  };
+
+  return mapping[value] ?? {
+    background: "linear-gradient(135deg, #111827, #44403c)",
+    color: "#f9f6f2",
+  };
+}

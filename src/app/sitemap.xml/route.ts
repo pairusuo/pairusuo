@@ -32,6 +32,12 @@ export async function GET() {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>${baseUrl}/games/2048</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   ${posts.map(post => `
   <url>
     <loc>${baseUrl}/blog/${post.slug}</loc>

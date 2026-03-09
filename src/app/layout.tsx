@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { t } from "@/lib/i18n";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/jsonld";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: t("meta.title"),
@@ -78,7 +75,7 @@ export default function RootLayout({
         data-site-id="150bda2af47a"
         strategy="afterInteractive"
       />
-      <body className={inter.className}>
+      <body className="font-sans">
         {/* GEO: JSON-LD for WebSite and Organization to help LLMs understand the site */}
         <WebSiteJsonLd name={t("meta.title")} url={baseUrl} />
         <OrganizationJsonLd
