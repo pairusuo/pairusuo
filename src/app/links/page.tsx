@@ -13,7 +13,7 @@ export async function generateMetadata() {
       title: `${t('nav.links')} - ${t('meta.title')}`,
       description: t('links.subtitle'),
       type: 'website',
-      url: `${baseUrl}/link`,
+      url: `${baseUrl}/links`,
     },
     twitter: {
       card: 'summary',
@@ -21,7 +21,7 @@ export async function generateMetadata() {
       description: t('links.subtitle'),
     },
     alternates: {
-      canonical: `${baseUrl}/link`,
+      canonical: `${baseUrl}/links`,
     },
   }
 }

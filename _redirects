@@ -1,3 +1,8 @@
+# Normalize singular routes to plural routes
+/tag /tags 301
+/tag/* /tags/:splat 301
+/link /links 301
+
 # Redirect old URLs (if any)
 # /old-path/* /new-path/:splat 301
 

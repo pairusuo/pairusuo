@@ -104,3 +104,52 @@ export function ArticleJsonLd({
   return <ScriptLD data={json} />
 }
 
+export function CollectionPageJsonLd({
+  name,
+  url,
+  description,
+}: {
+  name: string
+  url: string
+  description?: string
+}) {
+  const json = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    url,
+    description,
+  }
+  return <ScriptLD data={json} />
+}
+
+export function SoftwareApplicationJsonLd({
+  name,
+  url,
+  description,
+  image,
+  applicationCategory,
+  operatingSystem = 'Web',
+  inLanguage = 'en',
+}: {
+  name: string
+  url: string
+  description?: string
+  image?: string
+  applicationCategory?: string
+  operatingSystem?: string
+  inLanguage?: string
+}) {
+  const json = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name,
+    url,
+    description,
+    image,
+    applicationCategory,
+    operatingSystem,
+    inLanguage,
+  }
+  return <ScriptLD data={json} />
+}

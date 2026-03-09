@@ -92,12 +92,7 @@ export default function RootLayout({
         >
           {/* 外层背景 - 浅灰色/纯黑色 */}
           <div className="min-h-screen bg-muted">
-            {/* 固定Header */}
-            <div className="fixed top-0 left-0 right-0 z-50 bg-muted">
-              <div className="max-w-7xl mx-auto bg-background">
-                <Header />
-              </div>
-            </div>
+            <Header />
 
             {/* 中间内容区域 - 纯白色/深灰色背景 */}
             <div className="max-w-7xl mx-auto bg-background min-h-screen pt-20 flex flex-col">

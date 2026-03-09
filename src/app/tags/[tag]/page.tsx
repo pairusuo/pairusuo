@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: TagPageProps) {
       title: `${tag} - ${t('nav.tags')}`,
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
       type: 'website',
-      url: `${baseUrl}/tag/${encodeURIComponent(tag)}`,
+      url: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
     },
     twitter: {
       card: 'summary',
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: TagPageProps) {
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
     },
     alternates: {
-      canonical: `${baseUrl}/tag/${encodeURIComponent(tag)}`,
+      canonical: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
     },
   }
 }
@@ -128,7 +128,7 @@ export default async function TagPage({ params }: TagPageProps) {
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-muted-foreground mb-4">
                   <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary" asChild>
-                    <Link href="/tag" className="flex items-center gap-2">
+                    <Link href="/tags" className="flex items-center gap-2">
                       <ArrowLeft className="h-4 w-4" />
                       {t('tags.backToList')}
                     </Link>
