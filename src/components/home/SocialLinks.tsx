@@ -37,8 +37,10 @@ export const SocialLinks = () => {
                             <button
                                 className="text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
                                 aria-label={link.label}
+                                title={link.label}
                             >
                                 {link.icon}
+                                <span className="sr-only">{link.label}</span>
                             </button>
                             {/* QR Code Popup */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block transition-all duration-300 opacity-0 group-hover:opacity-100 z-50">
@@ -65,10 +67,12 @@ export const SocialLinks = () => {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={link.label}
                         className="text-muted-foreground hover:text-primary transition-colors duration-200"
                         aria-label={link.label}
                     >
                         {link.icon}
+                        <span className="sr-only">{link.label}</span>
                     </Link>
                 );
             })}

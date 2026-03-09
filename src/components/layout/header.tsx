@@ -66,6 +66,7 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    title={item.name}
                     className="px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full hover:bg-background hover:text-primary hover:shadow-md hover:scale-105 active:scale-95"
                   >
                     {item.name}
@@ -107,6 +108,7 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    title={item.name}
                     className="px-2 py-2 text-sm font-medium transition-colors hover:text-primary"
                     onClick={() => setIsMenuOpen(false)}
                   >

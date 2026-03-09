@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 import type { Metadata } from 'next'
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 const canonical = `${siteUrl}/links`
 
@@ -27,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
+      site: twitterHandle,
       title: `${t('nav.links')} | ${t('meta.title')}`,
       description: t('links.subtitle'),
       images: [defaultOgImage],
@@ -162,6 +163,7 @@ function LinkCard({ name, url, descriptionKey, category }: {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
+      title={name}
       className="group block"
     >
       <div className="flex flex-col gap-1">

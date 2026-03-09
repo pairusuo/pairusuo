@@ -379,7 +379,7 @@ function SelectCard({
     <label className="block">
       <span className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">{label}</span>
       <select
-        className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+        className="w-full appearance-none rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-stone-400 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       >

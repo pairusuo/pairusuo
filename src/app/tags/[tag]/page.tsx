@@ -6,7 +6,7 @@ import { BlogList } from '@/components/blog/blog-list'
 import { Button } from '@/components/ui/button'
 import { t } from '@/lib/i18n'
 import { BreadcrumbJsonLd } from '@/components/seo/jsonld'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 interface TagPageProps {
   params: {
@@ -91,6 +91,7 @@ export async function generateMetadata({ params }: TagPageProps) {
     },
     twitter: {
       card: 'summary_large_image',
+      site: twitterHandle,
       title: `${tag} | ${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
       images: [defaultOgImage],
@@ -145,7 +146,7 @@ export default async function TagPage({ params }: TagPageProps) {
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-muted-foreground mb-4">
                   <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary" asChild>
-                    <Link href="/tags" className="flex items-center gap-2">
+                    <Link href="/tags" title={t('tags.backToList')} className="flex items-center gap-2">
                       <ArrowLeft className="h-4 w-4" />
                       {t('tags.backToList')}
                     </Link>

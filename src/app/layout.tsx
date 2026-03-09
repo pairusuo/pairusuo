@@ -6,7 +6,9 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { t } from "@/lib/i18n";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/jsonld";
-import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from "@/lib/seo";
+
+const analyticsSiteId = process.env.NEXT_PUBLIC_ANALYTICS_SITE_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -47,6 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: twitterHandle,
     title: t("meta.title"),
     description: t("meta.description"),
     images: [defaultOgImage],
@@ -77,11 +80,13 @@ export default function RootLayout({
   const baseUrl = siteUrl;
   return (
     <html lang="en" suppressHydrationWarning>
-      <Script
-        src="https://analytics.pairusuo.top/api/script.js"
-        data-site-id="150bda2af47a"
-        strategy="afterInteractive"
-      />
+      {analyticsSiteId ? (
+        <Script
+          src="https://analytics.pairusuo.top/api/script.js"
+          data-site-id={analyticsSiteId}
+          strategy="afterInteractive"
+        />
+      ) : null}
       <body className="font-sans">
         {/* GEO: JSON-LD for WebSite and Organization to help LLMs understand the site */}
         <WebSiteJsonLd name={t("meta.title")} url={baseUrl} />

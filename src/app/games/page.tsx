@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CollectionPageJsonLd, BreadcrumbJsonLd } from "@/components/seo/jsonld";
-import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
+import { createDefaultOgImage, gamesOgImage, siteUrl, twitterHandle } from "@/lib/seo";
 
 const canonical = `${siteUrl}/games`;
 const title = "Games";
@@ -26,13 +26,14 @@ export const metadata: Metadata = {
     description,
     siteName: "pairusuo",
     locale: "en_US",
-    images: [createDefaultOgImage("Games | pairusuo")],
+    images: [createDefaultOgImage("Games | pairusuo", gamesOgImage)],
   },
   twitter: {
     card: "summary_large_image",
+    site: twitterHandle,
     title: `${title} | pairusuo`,
     description,
-    images: [defaultOgImage],
+    images: [gamesOgImage],
   },
 };
 
@@ -78,6 +79,7 @@ export default function GamesPage() {
           <Link
             key={game.href}
             href={game.href}
+            title={game.title}
             className="group rounded-[1.75rem] border border-stone-200/70 bg-white p-5 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-stone-700/70 dark:bg-stone-900"
           >
             <div className="flex items-start justify-between gap-3">

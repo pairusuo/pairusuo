@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Game2048 } from "@/components/games/2048/Game2048";
 import { BreadcrumbJsonLd, SoftwareApplicationJsonLd } from "@/components/seo/jsonld";
-import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
+import { createDefaultOgImage, gamesOgImage, siteUrl, twitterHandle } from "@/lib/seo";
 
 const canonical = `${siteUrl}/games/2048`;
 const title = "2048 Online";
@@ -33,13 +33,14 @@ export const metadata: Metadata = {
     description,
     siteName: "pairusuo",
     locale: "en_US",
-    images: [createDefaultOgImage("2048 Online | pairusuo")],
+    images: [createDefaultOgImage("2048 Online | pairusuo", gamesOgImage)],
   },
   twitter: {
     card: "summary_large_image",
+    site: twitterHandle,
     title: `${title} | pairusuo`,
     description,
-    images: [defaultOgImage],
+    images: [gamesOgImage],
   },
 };
 
@@ -57,7 +58,7 @@ export default function Game2048Page() {
         name="2048"
         url={canonical}
         description={description}
-        image={defaultOgImage}
+        image={gamesOgImage}
         applicationCategory="GameApplication"
       />
       <Game2048 />

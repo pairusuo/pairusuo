@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
+import React from 'react'
 import Image from 'next/image'
 import { RawHtmlFile } from '@/components/blog/raw-html'
 
@@ -26,16 +27,24 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </p>
     ),
-    a: ({ href, children }) => (
-      <a 
-        href={href} 
-        className="text-primary hover:underline"
-        target={href?.startsWith('http') ? '_blank' : undefined}
-        rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-      >
-        {children}
-      </a>
-    ),
+    a: ({ href, children }) => {
+      const title = React.Children.toArray(children)
+        .filter((child) => typeof child === 'string')
+        .join('')
+        .trim() || href
+
+      return (
+        <a
+          href={href}
+          title={title}
+          className="text-primary hover:underline"
+          target={href?.startsWith('http') ? '_blank' : undefined}
+          rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {children}
+        </a>
+      )
+    },
     ul: ({ children }) => (
       <ul className="mb-4 pl-6 list-disc">
         {children}

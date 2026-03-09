@@ -4,7 +4,7 @@ import { t } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import { HeroSection } from '@/components/home/HeroSection'
 import { SocialLinks } from '@/components/home/SocialLinks'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 const canonical = siteUrl
 
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: twitterHandle,
     title: t('meta.title'),
     description: t('meta.description'),
     images: [defaultOgImage],
@@ -69,6 +70,7 @@ export default async function HomePage() {
             <h2 className="text-3xl font-bold tracking-tight">{t('blog.latestPosts')}</h2>
             <Link 
               href="/blog" 
+              title={t('home.viewAllPosts')}
               className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
             >
               {t('home.viewAllPosts')} →
@@ -81,6 +83,7 @@ export default async function HomePage() {
               <Link 
                 key={post.slug}
                 href={`/blog/${post.slug}`}
+                title={post.title}
                 className="group block"
               >
                 <article className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-4">

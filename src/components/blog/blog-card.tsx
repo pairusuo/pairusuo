@@ -14,6 +14,7 @@ export function BlogCard({ post }: BlogCardProps) {
         <h2 className="text-xl font-semibold">
           <Link 
             href={`/blog/${post.slug}`}
+            title={post.title}
             className="hover:text-primary transition-colors"
           >
             {post.title}
@@ -29,6 +30,7 @@ export function BlogCard({ post }: BlogCardProps) {
           <Link
             key={tag}
             href={`/tags/${encodeURIComponent(tag)}`}
+            title={tag}
             className="inline-flex items-center px-2 py-1 sm:px-2.5 sm:py-0.5 text-xs bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 transition-colors whitespace-nowrap"
           >
             {tag}
@@ -42,6 +44,7 @@ export function BlogCard({ post }: BlogCardProps) {
         </time>
         <Link 
           href={`/blog/${post.slug}`}
+          title={post.title}
           className="text-primary hover:underline"
         >
           {t('blog.readMore')} →

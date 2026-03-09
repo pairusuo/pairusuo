@@ -3,7 +3,7 @@ import { getAllPosts } from '@/lib/mdx'
 import { t } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 const canonical = `${siteUrl}/blog`
 
@@ -29,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
+      site: twitterHandle,
       title: `${t('nav.blog')} | ${t('meta.title')}`,
       description: t('blog.description'),
       images: [defaultOgImage],

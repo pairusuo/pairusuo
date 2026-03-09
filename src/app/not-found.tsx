@@ -35,10 +35,10 @@ export default function NotFound() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg">
-                <Link href="/">{t('nav.home')}</Link>
+                <Link href="/" title={t('nav.home')}>{t('nav.home')}</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/blog">{t('nav.blog')}</Link>
+                <Link href="/blog" title={t('nav.blog')}>{t('nav.blog')}</Link>
               </Button>
             </div>
           </div>

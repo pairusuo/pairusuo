@@ -8,6 +8,7 @@ name = "pairusuo-blog-preview"
 [env.preview.vars]
 NEXT_PUBLIC_SITE_URL = "https://pairusuo-blog-preview.pages.dev"
 NEXT_PUBLIC_SITE_NAME = "派入所 Preview"
+NEXT_PUBLIC_ANALYTICS_SITE_ID = ""
 
 [env.production]
 name = "pairusuo-blog"
@@ -15,6 +16,7 @@ name = "pairusuo-blog"
 [env.production.vars]
 NEXT_PUBLIC_SITE_URL = "https://pairusuo.top"
 NEXT_PUBLIC_SITE_NAME = "派入所"
+NEXT_PUBLIC_ANALYTICS_SITE_ID = ""
 
 # Cloudflare R2 配置
 # R2_ACCOUNT_ID = ""

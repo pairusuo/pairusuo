@@ -3,7 +3,7 @@ import { getAllTags } from '@/lib/mdx'
 import { t } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 const canonical = `${siteUrl}/tags`
 
@@ -29,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
+      site: twitterHandle,
       title: `${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.subtitle').replace('{count}', tags.length.toString()),
       images: [defaultOgImage],
@@ -71,6 +72,7 @@ export default async function TagsPage() {
               <Link
                 key={tag}
                 href={`/tags/${encodeURIComponent(tag)}`}
+                title={tag}
                 className="group flex items-center gap-2 rounded-full border border-muted bg-background px-4 py-2 transition-all hover:border-primary hover:text-primary active:scale-95"
               >
                 <span className="font-medium">#{tag}</span>

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/jsonld'
-import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from '@/lib/seo'
 
 interface BlogPostPageProps {
   params: {
@@ -58,6 +58,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     },
     twitter: {
       card: 'summary_large_image',
+      site: twitterHandle,
       title: `${post.title} | ${t('meta.title')}`,
       description: post.excerpt,
       images: [socialImage],
@@ -101,7 +102,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {/* Back Button */}
         <div className="mb-8">
           <Button variant="ghost" asChild>
-            <Link href="/blog" className="flex items-center gap-2">
+            <Link href="/blog" title={t('blog.backToList')} className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
               {t('blog.backToList')}
             </Link>
@@ -134,6 +135,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Link
                   key={tag}
                   href={`/tags/${encodeURIComponent(tag)}`}
+                  title={tag}
                   className="inline-block px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 transition-colors"
                 >
                   {tag}
@@ -151,7 +153,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <footer className="mt-12 pt-8 border-t">
           <div className="text-center">
             <Button variant="outline" asChild>
-              <Link href="/blog">
+              <Link href="/blog" title={t('blog.backToList')}>
                 {t('blog.backToList')}
               </Link>
             </Button>

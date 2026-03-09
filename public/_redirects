@@ -5,6 +5,3 @@
 
 # Redirect old URLs (if any)
 # /old-path/* /new-path/:splat 301
-
-# SPA fallback for client-side routing
-/* /index.html 200

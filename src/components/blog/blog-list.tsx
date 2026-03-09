@@ -22,6 +22,7 @@ export function BlogList({ posts }: BlogListProps) {
         <Link 
           key={post.slug}
           href={`/blog/${post.slug}`}
+          title={post.title}
           className="group block"
         >
           <article className="flex flex-col gap-3">
