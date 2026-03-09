@@ -1,6 +1,19 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { t } from '@/lib/i18n'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '404',
+  description: t('notFound.description'),
+  alternates: {
+    canonical: 'https://pairusuo.top/404',
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function NotFound() {
   return (

@@ -1,28 +1,40 @@
 import Link from 'next/link'
 import { getAllTags } from '@/lib/mdx'
 import { t } from '@/lib/i18n'
+import type { Metadata } from 'next'
+import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
 
-export async function generateMetadata() {
+const canonical = `${siteUrl}/tags`
+
+export async function generateMetadata(): Promise<Metadata> {
   const tags = await getAllTags()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
   
   return {
-    title: `${t('nav.tags')} - ${t('meta.title')}`,
+    title: t('nav.tags'),
     description: t('tags.subtitle').replace('{count}', tags.length.toString()),
-    keywords: '',
+    keywords: 'tags, topics, blog tags, categories, pairusuo',
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: `${t('nav.tags')} - ${t('meta.title')}`,
+      title: `${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.subtitle').replace('{count}', tags.length.toString()),
       type: 'website',
-      url: `${baseUrl}/tags`,
+      url: canonical,
+      siteName: t('meta.title'),
+      locale: 'en_US',
+      images: [createDefaultOgImage(`${t('nav.tags')} | ${t('meta.title')}`)],
     },
     twitter: {
-      card: 'summary',
-      title: `${t('nav.tags')} - ${t('meta.title')}`,
+      card: 'summary_large_image',
+      title: `${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.subtitle').replace('{count}', tags.length.toString()),
+      images: [defaultOgImage],
     },
     alternates: {
-      canonical: `${baseUrl}/tags`,
+      canonical,
     },
   }
 }
@@ -32,6 +44,17 @@ export default async function TagsPage() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: 'https://pairusuo.top' },
+          { name: 'Tags', item: canonical },
+        ]}
+      />
+      <CollectionPageJsonLd
+        name="pairusuo Tags"
+        url={canonical}
+        description={t('tags.subtitle').replace('{count}', tags.length.toString())}
+      />
       <div className="space-y-12">
         {/* Header */}
         <div className="space-y-4">

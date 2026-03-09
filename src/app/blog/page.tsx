@@ -2,28 +2,39 @@ import { BlogList } from '@/components/blog/blog-list'
 import { getAllPosts } from '@/lib/mdx'
 import { t } from '@/lib/i18n'
 import type { Metadata } from 'next'
+import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
 
-export async function generateMetadata() {
+const canonical = `${siteUrl}/blog`
+
+export async function generateMetadata(): Promise<Metadata> {
   const posts = await getAllPosts()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
   
   return {
-    title: `${t('nav.blog')} - ${t('meta.title')}`,
+    title: t('nav.blog'),
     description: t('blog.description'),
     keywords: t('blog.keywords'),
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: `${t('nav.blog')} - ${t('meta.title')}`,
+      title: `${t('nav.blog')} | ${t('meta.title')}`,
       description: t('blog.description'),
       type: 'website',
-      url: `${baseUrl}/blog`,
+      url: canonical,
+      siteName: t('meta.title'),
+      locale: 'en_US',
+      images: [createDefaultOgImage(`${t('nav.blog')} | ${t('meta.title')}`)],
     },
     twitter: {
-      card: 'summary',
-      title: `${t('nav.blog')} - ${t('meta.title')}`,
+      card: 'summary_large_image',
+      title: `${t('nav.blog')} | ${t('meta.title')}`,
       description: t('blog.description'),
+      images: [defaultOgImage],
     },
     alternates: {
-      canonical: `${baseUrl}/blog`,
+      canonical,
     },
   }
 }
@@ -33,6 +44,17 @@ export default async function BlogPage() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: 'https://pairusuo.top' },
+          { name: 'Blog', item: canonical },
+        ]}
+      />
+      <CollectionPageJsonLd
+        name="pairusuo Blog"
+        url={canonical}
+        description={t('blog.description')}
+      />
       <div className="space-y-12">
         {/* Header / Intro */}
         <div className="space-y-4">

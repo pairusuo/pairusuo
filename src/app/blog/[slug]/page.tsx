@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/jsonld'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
 
 interface BlogPostPageProps {
   params: {
@@ -23,7 +24,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const post = await getPostBySlug(params.slug)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
+  const baseUrl = siteUrl
   
   if (!post) {
     return {
@@ -31,13 +32,19 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     }
   }
 
+  const socialImage = post.coverImage || defaultOgImage
+
   return {
-    title: `${post.title} - ${t('meta.title')}`,
+    title: post.title,
     description: post.excerpt,
     keywords: post.tags.join(', '),
     authors: post.author ? [{ name: post.author }] : undefined,
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: post.title,
+      title: `${post.title} | ${t('meta.title')}`,
       description: post.excerpt,
       type: 'article',
       publishedTime: post.createdAt,
@@ -45,20 +52,15 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
       authors: post.author ? [post.author] : undefined,
       tags: post.tags,
       url: `${baseUrl}/blog/${post.slug}`,
-      images: post.coverImage ? [
-        {
-          url: post.coverImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        }
-      ] : undefined,
+      siteName: t('meta.title'),
+      locale: 'en_US',
+      images: [createDefaultOgImage(post.title, socialImage)],
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
+      title: `${post.title} | ${t('meta.title')}`,
       description: post.excerpt,
-      images: post.coverImage ? [post.coverImage] : undefined,
+      images: [socialImage],
     },
     alternates: {
       canonical: `${baseUrl}/blog/${post.slug}`,
@@ -72,7 +74,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     notFound()
   }
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
+  const baseUrl = siteUrl
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 md:py-8">

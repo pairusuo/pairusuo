@@ -4,6 +4,9 @@ import { t } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import { HeroSection } from '@/components/home/HeroSection'
 import { SocialLinks } from '@/components/home/SocialLinks'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
+
+const canonical = siteUrl
 
 export const metadata: Metadata = {
   title: t('meta.title'),
@@ -13,21 +16,22 @@ export const metadata: Metadata = {
   creator: t('meta.author'),
   publisher: t('meta.author'),
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top',
+    canonical,
   },
   openGraph: {
     type: 'website',
-    locale: 'zh_CN',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top',
+    locale: 'en_US',
+    url: canonical,
     title: t('meta.title'),
     description: t('meta.description'),
     siteName: t('meta.title'),
+    images: [createDefaultOgImage(t('meta.title'))],
   },
   twitter: {
     card: 'summary_large_image',
     title: t('meta.title'),
     description: t('meta.description'),
-    creator: '@yourusername',
+    images: [defaultOgImage],
   },
   robots: {
     index: true,

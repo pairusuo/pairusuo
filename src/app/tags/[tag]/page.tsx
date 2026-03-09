@@ -5,6 +5,8 @@ import { getPostsByTag, getAllTags } from '@/lib/mdx'
 import { BlogList } from '@/components/blog/blog-list'
 import { Button } from '@/components/ui/button'
 import { t } from '@/lib/i18n'
+import { BreadcrumbJsonLd } from '@/components/seo/jsonld'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
 
 interface TagPageProps {
   params: {
@@ -69,21 +71,29 @@ export async function generateMetadata({ params }: TagPageProps) {
   }
   
   const posts = await getPostsByTag(tag)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
-    return {
-    title: `${tag} - ${t('nav.tags')} - ${t('meta.title')}`,
+  const baseUrl = siteUrl
+  return {
+    title: `${tag} | ${t('nav.tags')}`,
     description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
     keywords: `${tag},${t('tags.keywords')}`,
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: `${tag} - ${t('nav.tags')}`,
+      title: `${tag} | ${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
       type: 'website',
       url: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
+      siteName: t('meta.title'),
+      locale: 'en_US',
+      images: [createDefaultOgImage(`${tag} | ${t('nav.tags')}`)],
     },
     twitter: {
-      card: 'summary',
-      title: `${tag} - ${t('nav.tags')}`,
+      card: 'summary_large_image',
+      title: `${tag} | ${t('nav.tags')} | ${t('meta.title')}`,
       description: t('tags.browseDescription').replace('{tag}', tag).replace('{count}', posts.length.toString()),
+      images: [defaultOgImage],
     },
     alternates: {
       canonical: `${baseUrl}/tags/${encodeURIComponent(tag)}`,
@@ -123,6 +133,13 @@ export default async function TagPage({ params }: TagPageProps) {
 
     return (
       <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'Home', item: 'https://pairusuo.top' },
+            { name: 'Tags', item: 'https://pairusuo.top/tags' },
+            { name: tag, item: `https://pairusuo.top/tags/${encodeURIComponent(tag)}` },
+          ]}
+        />
         <div className="space-y-12">
             {/* Header */}
             <div className="space-y-4">

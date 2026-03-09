@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Game2048 } from "@/components/games/2048/Game2048";
 import { BreadcrumbJsonLd, SoftwareApplicationJsonLd } from "@/components/seo/jsonld";
+import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
 
-const canonical = "https://pairusuo.top/games/2048";
-const title = "2048 Online | pairusuo";
+const canonical = `${siteUrl}/games/2048`;
+const title = "2048 Online";
 const description =
   "Play 2048 online with 4x4 to 9x9 boards, balanced or standard goals, custom auto-play strategies, keyboard controls, and touch support.";
 
 export const metadata: Metadata = {
-  title: "2048 Online",
+  title,
   description,
   keywords: [
     "2048 online",
@@ -28,15 +29,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: canonical,
-    title,
+    title: `${title} | pairusuo`,
     description,
     siteName: "pairusuo",
     locale: "en_US",
+    images: [createDefaultOgImage("2048 Online | pairusuo")],
   },
   twitter: {
     card: "summary_large_image",
-    title,
+    title: `${title} | pairusuo`,
     description,
+    images: [defaultOgImage],
   },
 };
 
@@ -54,6 +57,7 @@ export default function Game2048Page() {
         name="2048"
         url={canonical}
         description={description}
+        image={defaultOgImage}
         applicationCategory="GameApplication"
       />
       <Game2048 />

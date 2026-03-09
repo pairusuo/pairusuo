@@ -6,14 +6,20 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { t } from "@/lib/i18n";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/jsonld";
+import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: t("meta.title"),
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: t("meta.title"),
+    template: `%s | ${t("meta.title")}`,
+  },
   description: t("meta.description"),
   keywords: t("meta.keywords"),
   authors: [{ name: t("meta.author") }],
   creator: t("meta.author"),
   publisher: t("meta.author"),
+  applicationName: t("meta.title"),
   icons: {
     icon: [
       { url: "/info.png", sizes: "256x256", type: "image/png" },
@@ -28,21 +34,22 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://pairusuo.top",
+    canonical: siteUrl,
   },
   openGraph: {
     type: "website",
-    locale: "zh_CN",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://pairusuo.top",
+    locale: "en_US",
+    url: siteUrl,
     title: t("meta.title"),
     description: t("meta.description"),
     siteName: t("meta.title"),
+    images: [createDefaultOgImage(t("meta.title"))],
   },
   twitter: {
     card: "summary_large_image",
     title: t("meta.title"),
     description: t("meta.description"),
-    creator: "@yourusername",
+    images: [defaultOgImage],
   },
   robots: {
     index: true,
@@ -67,9 +74,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pairusuo.top";
+  const baseUrl = siteUrl;
   return (
-    <html lang="zh" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <Script
         src="https://analytics.pairusuo.top/api/script.js"
         data-site-id="150bda2af47a"

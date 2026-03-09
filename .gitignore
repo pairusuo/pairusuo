@@ -80,5 +80,3 @@ next-env.d.ts
 # Local development
 .vercel/
 .netlify/
-
-my_2048/

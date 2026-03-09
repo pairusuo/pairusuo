@@ -1,27 +1,38 @@
 import { t } from '@/lib/i18n'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
+import type { Metadata } from 'next'
+import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
+import { createDefaultOgImage, defaultOgImage, siteUrl } from '@/lib/seo'
 
-export async function generateMetadata() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pairusuo.top'
+const canonical = `${siteUrl}/links`
 
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${t('nav.links')} - ${t('meta.title')}`,
+    title: t('nav.links'),
     description: t('links.subtitle'),
-    keywords: '',
+    keywords: 'links, tools, resources, hosting, development, pairusuo',
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: `${t('nav.links')} - ${t('meta.title')}`,
+      title: `${t('nav.links')} | ${t('meta.title')}`,
       description: t('links.subtitle'),
       type: 'website',
-      url: `${baseUrl}/links`,
+      url: canonical,
+      siteName: t('meta.title'),
+      locale: 'en_US',
+      images: [createDefaultOgImage(`${t('nav.links')} | ${t('meta.title')}`)],
     },
     twitter: {
-      card: 'summary',
-      title: `${t('nav.links')} - ${t('meta.title')}`,
+      card: 'summary_large_image',
+      title: `${t('nav.links')} | ${t('meta.title')}`,
       description: t('links.subtitle'),
+      images: [defaultOgImage],
     },
     alternates: {
-      canonical: `${baseUrl}/links`,
+      canonical,
     },
   }
 }
@@ -171,6 +182,17 @@ function LinkCard({ name, url, descriptionKey, category }: {
 export default function LinksPage() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 pb-20">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: 'https://pairusuo.top' },
+          { name: 'Links', item: canonical },
+        ]}
+      />
+      <CollectionPageJsonLd
+        name="pairusuo Links"
+        url={canonical}
+        description={t('links.subtitle')}
+      />
       <div className="space-y-12">
         {/* Header */}
         <div className="space-y-4">

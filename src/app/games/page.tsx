@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CollectionPageJsonLd, BreadcrumbJsonLd } from "@/components/seo/jsonld";
+import { createDefaultOgImage, defaultOgImage, siteUrl } from "@/lib/seo";
 
-const canonical = "https://pairusuo.top/games";
-const title = "Games | pairusuo";
+const canonical = `${siteUrl}/games`;
+const title = "Games";
 const description =
   "Play browser games on pairusuo.top, starting with 2048 and more lightweight web games over time.";
 
 export const metadata: Metadata = {
-  title: "Games",
+  title,
   description,
   keywords: ["browser games", "web games", "2048", "pairusuo games"],
   alternates: {
@@ -21,15 +22,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: canonical,
-    title,
+    title: `${title} | pairusuo`,
     description,
     siteName: "pairusuo",
     locale: "en_US",
+    images: [createDefaultOgImage("Games | pairusuo")],
   },
   twitter: {
     card: "summary_large_image",
-    title,
+    title: `${title} | pairusuo`,
     description,
+    images: [defaultOgImage],
   },
 };
 
