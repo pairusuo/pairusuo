@@ -8,7 +8,7 @@ import { t } from "@/lib/i18n";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/jsonld";
 import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from "@/lib/seo";
 
-const analyticsSiteId = process.env.NEXT_PUBLIC_ANALYTICS_SITE_ID;
+const analyticsSiteId = "150bda2af47a";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -80,14 +80,12 @@ export default function RootLayout({
   const baseUrl = siteUrl;
   return (
     <html lang="en" suppressHydrationWarning>
-      {analyticsSiteId ? (
+      <body className="font-sans">
         <Script
           src="https://analytics.pairusuo.top/api/script.js"
           data-site-id={analyticsSiteId}
           strategy="afterInteractive"
         />
-      ) : null}
-      <body className="font-sans">
         {/* GEO: JSON-LD for WebSite and Organization to help LLMs understand the site */}
         <WebSiteJsonLd name={t("meta.title")} url={baseUrl} />
         <OrganizationJsonLd

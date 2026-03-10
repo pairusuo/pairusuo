@@ -36,7 +36,7 @@ export function createInitialSnapshot(
     keepPlaying: false,
     steps: 0,
     winSteps: null,
-    startTimeMs: Date.now(),
+    startTimeMs: 0,
   };
 }
 
@@ -66,6 +66,7 @@ export function moveSnapshot(
     over: !hasMovesAvailable(boardWithSpawn),
     steps,
     winSteps: won && snapshot.winSteps === null ? steps : snapshot.winSteps,
+    startTimeMs: snapshot.startTimeMs || Date.now(),
   };
 
   return {

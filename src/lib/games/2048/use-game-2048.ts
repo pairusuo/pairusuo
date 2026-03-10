@@ -35,7 +35,7 @@ function createBootSnapshot(): GameSnapshot {
     keepPlaying: false,
     steps: 0,
     winSteps: null,
-    startTimeMs: Date.now(),
+    startTimeMs: 0,
   };
 }
 
@@ -76,7 +76,11 @@ export function useGame2048() {
     setSnapshot(nextSnapshot);
     snapshotRef.current = nextSnapshot;
     setBestScore(loadBestScore(nextSnapshot.size, nextSnapshot.mode));
-    setElapsedSeconds(Math.max(0, Math.floor((Date.now() - nextSnapshot.startTimeMs) / 1000)));
+    setElapsedSeconds(
+      nextSnapshot.startTimeMs > 0
+        ? Math.max(0, Math.floor((Date.now() - nextSnapshot.startTimeMs) / 1000))
+        : 0,
+    );
     setIsHydrated(true);
   }, []);
 
@@ -123,12 +127,16 @@ export function useGame2048() {
     }
 
     const tick = () => {
-      setElapsedSeconds(Math.max(0, Math.floor((Date.now() - snapshot.startTimeMs) / 1000)));
+      setElapsedSeconds(
+        snapshot.startTimeMs > 0
+          ? Math.max(0, Math.floor((Date.now() - snapshot.startTimeMs) / 1000))
+          : 0,
+      );
     };
 
     tick();
 
-    if (isTerminated) {
+    if (isTerminated || snapshot.startTimeMs <= 0) {
       return;
     }
 
