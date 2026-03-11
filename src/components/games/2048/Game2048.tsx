@@ -165,7 +165,7 @@ export function Game2048() {
 
   const shellClass = cn(
     styles.shell,
-    "relative overflow-hidden rounded-[2rem] border border-stone-200/70 p-5 shadow-[0_24px_80px_-40px_rgba(120,53,15,0.45)] dark:border-stone-700/70 dark:shadow-[0_24px_80px_-40px_rgba(245,158,11,0.32)]",
+    "relative overflow-hidden rounded-[2rem] border border-stone-200/70 p-5 font-sans shadow-[0_24px_80px_-40px_rgba(120,53,15,0.45)] dark:border-stone-700/70 dark:shadow-[0_24px_80px_-40px_rgba(245,158,11,0.32)]",
   );
 
   return (
@@ -176,9 +176,12 @@ export function Game2048() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-400">
               pairusuo games
             </p>
-            <h1 className="text-5xl font-black tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">2048</h1>
+            <h1 className="text-5xl font-black tracking-tight text-stone-900 dark:text-stone-100 sm:text-6xl">
+              Play 2048 Online
+            </h1>
             <p className="max-w-2xl text-base leading-8 text-stone-600 dark:text-stone-300">
-              Rebuilt as a native page inside the main site, with larger boards, difficulty modes, and auto-play strategies.
+              Play 2048 online in your browser with board sizes from 4x4 to 9x9, standard or balanced goals, touch
+              controls, keyboard support, and built-in auto-play strategies.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -445,6 +448,75 @@ export function Game2048() {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
+        <section className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <h2 className="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100">
+            Free 2048 Game in Your Browser
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-stone-600 dark:text-stone-300 sm:text-base">
+            This 2048 game keeps the classic number-merging rules and adds more ways to play. You can start a quick
+            standard 4x4 run, switch to larger boards for longer sessions, or use balanced mode to keep the target
+            challenging as the grid grows. Everything runs directly in the browser, so you can play 2048 online on
+            desktop or mobile without installing anything.
+          </p>
+          <p className="mt-3 text-sm leading-7 text-stone-600 dark:text-stone-300 sm:text-base">
+            If you are comparing 2048 websites, the main difference here is flexibility. This page supports swipe and
+            keyboard input, remembers your progress locally, and includes auto-play patterns so you can experiment with
+            different 2048 strategies instead of only playing the default version.
+          </p>
+        </section>
+
+        <section className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <h2 className="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100">How to Play 2048</h2>
+          <div className="mt-4 space-y-3 text-sm leading-7 text-stone-600 dark:text-stone-300 sm:text-base">
+            <p>Use the arrow keys or swipe gestures to move every tile on the board in one direction.</p>
+            <p>When two tiles with the same value touch, they merge into a larger tile.</p>
+            <p>Keep combining numbers until you reach the target tile, such as 2048 on a standard 4x4 board.</p>
+            <p>The game ends when the board is full and there are no valid moves left.</p>
+          </div>
+        </section>
+
+        <section className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <h2 className="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100">2048 Strategy Tips</h2>
+          <div className="mt-4 space-y-3 text-sm leading-7 text-stone-600 dark:text-stone-300 sm:text-base">
+            <p>Keep your highest-value tile in one corner so the rest of the board can feed into it.</p>
+            <p>Avoid moving in all four directions randomly, because that breaks stable tile chains.</p>
+            <p>Leave open spaces whenever possible so you can recover from bad spawns.</p>
+            <p>On larger boards, plan ahead for long merge paths instead of chasing quick points.</p>
+            <p>Use the built-in auto-play patterns to test ideas and learn which sequences stay stable the longest.</p>
+          </div>
+        </section>
+
+        <section className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">
+          <h2 className="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100">2048 FAQ</h2>
+          <div className="mt-4 space-y-4 text-sm leading-7 text-stone-600 dark:text-stone-300 sm:text-base">
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">What is 2048?</h3>
+              <p className="mt-1">
+                2048 is a puzzle game where you slide numbered tiles and merge matching values to create larger numbers.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">Can I play 2048 on mobile?</h3>
+              <p className="mt-1">
+                Yes. This page supports touch gestures, so you can play 2048 online on phones and tablets.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">What is balanced mode?</h3>
+              <p className="mt-1">
+                Balanced mode raises the target more aggressively on larger boards, which keeps bigger grids from
+                feeling too easy.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">What board sizes are available?</h3>
+              <p className="mt-1">You can play this 2048 game on board sizes from 4x4 up to 9x9.</p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
