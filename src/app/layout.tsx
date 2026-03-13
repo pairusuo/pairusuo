@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Header } from "@/components/layout/header";
@@ -7,8 +6,6 @@ import { Footer } from "@/components/layout/footer";
 import { t } from "@/lib/i18n";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/jsonld";
 import { createDefaultOgImage, defaultOgImage, siteUrl, twitterHandle } from "@/lib/seo";
-
-const analyticsSiteId = "150bda2af47a";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -81,11 +78,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans">
-        <Script
-          src="https://analytics.pairusuo.top/api/script.js"
-          data-site-id={analyticsSiteId}
-          strategy="afterInteractive"
-        />
         {/* GEO: JSON-LD for WebSite and Organization to help LLMs understand the site */}
         <WebSiteJsonLd name={t("meta.title")} url={baseUrl} />
         <OrganizationJsonLd

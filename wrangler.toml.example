@@ -15,10 +15,6 @@ name = "pairusuo-blog"
 [env.production.vars]
 NEXT_PUBLIC_SITE_URL = "https://pairusuo.top"
 NEXT_PUBLIC_SITE_NAME = "派入所"
-
-# Cloudflare R2 配置
-# R2_ACCOUNT_ID = ""
-# R2_ACCESS_KEY_ID = ""
-# R2_SECRET_ACCESS_KEY = ""
-# R2_BUCKET_NAME = ""
-# R2_PUBLIC_URL = ""
+APP_ENV = "production"
+PAIRUSUO_ANALYTICS_SITE_ID = "XXXXXXXXXX"
+GA_MEASUREMENT_ID = "G-XXXXXXXXXX"
