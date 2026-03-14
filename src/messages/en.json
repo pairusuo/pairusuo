@@ -3,6 +3,7 @@
     "home": "Home",
     "blog": "Blog",
     "games": "Games",
+    "tools": "Tools",
     "links": "Links",
     "tags": "Tags"
   },
@@ -211,6 +212,20 @@
       "vscode": "Powerful Code Editor",
       "hostinger": "Affordable Hosting Service",
       "zpcloud": "ZPCloud"
+    }
+  },
+  "tools": {
+    "title": "Tools",
+    "subtitle": "A small collection of utility apps and experiments I built, gathered in one place.",
+    "eyebrow": "Built by pairusuo",
+    "openLink": "Open tool",
+    "moreTitle": "Keep growing this shelf",
+    "moreDescription": "New mini products, calculators, and niche utilities can be added here by extending the tools array on this page.",
+    "descriptions": {
+      "cardCounter": "A lightweight browser card counter for quick blackjack practice and table-side drills.",
+      "desktopClock": "A clean fullscreen clock page for work setups, study sessions, and secondary displays.",
+      "keywordRoi": "A simple ROI calculator for evaluating keyword traffic value before you spend on SEO or ads.",
+      "randomChineseNames": "Generate Chinese names quickly for products, characters, side projects, and brand ideas."
     }
   }
 }

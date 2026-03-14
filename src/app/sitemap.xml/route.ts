@@ -45,6 +45,12 @@ export async function GET() {
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>${baseUrl}/tools</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>${baseUrl}/games/2048</loc>
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>

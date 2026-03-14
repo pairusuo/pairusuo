@@ -18,6 +18,7 @@ export function Header() {
     { name: t('nav.home'), href: '/' },
     { name: t('nav.blog'), href: '/blog' },
     { name: t('nav.games'), href: '/games' },
+    { name: t('nav.tools'), href: '/tools' },
     { name: t('nav.tags'), href: '/tags' },
     { name: t('nav.links'), href: '/links' },
   ]

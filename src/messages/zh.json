@@ -3,6 +3,7 @@
     "home": "首页",
     "blog": "博客",
     "games": "游戏",
+    "tools": "工具",
     "links": "链接",
     "tags": "标签"
   },
@@ -211,6 +212,20 @@
       "vscode": "强大的代码编辑器",
       "hostinger": "优惠的主机托管服务",
       "zpcloud": "零点云"
+    }
+  },
+  "tools": {
+    "title": "工具",
+    "subtitle": "把我做过的一些小工具和实验项目统一收在这里，后面继续往里加就行。",
+    "eyebrow": "pairusuo 的工具箱",
+    "openLink": "打开工具",
+    "moreTitle": "这里会继续扩充",
+    "moreDescription": "后面有新的小产品、计算器或实用工具，上线后都可以继续补到这个页面里。",
+    "descriptions": {
+      "cardCounter": "一个轻量级浏览器记牌器，适合快速练习二十一点记牌和概率感觉。",
+      "desktopClock": "一个干净的全屏时钟页面，适合办公桌面、学习场景和副屏展示。",
+      "keywordRoi": "一个简单的关键词 ROI 计算器，用来预估 SEO 或广告投入前的流量价值。",
+      "randomChineseNames": "快速生成中文名字，适合产品命名、角色设定、独立项目和品牌灵感。"
     }
   }
 }
