@@ -47,6 +47,12 @@ const toolSharingLinks = [
     category: 'server'
   },
   {
+    name: 'uSMART',
+    url: 'https://hk.usmartbroker.com/u/1-0200k0hg2L',
+    descriptionKey: 'usmart',
+    category: 'broker'
+  },
+  {
     name: 'ZPCloud',
     url: 'https://www.zpcloud01.site/auth/register?code=YF9j',
     descriptionKey: 'zpcloud',
