@@ -57,7 +57,7 @@
     "viewAllPosts": "すべての記事を見る",
     "intro": {
       "title": "Hi, I'm Pairusuo",
-      "description": "ここでは私の技術実践、プロダクト思考、海外展開の歩みを記録し、日常生活や株式投資に加えて、面白いミニゲームの収集や整理も共有しています。その中には、私が二次開発したバージョンもあります。",
+      "description": "ここでは技術メモ、プロダクトのアイデア、海外展開の学び、日常の気づき、投資メモ、そして気軽に遊べるブラウザゲームを紹介しています。",
       "features": [
         "新人個人開発者",
         "Vibe Coding プレイヤー",
@@ -86,8 +86,13 @@
       },
       {
         "text": "2048",
-        "url": "https://2048.pairusuo.top",
+        "url": "https://pairusuo.top/games/2048",
         "color": "#ffdf20"
+      },
+      {
+        "text": "マインスイーパー",
+        "url": "https://pairusuo.top/games/minesweeper",
+        "color": "#f59e0b"
       },
       {
         "text": "カードカウンター",
@@ -162,13 +167,13 @@
   },
   "links": {
     "title": "リンク",
-    "subtitle": "このサイトで使用している技術スタックと推奨リンク",
+    "subtitle": "ブックマークしておきたいツール、資料、サービスのまとめ",
     "techStack": "技術スタック",
     "recommended": "推奨リンク",
     "toolSharing": "ツール共有",
     "description": "説明",
     "aboutLinks": "リンクについて",
-    "aboutLinksDesc": "上記のリンクは、このブログで使用している技術スタックと推奨する開発リソースを紹介しています。同様の技術スタックでプロジェクトを構築している場合は、お気軽にご連絡ください。",
+    "aboutLinksDesc": "ここでは、仕事や学習、プロダクトづくりに役立つツール、サービス、参考サイトをまとめています。",
     "categories": {
       "framework": "フレームワーク",
       "language": "言語",
@@ -217,11 +222,11 @@
   },
   "tools": {
     "title": "ツール",
-    "subtitle": "自作した小さなツールや実験プロジェクトへのリンクを、ここにまとめています。",
-    "eyebrow": "pairusuo のツール集",
+    "subtitle": "仕事、学習、日常で使える小さな実用ツールをまとめています。",
+    "eyebrow": "便利なツール",
     "openLink": "ツールを開く",
-    "moreTitle": "ここは今後も増やしていく",
-    "moreDescription": "新しいミニプロダクト、計算機、実用ツールを公開したら、このページに追加していけます。",
+    "moreTitle": "さらに追加予定",
+    "moreDescription": "実用的な小さなツールや計算機を今後も追加していきます。",
     "descriptions": {
       "cardCounter": "ブラックジャックの練習やカウント感覚の確認に使える軽量なブラウザ記牌ツールです。",
       "desktopClock": "作業机、学習時間、サブディスプレイ表示に向いたシンプルな全画面時計です。",

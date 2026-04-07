@@ -51,18 +51,18 @@
     "author": "pairusuo"
   },
   "home": {
-    "title": "派入所",
-    "subtitle": "分享思考与经验",
-    "latestPosts": "最新文章",
+    "title": "pairusuo",
+    "subtitle": "Thoughts and practical notes",
+    "latestPosts": "Latest Posts",
     "viewAllPosts": "View all articles",
     "intro": {
-      "title": "Hi, I'm 派入所",
-      "description": "这里记录我的技术实践，产品思考与出海历程，也包括日常生活、股票投资，以及一些好玩小游戏的搜集整理，其中有些还是我二次开发过的版本，愿与你一起探索与成长。",
+      "title": "Hi, I'm pairusuo",
+      "description": "This is where I share technical notes, product ideas, global expansion lessons, everyday observations, investing notes, and a few fun browser games.",
       "features": [
-        "新独立开发者",
-        "Vibe Coding 选手",
-        "偶尔分享点经验",
-        "持续学习成长"
+        "Indie builder in progress",
+        "Vibe coding enthusiast",
+        "Occasional practical notes",
+        "Always learning"
       ],
       "contact": "Scan to add WeChat",
       "avatar": "Blogger Avatar",
@@ -86,8 +86,13 @@
       },
       {
         "text": "2048",
-        "url": "https://2048.pairusuo.top",
+        "url": "https://pairusuo.top/games/2048",
         "color": "#ffdf20"
+      },
+      {
+        "text": "Minesweeper",
+        "url": "https://pairusuo.top/games/minesweeper",
+        "color": "#f59e0b"
       },
       {
         "text": "Card Counter",
@@ -162,13 +167,13 @@
   },
   "links": {
     "title": "Links",
-    "subtitle": "Tech stack used by this site and recommended links",
+    "subtitle": "Useful tools, references, and services worth bookmarking",
     "techStack": "Tech Stack",
     "recommended": "Recommended Links",
     "toolSharing": "Tool Sharing",
     "description": "Description",
     "aboutLinks": "About Links",
-    "aboutLinksDesc": "The above links showcase the tech stack used by this blog and some recommended development resources. If you're also building projects with similar tech stacks, feel free to connect with me.",
+    "aboutLinksDesc": "This page collects tools, services, and references that may be useful for building, learning, and working online.",
     "categories": {
       "framework": "Framework",
       "language": "Language",
@@ -217,11 +222,11 @@
   },
   "tools": {
     "title": "Tools",
-    "subtitle": "A small collection of utility apps and experiments I built, gathered in one place.",
-    "eyebrow": "Built by pairusuo",
+    "subtitle": "A small collection of practical utility apps for work, study, and everyday use.",
+    "eyebrow": "Useful tools",
     "openLink": "Open tool",
-    "moreTitle": "Keep growing this shelf",
-    "moreDescription": "New mini products, calculators, and niche utilities can be added here by extending the tools array on this page.",
+    "moreTitle": "More tools on the way",
+    "moreDescription": "More practical calculators and small utilities will be added over time.",
     "descriptions": {
       "cardCounter": "A lightweight browser card counter for quick blackjack practice and table-side drills.",
       "desktopClock": "A clean fullscreen clock page for work setups, study sessions, and secondary displays.",

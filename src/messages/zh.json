@@ -57,7 +57,7 @@
     "viewAllPosts": "查看所有文章",
     "intro": {
       "title": "Hi, I'm 派入所",
-      "description": "这里记录我的技术实践，产品思考与出海历程，也包括日常生活、股票投资，以及一些好玩小游戏的搜集整理，其中有些还是我二次开发过的版本，愿与你一起探索与成长。",
+      "description": "这里分享技术实践、产品思考、出海经历、日常观察、投资记录，以及一些好玩的网页小游戏，希望能带来一点启发。",
       "features": [
         "新独立开发者",
         "Vibe Coding 选手",
@@ -88,6 +88,11 @@
         "text": "2048",
         "url": "https://pairusuo.top/games/2048",
         "color": "#ffdf20"
+      },
+      {
+        "text": "扫雷",
+        "url": "https://pairusuo.top/games/minesweeper",
+        "color": "#f59e0b"
       },
       {
         "text": "记牌器",
@@ -162,13 +167,13 @@
   },
   "links": {
     "title": "链接",
-    "subtitle": "本站使用的技术栈和推荐链接",
+    "subtitle": "一些值得收藏的技术、工具和服务链接",
     "techStack": "技术栈",
     "recommended": "推荐链接",
     "toolSharing": "工具分享",
     "description": "描述",
     "aboutLinks": "关于链接",
-    "aboutLinksDesc": "以上链接展示了本博客使用的技术栈和一些推荐的开发资源。如果你也在使用类似的技术栈构建项目，欢迎与我交流。",
+    "aboutLinksDesc": "这里整理了一些常用的技术、工具、服务和参考网站，方便查找，也希望对你有帮助。",
     "categories": {
       "framework": "框架",
       "language": "语言",
@@ -217,11 +222,11 @@
   },
   "tools": {
     "title": "工具",
-    "subtitle": "把我做过的一些小工具和实验项目统一收在这里，后面继续往里加就行。",
-    "eyebrow": "pairusuo 的工具箱",
+    "subtitle": "这里收录了一些适合工作、学习和日常使用的小工具。",
+    "eyebrow": "实用工具",
     "openLink": "打开工具",
-    "moreTitle": "这里会继续扩充",
-    "moreDescription": "后面有新的小产品、计算器或实用工具，上线后都可以继续补到这个页面里。",
+    "moreTitle": "更多工具陆续上线",
+    "moreDescription": "后续还会继续加入更多实用的小工具和计算器。",
     "descriptions": {
       "cardCounter": "一个轻量级浏览器记牌器，适合快速练习二十一点记牌和概率感觉。",
       "desktopClock": "一个干净的全屏时钟页面，适合办公桌面、学习场景和副屏展示。",

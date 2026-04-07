@@ -6,7 +6,7 @@ import { createDefaultOgImage, gamesOgImage, siteUrl, twitterHandle } from "@/li
 const canonical = `${siteUrl}/games`;
 const title = "Games | OVO Games | Online Browser Games";
 const description =
-  "OVO Games is a collection of classic online mini games that you can play instantly in the browser, starting with 2048 and expanding over time.";
+  "OVO Games is a collection of classic online mini games you can play instantly in the browser, including 2048 and Minesweeper.";
 
 export const metadata: Metadata = {
   title,
@@ -42,9 +42,13 @@ const games = [
     title: "2048",
     href: "/games/2048",
     badge: "Live",
-    description:
-      "A rebuilt 2048 page with larger board sizes, balanced or standard targets, and auto-play strategies.",
     meta: ["4×4 to 9×9", "Auto Play", "Keyboard + Touch"],
+  },
+  {
+    title: "Minesweeper",
+    href: "/games/minesweeper",
+    badge: "New",
+    meta: ["Custom Uploads", "Touch + Right Click", "Classic Rules"],
   },
 ];
 
@@ -68,10 +72,6 @@ export default function GamesPage() {
             OVO Games
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-100">Games</h1>
-          <p className="max-w-4xl text-base text-muted-foreground">
-            OVO Games is a collection of classic online mini games that you can open and play instantly in the
-            browser, with simple controls and a clean experience across desktop and mobile.
-          </p>
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -87,9 +87,6 @@ export default function GamesPage() {
                   <h2 className="text-2xl font-semibold tracking-tight text-stone-900 transition-colors group-hover:text-primary dark:text-stone-100">
                     {game.title}
                   </h2>
-                  <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
-                    {game.description}
-                  </p>
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
                     <span>{game.badge}</span>
                     {game.meta.map((item) => (
@@ -103,20 +100,6 @@ export default function GamesPage() {
               </div>
             </Link>
           ))}
-        </section>
-
-        <section className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-400">
-            About OVO Games
-          </p>
-          <h2 className="text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-100">
-            A Small Browser Games Corner
-          </h2>
-          <p className="max-w-4xl text-base text-muted-foreground">
-            OVO Games focuses on classic online mini games that are easy to open and play right away. No downloads, no
-            heavy setup, and no distractions. 2048 is the first game here, and more familiar web games can be added
-            over time under the same OVO Games label.
-          </p>
         </section>
       </div>
     </div>
