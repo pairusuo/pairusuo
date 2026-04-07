@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRef } from "react";
 import { Bomb, Clock3, Eye, Flag, ImagePlus, RotateCcw, Sparkles, Trash2 } from "lucide-react";
+import { GameWinCelebration } from "@/components/games/shared/GameWinCelebration";
 import { Button } from "@/components/ui/button";
 import { DIFFICULTY_PRESETS } from "@/lib/games/minesweeper/core";
 import { DEFAULT_BOMB_VISUALS } from "@/lib/games/minesweeper/default-bombs";
@@ -106,6 +107,7 @@ export function GameMinesweeper() {
 
   return (
     <div className={shellClass}>
+      <GameWinCelebration active={isHydrated && snapshot.status === "won"} />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_340px] xl:items-stretch">
         <div className="flex flex-col gap-6">
           <section className="rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70">

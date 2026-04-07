@@ -3,6 +3,7 @@
 import type { KeyboardEvent, TouchEvent } from "react";
 import { useMemo, useRef } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { GameWinCelebration } from "@/components/games/shared/GameWinCelebration";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useGame2048 } from "@/lib/games/2048/use-game-2048";
@@ -170,6 +171,7 @@ export function Game2048() {
 
   return (
     <div className={shellClass}>
+      <GameWinCelebration active={isHydrated && won} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.9fr)]">
         <div className="grid h-full gap-5 rounded-[1.5rem] bg-white/80 p-5 shadow-sm ring-1 ring-stone-200/70 dark:bg-stone-900/70 dark:ring-stone-700/70 lg:grid-cols-[minmax(0,1fr)_180px] lg:items-start">
           <div className="space-y-4">

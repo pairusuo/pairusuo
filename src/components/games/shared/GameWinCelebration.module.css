@@ -1,0 +1,31 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.piece {
+  position: absolute;
+  width: 7px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--color, #f7d046);
+  opacity: 0.95;
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: confetti-burst var(--dur, 900ms) ease-out forwards;
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 0px), var(--dy, -60px)) rotate(var(--rot, 180deg)) scale(1);
+  }
+}
