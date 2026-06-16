@@ -1,0 +1,99 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - preview
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      NODE_OPTIONS: --no-deprecation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm type-check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build preview
+        if: github.ref == 'refs/heads/preview'
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://pairusuo-blog-preview.pages.dev
+          NEXT_PUBLIC_SITE_NAME: 派入所 Preview
+
+      - name: Build production
+        if: github.ref != 'refs/heads/preview'
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://pairusuo.top
+          NEXT_PUBLIC_SITE_NAME: 派入所
+
+      - name: Upload build output
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-output
+          path: out
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to Cloudflare Pages
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: pages-output
+          path: out
+
+      - name: Deploy preview
+        if: github.ref == 'refs/heads/preview'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=pairusuo-blog --branch=preview
+
+      - name: Deploy production
+        if: github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=pairusuo-blog --branch=main

@@ -61,6 +61,21 @@ pnpm deploy:prod
 
 部署过程会提示授权cloudflare
 
+## GitHub Actions 自动部署
+
+项目已包含 `.github/workflows/deploy.yml`：
+
+- 推送到 `main` 分支：自动构建并部署生产环境 `https://pairusuo.top`
+- 推送到 `preview` 分支：自动构建并部署预览环境 `https://pairusuo-blog-preview.pages.dev`
+- 向 `main` 发起 Pull Request：只执行类型检查、Lint 和构建，不部署
+
+在 GitHub 仓库中配置以下 Secrets：
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+Cloudflare API Token 建议使用自定义 Token，并授予 Cloudflare Pages 部署所需权限。`Account ID` 可在 Cloudflare Dashboard 的账号页面获取。
+
 ## Sitemap 逻辑
 
 当前项目的 sitemap 不是框架自动扫描生成，而是由 `src/app/sitemap.xml/route.ts` 手动拼接 XML。
