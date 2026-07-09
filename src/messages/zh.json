@@ -220,7 +220,7 @@
     "title": "工具",
     "subtitle": "这里收录了一些适合工作、学习和日常使用的小工具。",
     "eyebrow": "实用工具",
-    "openLink": "打开工具",
+    "openLink": "Open",
     "moreTitle": "更多工具陆续上线",
     "moreDescription": "后续还会继续加入更多实用的小工具和计算器。",
     "descriptions": {
@@ -228,6 +228,8 @@
       "desktopClock": "一个干净的全屏时钟页面，适合办公桌面、学习场景和副屏展示。",
       "keywordRoi": "一个简单的关键词 ROI 计算器，用来预估 SEO 或广告投入前的流量价值。",
       "dataTable": "一个在线数据表格工具，适合快速整理、查看和处理结构化数据。",
+      "assetCorrelationMonitor": "一个资产相关性监控工具，用来观察不同资产之间的联动变化和市场关系。",
+      "offlineService": "一个离线服务检测工具，用来快速检查网站或服务是否可访问。",
       "randomChineseNames": "快速生成中文名字，适合产品命名、角色设定、独立项目和品牌灵感。"
     }
   }

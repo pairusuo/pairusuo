@@ -220,7 +220,7 @@
     "title": "Tools",
     "subtitle": "A small collection of practical utility apps for work, study, and everyday use.",
     "eyebrow": "Useful tools",
-    "openLink": "Open tool",
+    "openLink": "Open",
     "moreTitle": "More tools on the way",
     "moreDescription": "More practical calculators and small utilities will be added over time.",
     "descriptions": {
@@ -228,6 +228,8 @@
       "desktopClock": "A clean fullscreen clock page for work setups, study sessions, and secondary displays.",
       "keywordRoi": "A simple ROI calculator for evaluating keyword traffic value before you spend on SEO or ads.",
       "dataTable": "An online data table tool for quickly organizing, viewing, and working with structured data.",
+      "assetCorrelationMonitor": "Track asset correlations to see how markets move together and spot changing relationships over time.",
+      "offlineService": "Check whether a website or service is reachable and quickly confirm possible downtime.",
       "randomChineseNames": "Generate Chinese names quickly for products, characters, side projects, and brand ideas."
     }
   }

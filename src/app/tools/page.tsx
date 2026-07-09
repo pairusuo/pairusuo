@@ -25,8 +25,18 @@ const tools = [
   },
   {
     name: 'Data-table',
-    href: 'https://data-table.pairusuo.top/',
+    href: 'https://data-table.pairusuo.top/app',
     descriptionKey: 'dataTable',
+  },
+  {
+    name: 'Asset Correlation Monitor',
+    href: 'https://asset-correlation-monitor.pairusuo.top/',
+    descriptionKey: 'assetCorrelationMonitor',
+  },
+  {
+    name: 'Offline Service',
+    href: 'https://offline-service.pairusuo.top/',
+    descriptionKey: 'offlineService',
   },
 ] as const
 
