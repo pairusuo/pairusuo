@@ -64,9 +64,7 @@
         "Occasional practical notes",
         "Always learning"
       ],
-      "contact": "Scan to add WeChat",
-      "avatar": "Blogger Avatar",
-      "jike": "Follow on Jike"
+      "avatar": "Blogger Avatar"
     },
     "author": {
       "name": "pairusuo",
@@ -150,8 +148,6 @@
         "color": "#a6a09b"
       }
     ],
-    "wechat": "WeChat Official Account",
-    "jike": "Jike Account",
     "readTime": "min read"
   },
   "tags": {

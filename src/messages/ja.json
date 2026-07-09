@@ -64,9 +64,7 @@
         "時々経験を共有",
         "継続的な学習と成長"
       ],
-      "contact": "スキャンしてWeChatを追加",
-      "avatar": "ブロガーのアバター",
-      "jike": "Jikeをフォロー"
+      "avatar": "ブロガーのアバター"
     },
     "author": {
       "name": "pairusuo",
@@ -150,8 +148,6 @@
         "color": "#a6a09b"
       }
     ],
-    "wechat": "WeChat公式アカウント",
-    "jike": "Jikeアカウント",
     "readTime": "分読む"
   },
   "tags": {
