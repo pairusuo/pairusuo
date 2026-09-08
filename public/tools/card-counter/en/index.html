@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Poker card counter</title>
+  <meta name="description" content="A simple poker card counter: 3-A, 2, Jokers, each card counts according to the upper limit of a deck, and supports setting multiple decks." />
+  <meta name="keywords" content="card counter, playing cards counter, joker, multi-deck, deck counter, online tool, web app" />
+  <link rel="canonical" href="/tools/card-counter/en/" />
+  <link rel="alternate" hreflang="zh" href="/tools/card-counter/" />
+  <link rel="alternate" hreflang="en" href="/tools/card-counter/en/" />
+  <link rel="alternate" hreflang="ja" href="/tools/card-counter/ja/" />
+  <link rel="alternate" hreflang="ko" href="/tools/card-counter/ko/" />
+  <link rel="alternate" hreflang="x-default" href="/tools/card-counter/" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/tools/card-counter/static/joker.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/tools/card-counter/static/joker.png" />
+  <link rel="stylesheet" href="/tools/card-counter/style.css" />
+  <meta name="robots" content="index,follow" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#ffffff" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="lang-dropdown">
+      <button id="langBtn" class="btn lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu" aria-label="Switch language"></button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button class="lang-item" role="menuitemradio" aria-checked="true" data-lang="zh">🇨🇳 中文</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="en">🇺🇸 English</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ja">🇯🇵 日本語</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ko">🇰🇷 한국어</button>
+      </div>
+    </div>
+  </div>
+  <header>
+    <div class="title-wrap">
+      <h1 class="title">Poker Card Counter</h1>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">Click a card to add 1; click the minus on the card to subtract 1; stops at the cap.</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>Decks</label>
+            <div class="stepper">
+              <button id="deckDecUp" type="button" class="step-btn" aria-label="Decrease one deck">−</button>
+              <div id="deckValUp" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncUp" type="button" class="step-btn" aria-label="Increase one deck">＋</button>
+            </div>
+          </div>
+          <button id="resetUp" class="btn">Reset</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">Starts with the total of each card. Click the card to subtract 1; click the plus on the card to add 1; down to 0.</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>Decks</label>
+            <div class="stepper">
+              <button id="deckDecDown" type="button" class="step-btn" aria-label="Decrease one deck">−</button>
+              <div id="deckValDown" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncDown" type="button" class="step-btn" aria-label="Increase one deck">＋</button>
+            </div>
+          </div>
+          <button id="resetDown" class="btn">Reset</button>
+        </div>
+      </div>
+      <div id="gridDown" class="grid"></div>
+    </section>
+  </main>
+  <footer><a href="/tools/">Back to tools</a></footer>
+  <script src="/tools/card-counter/i18n.js"></script>
+  <script src="/tools/card-counter/app.js" defer></script>
+</body>
+</html>

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { ArrowUpRight, Wrench } from 'lucide-react'
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from '@/components/seo/jsonld'
 import { t } from '@/lib/i18n'
@@ -10,7 +9,7 @@ const canonical = `${siteUrl}/tools`
 const tools = [
   {
     name: 'Card Counter',
-    href: 'https://cardcounter.pairusuo.top',
+    href: '/tools/card-counter/',
     descriptionKey: 'cardCounter',
   },
   {
@@ -72,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 function getHostname(url: string) {
-  return new URL(url).hostname.replace(/^www\./, '')
+  return new URL(url, siteUrl).hostname.replace(/^www\./, '')
 }
 
 export default function ToolsPage() {
@@ -108,11 +107,11 @@ export default function ToolsPage() {
 
         <section className="grid gap-4 md:grid-cols-2">
           {tools.map((tool) => (
-            <Link
+            <a
               key={tool.href}
               href={tool.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={tool.href.startsWith('/') ? undefined : '_blank'}
+              rel={tool.href.startsWith('/') ? undefined : 'noopener noreferrer'}
               title={tool.name}
               className="group flex h-full flex-col rounded-3xl border border-border bg-background px-5 py-5 transition-colors hover:border-amber-300/80 hover:bg-stone-50/60 dark:hover:border-amber-500/40 dark:hover:bg-stone-900"
             >
@@ -135,7 +134,7 @@ export default function ToolsPage() {
               <div className="mt-auto pt-6 text-sm font-medium text-amber-700 transition-colors group-hover:text-amber-800 dark:text-amber-400 dark:group-hover:text-amber-300">
                 {t('tools.openLink')} →
               </div>
-            </Link>
+            </a>
           ))}
         </section>
 

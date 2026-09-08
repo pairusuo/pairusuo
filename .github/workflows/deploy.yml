@@ -43,6 +43,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Check card counter
+        run: pnpm test:card-counter
+
       - name: Build preview
         if: github.ref == 'refs/heads/preview'
         run: pnpm build

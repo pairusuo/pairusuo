@@ -1,3 +1,5 @@
+const { PHASE_DEVELOPMENT_SERVER } = require('next/constants')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -11,4 +13,16 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = (phase) => ({
+  ...nextConfig,
+  ...(phase === PHASE_DEVELOPMENT_SERVER
+    ? {
+        async rewrites() {
+          return ['', '/en', '/ja', '/ko'].map((locale) => ({
+            source: `/tools/card-counter${locale}/`,
+            destination: `/tools/card-counter${locale}/index.html`,
+          }))
+        },
+      }
+    : {}),
+})

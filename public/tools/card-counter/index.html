@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>在线扑克牌计数器</title>
+  <meta name="description" content="简单的扑克牌计数器：3–A、2、大小王，每张牌按一副牌上限计数，支持设置多副牌。" />
+  <meta name="keywords" content="扑克牌计数器, 记牌器, 纸牌计数, 斗地主, 大小王, 多副牌, 在线工具" />
+  <link rel="canonical" href="/tools/card-counter/" />
+  <link rel="alternate" hreflang="zh" href="/tools/card-counter/" />
+  <link rel="alternate" hreflang="en" href="/tools/card-counter/en/" />
+  <link rel="alternate" hreflang="ja" href="/tools/card-counter/ja/" />
+  <link rel="alternate" hreflang="ko" href="/tools/card-counter/ko/" />
+  <link rel="alternate" hreflang="x-default" href="/tools/card-counter/" />
+  <!-- Favicon: use PNG joker image -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/tools/card-counter/static/joker.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/tools/card-counter/static/joker.png" />
+  <link rel="stylesheet" href="/tools/card-counter/style.css" />
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="lang-dropdown">
+      <button id="langBtn" class="btn lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu"
+        aria-label="切换语言"></button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button class="lang-item" role="menuitemradio" aria-checked="true" data-lang="zh">🇨🇳 中文</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="en">🇺🇸 English</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ja">🇯🇵 日本語</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ko">🇰🇷 한국어</button>
+      </div>
+    </div>
+  </div>
+  <header>
+    <div class="title-wrap">
+      <h1 class="title">扑克牌计数器</h1>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">点击牌面计数加一；点击牌面上的减号计数减一；达到上限不再增加。</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>几副牌</label>
+            <div class="stepper">
+              <button id="deckDecUp" type="button" class="step-btn" aria-label="减少一副">−</button>
+              <div id="deckValUp" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncUp" type="button" class="step-btn" aria-label="增加一副">＋</button>
+            </div>
+          </div>
+          <button id="resetUp" class="btn">重置</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">初始为每张牌的总数，点击牌面计数减一；点击牌面上的加号计数加一；直到 0。</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>几副牌</label>
+            <div class="stepper">
+              <button id="deckDecDown" type="button" class="step-btn" aria-label="减少一副">−</button>
+              <div id="deckValDown" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncDown" type="button" class="step-btn" aria-label="增加一副">＋</button>
+            </div>
+          </div>
+          <button id="resetDown" class="btn">重置</button>
+        </div>
+      </div>
+      <div id="gridDown" class="grid"></div>
+    </section>
+  </main>
+  <footer><a href="/tools/">返回工具列表</a></footer>
+  <script src="/tools/card-counter/i18n.js"></script>
+  <script src="/tools/card-counter/app.js" defer></script>
+</body>
+
+</html>

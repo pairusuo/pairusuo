@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>포커 카드 카운터</title>
+  <meta name="description" content="간단한 포커 카드 카운터: 3-A, 2, 조커, 각 카드는 덱의 상한에 따라 계산되며, 여러 덱을 설정할 수 있습니다." />
+  <meta name="keywords" content="트럼프 카운터, 카드 카운터, 조커, 덱 카운터, 다중 덱, 온라인 도구" />
+  <link rel="canonical" href="/tools/card-counter/ko/" />
+  <link rel="alternate" hreflang="zh" href="/tools/card-counter/" />
+  <link rel="alternate" hreflang="en" href="/tools/card-counter/en/" />
+  <link rel="alternate" hreflang="ja" href="/tools/card-counter/ja/" />
+  <link rel="alternate" hreflang="ko" href="/tools/card-counter/ko/" />
+  <link rel="alternate" hreflang="x-default" href="/tools/card-counter/" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/tools/card-counter/static/joker.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/tools/card-counter/static/joker.png" />
+  <link rel="stylesheet" href="/tools/card-counter/style.css" />
+  <meta name="robots" content="index,follow" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#ffffff" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="lang-dropdown">
+      <button id="langBtn" class="btn lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu" aria-label="언어 전환"></button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button class="lang-item" role="menuitemradio" aria-checked="true" data-lang="zh">🇨🇳 中文</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="en">🇺🇸 English</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ja">🇯🇵 日本語</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ko">🇰🇷 한국어</button>
+      </div>
+    </div>
+  </div>
+  <header>
+    <div class="title-wrap">
+      <h1 class="title">포커 카드 카운터</h1>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">카드를 누르면 +1, 카드의 − 버튼은 −1. 상한에서 멈춤.</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>덱 수</label>
+            <div class="stepper">
+              <button id="deckDecUp" type="button" class="step-btn" aria-label="덱 1개 줄이기">−</button>
+              <div id="deckValUp" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncUp" type="button" class="step-btn" aria-label="덱 1개 늘리기">＋</button>
+            </div>
+          </div>
+          <button id="resetUp" class="btn">초기화</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">초기값은 각 카드의 총수입니다. 카드를 누르면 −1, 카드의 + 버튼은 +1, 0까지.</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>덱 수</label>
+            <div class="stepper">
+              <button id="deckDecDown" type="button" class="step-btn" aria-label="덱 1개 줄이기">−</button>
+              <div id="deckValDown" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncDown" type="button" class="step-btn" aria-label="덱 1개 늘리기">＋</button>
+            </div>
+          </div>
+          <button id="resetDown" class="btn">초기화</button>
+        </div>
+      </div>
+      <div id="gridDown" class="grid"></div>
+    </section>
+  </main>
+  <footer><a href="/tools/">도구 목록으로 돌아가기</a></footer>
+  <script src="/tools/card-counter/i18n.js"></script>
+  <script src="/tools/card-counter/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ポーカーカードカウンター</title>
+  <meta name="description" content="シンプルなポーカーカードカウンター：3-A、2、ジョーカー、各カードはデッキの上限に応じてカウントされ、複数のデッキの設定をサポートします。" />
+  <meta name="keywords" content="トランプ カウンター, カード カウンター, ジョーカー, デッキ, 複数デッキ, オンライン ツール" />
+  <link rel="canonical" href="/tools/card-counter/ja/" />
+  <link rel="alternate" hreflang="zh" href="/tools/card-counter/" />
+  <link rel="alternate" hreflang="en" href="/tools/card-counter/en/" />
+  <link rel="alternate" hreflang="ja" href="/tools/card-counter/ja/" />
+  <link rel="alternate" hreflang="ko" href="/tools/card-counter/ko/" />
+  <link rel="alternate" hreflang="x-default" href="/tools/card-counter/" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/tools/card-counter/static/joker.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/tools/card-counter/static/joker.png" />
+  <link rel="stylesheet" href="/tools/card-counter/style.css" />
+  <meta name="robots" content="index,follow" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#ffffff" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="lang-dropdown">
+      <button id="langBtn" class="btn lang-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu" aria-label="言語を切り替える"></button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button class="lang-item" role="menuitemradio" aria-checked="true" data-lang="zh">🇨🇳 中文</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="en">🇺🇸 English</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ja">🇯🇵 日本語</button>
+        <button class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ko">🇰🇷 한국어</button>
+      </div>
+    </div>
+  </div>
+  <header>
+    <div class="title-wrap">
+      <h1 class="title">ポーカーカードカウンター</h1>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">カードをクリックで +1、カード上のマイナスで −1。上限で停止。</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>デッキ数</label>
+            <div class="stepper">
+              <button id="deckDecUp" type="button" class="step-btn" aria-label="デッキを1つ減らす">−</button>
+              <div id="deckValUp" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncUp" type="button" class="step-btn" aria-label="デッキを1つ増やす">＋</button>
+            </div>
+          </div>
+          <button id="resetUp" class="btn">リセット</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">
+        <div class="tips">初期値は各カードの総数。カードをクリックで −1、カード上のプラスで +1、0 まで。</div>
+        <div class="section-actions">
+          <div class="field">
+            <label>デッキ数</label>
+            <div class="stepper">
+              <button id="deckDecDown" type="button" class="step-btn" aria-label="デッキを1つ減らす">−</button>
+              <div id="deckValDown" class="deck-display" aria-live="polite">1</div>
+              <button id="deckIncDown" type="button" class="step-btn" aria-label="デッキを1つ増やす">＋</button>
+            </div>
+          </div>
+          <button id="resetDown" class="btn">リセット</button>
+        </div>
+      </div>
+      <div id="gridDown" class="grid"></div>
+    </section>
+  </main>
+  <footer><a href="/tools/">ツール一覧に戻る</a></footer>
+  <script src="/tools/card-counter/i18n.js"></script>
+  <script src="/tools/card-counter/app.js" defer></script>
+</body>
+</html>

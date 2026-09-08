@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "test:card-counter": "node --test tests/card-counter.test.cjs",
     "deploy:preview": "pnpm build:clean && npx wrangler pages deploy out --project-name=pairusuo-blog --branch=preview --commit-dirty=true",
     "deploy:prod": "pnpm build:clean && npx wrangler pages deploy out --project-name=pairusuo-blog --branch=main --commit-dirty=true"
   },
