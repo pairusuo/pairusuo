@@ -142,3 +142,20 @@ MIT License
 - [Shadcn/ui](https://ui.shadcn.com/) - UI 组件库
 - [MDX](https://mdxjs.com/) - Markdown + React
 - [Lucide](https://lucide.dev/) - 图标库
+
+## 桌面时钟 / Desktop Clock
+
+访问路径：`/tools/desktop-clock/`。时钟可独立显示时间，天气功能需要联网。
+
+Page: `/tools/desktop-clock/`. The clock works independently; weather requires an internet connection.
+
+- 天气服务：`https://weather-proxy.dirkchou.workers.dev`，是独立运行的服务，不随本站部署。原时钟项目已使用此服务，当前页面继续使用。
+  Weather service: `https://weather-proxy.dirkchou.workers.dev`. This existing service runs and deploys separately from this site.
+- `/weather?lat=…&lon=…`：使用经纬度查询天气；请求失败时自动尝试 Open-Meteo（`https://api.open-meteo.com/v1/forecast`）。
+  `/weather?lat=…&lon=…` retrieves weather for the supplied coordinates and falls back to Open-Meteo if the request fails.
+- `/geoip`：浏览器定位失败时，尝试按访问者 IP 获取大致位置；两种定位方式均失败时使用北京。页面显示的北京不一定是实际定位结果。
+  `/geoip` provides an approximate IP-based location if browser geolocation fails. If both fail, Beijing is used; a displayed Beijing location may therefore be a fallback.
+- 位置查询：天气请求会向对应服务发送经纬度；城市名称优先通过 BigDataCloud 查询，失败后尝试 Open-Meteo 的地名查询接口。
+  Weather requests send coordinates to the selected service. City names are requested from BigDataCloud, with an Open-Meteo geocoding fallback.
+- 天气服务密钥由独立服务保管，不应放入本站页面或公开配置。调用地址位于 `public/tools/desktop-clock/script.js` 的 `WEATHER_API_URL`。
+  Weather credentials belong in the separate service, never in public site files. The endpoint is configured by `WEATHER_API_URL` in `public/tools/desktop-clock/script.js`.

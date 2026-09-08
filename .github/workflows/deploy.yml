@@ -46,6 +46,9 @@ jobs:
       - name: Check card counter
         run: pnpm test:card-counter
 
+      - name: Check desktop clock
+        run: pnpm test:desktop-clock
+
       - name: Build preview
         if: github.ref == 'refs/heads/preview'
         run: pnpm build

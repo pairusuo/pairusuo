@@ -90,6 +90,10 @@ function applySecurityHeaders(response) {
 }
 
 function applyCacheHeaders(response, pathname) {
+  if (pathname.startsWith('/tools/') && /\.(css|js|svg|webmanifest)$/.test(pathname)) {
+    response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+    return;
+  }
   if (
     pathname.startsWith("/_next/static/") ||
     pathname.startsWith("/images/") ||
@@ -118,6 +122,9 @@ export async function onRequest(context) {
   }
 
   applySecurityHeaders(finalResponse);
+  if (url.pathname.startsWith('/tools/desktop-clock/')) {
+    finalResponse.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)');
+  }
   applyCacheHeaders(finalResponse, url.pathname);
 
   return finalResponse;

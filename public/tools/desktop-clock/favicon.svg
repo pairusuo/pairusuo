@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Monochrome dark clock icon -->
+  <defs>
+    <style>
+      .bg{fill:#0b111b}
+      .face{fill:#0b111b;stroke:#ffffff;stroke-width:6}
+      .hand{stroke:#ffffff;stroke-width:8;stroke-linecap:round}
+    </style>
+  </defs>
+  <rect width="128" height="128" fill="none"/>
+  <circle cx="64" cy="64" r="56" class="face"/>
+  <!-- hour hand at 3 o'clock -->
+  <line x1="64" y1="64" x2="92" y2="64" class="hand"/>
+  <!-- minute hand at 12 o'clock -->
+  <line x1="64" y1="64" x2="64" y2="28" class="hand"/>
+</svg>

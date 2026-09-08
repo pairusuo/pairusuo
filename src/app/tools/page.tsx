@@ -14,13 +14,8 @@ const tools = [
   },
   {
     name: 'Desktop Clock',
-    href: 'https://clock.pairusuo.top',
+    href: '/tools/desktop-clock/',
     descriptionKey: 'desktopClock',
-  },
-  {
-    name: 'Keyword ROI Calculator',
-    href: 'https://roi-calculator.pairusuo.top/',
-    descriptionKey: 'keywordRoi',
   },
   {
     name: 'Data-table',

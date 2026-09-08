@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- iOS PWA fullscreen support when added to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Clock" />
+    <link rel="manifest" href="site.webmanifest" />
+    <title>桌面时钟｜全屏时间、农历与天气</title>
+    <meta name="description" content="简洁的在线桌面时钟，支持全屏、12/24 小时制、秒数显示、明暗主题、农历、节气和天气，自由设置显示内容。" />
+    <!-- Site icon (emoji-based SVG) -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="simple">
+    <main id="app" class="container">
+      <h1 class="visually-hidden">桌面时钟</h1>
+      <header class="top">
+        <div class="date-wrap">
+          <div id="greg-date" class="date-line">周— · —年—月—日</div>
+          <div id="lunar-date" class="date-sub">农历 —月— · —</div>
+        </div>
+        <div class="right-wrap">
+          <a class="pill small tool-back" href="/tools/">返回工具列表</a>
+          <button id="btn-settings" class="pill small">设置</button>
+        </div>
+      </header>
+
+      <section class="bigtime" aria-label="大屏时间">
+        <div class="toolbar">
+          <div class="seg">
+            <button id="btn-12h" class="pill">12h</button>
+            <button id="btn-24h" class="pill active">24h</button>
+            <button id="btn-sec" class="pill">秒</button>
+            <button id="btn-fs" class="pill">全屏</button>
+            <button id="toggle-theme" class="pill">主题</button>
+          </div>
+        </div>
+        <div id="big-time" class="big-digits">00:00:00</div>
+        <div class="dual-date">
+          <div id="big-week" class="chip-date">—</div>
+          <div id="big-gdate" class="chip-date">—</div>
+          <div id="big-ldate" class="chip-date">—</div>
+        </div>
+        <!-- Centered weather under dates, above meta -->
+        <div class="weather-wrap compact center">
+          <div id="location" class="weather-loc">定位中…</div>
+          <div id="weather-desc" class="weather-main">定位中…</div>
+          <div id="temp" class="weather-sub"></div>
+          <div id="weather-line" class="weather-line">定位中…</div>
+        </div>
+        <div class="meta pills">
+          <div class="meta-item solar">
+            <span id="solar-prev" class="meta-value">计算中…</span>
+          </div>
+          <div class="meta-item solar">
+            <span id="solar-next" class="meta-value">计算中…</span>
+          </div>
+          <div class="meta-item sun">
+            <span class="meta-label">日出</span>
+            <span id="sunrise" class="meta-value">—:—</span>
+          </div>
+          <div class="meta-item sun">
+            <span class="meta-label">日落</span>
+            <span id="sunset" class="meta-value">—:—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="clock" aria-label="当前时间">
+        <div class="flip-group">
+          <div class="flip" data-slot="h1"></div>
+          <div class="flip" data-slot="h2"></div>
+        </div>
+        <div class="colon">:</div>
+        <div class="flip-group">
+          <div class="flip" data-slot="m1"></div>
+          <div class="flip" data-slot="m2"></div>
+        </div>
+        <div class="colon">:</div>
+        <div class="flip-group">
+          <div class="flip" data-slot="s1"></div>
+          <div class="flip" data-slot="s2"></div>
+        </div>
+      </section>
+
+
+
+      <!-- 页脚已留空：主题按钮已移到右上角 -->
+    </main>
+
+    <!-- Settings Panel -->
+    <div id="settings" class="settings hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="settings-card" role="document">
+        <div class="settings-header">
+          <div class="settings-title" id="settings-title">设置</div>
+          <button id="settings-close" class="pill small">完成</button>
+        </div>
+        <div class="settings-section">
+          <label class="setting-row"><input type="checkbox" id="opt-toolbar"> 显示顶部工具栏</label>
+          <div class="setting-row" style="margin-top:6px; font-weight:700">星期</div>
+          <label class="setting-row"><input type="checkbox" id="opt-week"> 显示星期</label>
+          <div class="setting-row" style="margin-top:6px; font-weight:700">日期</div>
+          <label class="setting-row"><input type="checkbox" id="opt-greg"> 显示公历</label>
+          <label class="setting-row"><input type="checkbox" id="opt-lunar"> 显示农历</label>
+          <div class="setting-row" style="margin-top:6px; font-weight:700">天气/节气</div>
+          <label class="setting-row"><input type="checkbox" id="opt-weather"> 显示天气</label>
+          <label class="setting-row"><input type="checkbox" id="opt-solar"> 显示节气</label>
+          <label class="setting-row"><input type="checkbox" id="opt-sun"> 显示日出/日落</label>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+  </html>

@@ -18,10 +18,13 @@ module.exports = (phase) => ({
   ...(phase === PHASE_DEVELOPMENT_SERVER
     ? {
         async rewrites() {
-          return ['', '/en', '/ja', '/ko'].map((locale) => ({
+          return [...['', '/en', '/ja', '/ko'].map((locale) => ({
             source: `/tools/card-counter${locale}/`,
             destination: `/tools/card-counter${locale}/index.html`,
-          }))
+          })), {
+            source: '/tools/desktop-clock/',
+            destination: '/tools/desktop-clock/index.html',
+          }]
         },
       }
     : {}),
