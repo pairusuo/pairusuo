@@ -4,6 +4,12 @@
 
 基于 Next.js · Shadcn · Tailwind · MDX ｜ Based on Next.js · Shadcn · Tailwind · MDX
 
+top 域名便宜没好货，做外链时容易被当做 spam
+
+push 代码到 GitHub 会自动触发部署
+
+改名出海派比较好，派入所确实让人想到派出所。
+
 ## 🚀 快速开始
 
 ### 1. 克隆项目
@@ -28,7 +34,7 @@ pnpm install
 
 ```javascript
 // 选择你的语言: 'zh' | 'ja' | 'en'
-export const LOCALE = 'zh';
+export const LOCALE = "zh";
 ```
 
 ### 4. 启动开发服务器
@@ -159,3 +165,17 @@ Page: `/tools/desktop-clock/`. The clock works independently; weather requires a
   Weather requests send coordinates to the selected service. City names are requested from BigDataCloud, with an Open-Meteo geocoding fallback.
 - 天气服务密钥由独立服务保管，不应放入本站页面或公开配置。调用地址位于 `public/tools/desktop-clock/script.js` 的 `WEATHER_API_URL`。
   Weather credentials belong in the separate service, never in public site files. The endpoint is configured by `WEATHER_API_URL` in `public/tools/desktop-clock/script.js`.
+
+## 独立工具项目 / Independent Tool Projects
+
+Tools 页面中的以下三个工具均为独立项目，暂不迁入主项目，保留现有外链入口：
+
+The following three tools remain independent projects. Migration into this project is deferred; keep their existing external links:
+
+- Data-table：`https://data-table.pairusuo.top/app`
+- Asset Correlation Monitor：`https://asset-correlation-monitor.pairusuo.top/`
+- Offline Service：`https://offline-service.pairusuo.top/`
+
+后续仅在明确要求迁移时再处理。
+
+Migrate these tools only when explicitly requested.
