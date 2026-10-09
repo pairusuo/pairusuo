@@ -1,0 +1,322 @@
+{
+  "00-moves": {
+    "file": "00-moves.svg",
+    "alt": "左右手上去下回动作表：右手依次为右层向上、顶层向左、右层向下、顶层向右；左手为镜像动作",
+    "width": 800,
+    "height": 400,
+    "version": "afa6f66fb59b"
+  },
+  "01-daisy": {
+    "file": "01-daisy.svg",
+    "alt": "小花、侧面对色与底部白色十字三个阶段的示意图",
+    "width": 800,
+    "height": 400,
+    "version": "14a0d6d66589"
+  },
+  "02-first-layer": {
+    "file": "02-first-layer.svg",
+    "alt": "第一层完成标准：底面全白，四个侧面的底下一排都与本面中心同色",
+    "width": 800,
+    "height": 400,
+    "version": "bd12603940cf"
+  },
+  "03-middle": {
+    "file": "03-middle.svg",
+    "alt": "第二层插棱判断示意：正面绿色对绿心，顶色为红且红心在右，则目标是右侧槽位",
+    "width": 800,
+    "height": 400,
+    "version": "90f9647444bc"
+  },
+  "04-cross": {
+    "file": "04-cross.svg",
+    "alt": "黄色十字的点、左后直角和横线三种俯视图；图的下边靠近自己",
+    "width": 800,
+    "height": 400,
+    "version": "8a341a765910"
+  },
+  "05-yellow": {
+    "file": "05-yellow.svg",
+    "alt": "黄色朝下时补角的底面示意图：固定右前下角为工作位，只转底层换下一个角",
+    "width": 800,
+    "height": 400,
+    "version": "8705b64614c9"
+  },
+  "06-headlights": {
+    "file": "06-headlights.svg",
+    "alt": "同色角、手提袋和完整侧面的区别：手提袋两角同色，顶排中间棱块仍可能异色",
+    "width": 800,
+    "height": 400,
+    "version": "8ef74e2e103e"
+  },
+  "07-last-edges": {
+    "file": "07-last-edges.svg",
+    "alt": "最后一步的侧色示例：正面全绿，后面橙心缺橙色，橙色顶棱在左侧，因此先做左手",
+    "width": 800,
+    "height": 400,
+    "version": "6477c3dbdc08"
+  },
+  "move-right-0": {
+    "file": "move-right-0.svg",
+    "alt": "起点：认准正面：绿心朝前，红心在右",
+    "width": 640,
+    "height": 520,
+    "version": "c50987dcc491"
+  },
+  "move-right-1": {
+    "file": "move-right-1.svg",
+    "alt": "① 上：右层向上：整颗魔方拿法保持不变",
+    "width": 640,
+    "height": 520,
+    "version": "336cc9cb8bba"
+  },
+  "move-right-2": {
+    "file": "move-right-2.svg",
+    "alt": "② 去：顶层向左：整颗魔方拿法保持不变",
+    "width": 640,
+    "height": 520,
+    "version": "35f55c4776b8"
+  },
+  "move-right-3": {
+    "file": "move-right-3.svg",
+    "alt": "③ 下：右层向下：整颗魔方拿法保持不变",
+    "width": 640,
+    "height": 520,
+    "version": "66b4c3f555ad"
+  },
+  "move-right-4": {
+    "file": "move-right-4.svg",
+    "alt": "④ 回：顶层向右：四步合起来，才算“右手一次”",
+    "width": 640,
+    "height": 520,
+    "version": "ff6ddfd1bee6"
+  },
+  "move-left-0": {
+    "file": "move-left-0.svg",
+    "alt": "起点：左手镜像动作：仍然绿心朝前，红心在右",
+    "width": 640,
+    "height": 520,
+    "version": "c262de59c764"
+  },
+  "move-left-1": {
+    "file": "move-left-1.svg",
+    "alt": "① 上：左层向上：只转指定层，保持正面不变",
+    "width": 640,
+    "height": 520,
+    "version": "c3896c939626"
+  },
+  "move-left-2": {
+    "file": "move-left-2.svg",
+    "alt": "② 去：顶层向右：只转指定层，保持正面不变",
+    "width": 640,
+    "height": 520,
+    "version": "3f5f511d91f0"
+  },
+  "move-left-3": {
+    "file": "move-left-3.svg",
+    "alt": "③ 下：左层向下：只转指定层，保持正面不变",
+    "width": 640,
+    "height": 520,
+    "version": "dad3493e8192"
+  },
+  "move-left-4": {
+    "file": "move-left-4.svg",
+    "alt": "④ 回：顶层向左：四步合起来，才算“左手一次”",
+    "width": 640,
+    "height": 520,
+    "version": "c7ee5979964e"
+  },
+  "move-middle-right-0": {
+    "file": "move-middle-right-0.svg",
+    "alt": "① 起点：棱块侧色对中心：绿心朝前：目标棱在正前上方",
+    "width": 640,
+    "height": 520,
+    "version": "efc192f96bee"
+  },
+  "move-middle-right-1": {
+    "file": "move-middle-right-1.svg",
+    "alt": "② 顶层先远离目标槽：只转顶层 90°",
+    "width": 640,
+    "height": 520,
+    "version": "3f9b75402fa9"
+  },
+  "move-middle-right-2": {
+    "file": "move-middle-right-2.svg",
+    "alt": "③ 完整做一次右手：白色角暂时离开底层",
+    "width": 640,
+    "height": 520,
+    "version": "18b6dddbf222"
+  },
+  "move-middle-right-3": {
+    "file": "move-middle-right-3.svg",
+    "alt": "④ 整颗转向，换一个正面：原来的右面成为新正面",
+    "width": 640,
+    "height": 520,
+    "version": "b5afb17ad77e"
+  },
+  "move-middle-right-4": {
+    "file": "move-middle-right-4.svg",
+    "alt": "⑤ 另一只手做一次，复原：白色角与目标棱一起归位",
+    "width": 640,
+    "height": 520,
+    "version": "04fdf3da0728"
+  },
+  "move-middle-left-0": {
+    "file": "move-middle-left-0.svg",
+    "alt": "① 起点：棱块侧色对中心：绿心朝前：目标棱在正前上方",
+    "width": 640,
+    "height": 520,
+    "version": "74c755145e2f"
+  },
+  "move-middle-left-1": {
+    "file": "move-middle-left-1.svg",
+    "alt": "② 顶层先远离目标槽：只转顶层 90°",
+    "width": 640,
+    "height": 520,
+    "version": "eeb0ceb81413"
+  },
+  "move-middle-left-2": {
+    "file": "move-middle-left-2.svg",
+    "alt": "③ 完整做一次左手：白色角暂时离开底层",
+    "width": 640,
+    "height": 520,
+    "version": "827e5eb2cd94"
+  },
+  "move-middle-left-3": {
+    "file": "move-middle-left-3.svg",
+    "alt": "④ 整颗转向，换一个正面：原来的左面成为新正面",
+    "width": 640,
+    "height": 520,
+    "version": "5596ae765c87"
+  },
+  "move-middle-left-4": {
+    "file": "move-middle-left-4.svg",
+    "alt": "⑤ 另一只手做一次，复原：白色角与目标棱一起归位",
+    "width": 640,
+    "height": 520,
+    "version": "b3dc414933d9"
+  },
+  "move-cross-0": {
+    "file": "move-cross-0.svg",
+    "alt": "① 黄色横线左右放平：俯视时，黄色棱连成横线",
+    "width": 640,
+    "height": 520,
+    "version": "3d9d61c565d7"
+  },
+  "move-cross-1": {
+    "file": "move-cross-1.svg",
+    "alt": "② 前面顺时针转 90°：只转前面，不是整颗转动",
+    "width": 640,
+    "height": 520,
+    "version": "c937c7e029bb"
+  },
+  "move-cross-2": {
+    "file": "move-cross-2.svg",
+    "alt": "③ 完整做右手一次：上 → 去 → 下 → 回",
+    "width": 640,
+    "height": 520,
+    "version": "edba1ec8a5f2"
+  },
+  "move-cross-3": {
+    "file": "move-cross-3.svg",
+    "alt": "④ 前面逆时针转回：黄色十字出现，下面两层恢复",
+    "width": 640,
+    "height": 520,
+    "version": "3d9efce7c4fd"
+  },
+  "move-yellow-work": {
+    "file": "move-yellow-work.svg",
+    "alt": "黄色朝下：固定右前下角：紫色框是唯一工作角；下一角靠转底层送来",
+    "width": 640,
+    "height": 520,
+    "version": "c97cd3fc1a56"
+  },
+  "move-regrip-before": {
+    "file": "move-regrip-before.svg",
+    "alt": "整颗转向之前：正面绿心，右面红心",
+    "width": 640,
+    "height": 520,
+    "version": "15c63efcf418"
+  },
+  "move-regrip-after": {
+    "file": "move-regrip-after.svg",
+    "alt": "整颗转向之后：原来的右面变正面：现在红心朝前",
+    "width": 640,
+    "height": 520,
+    "version": "5201a360657c"
+  },
+  "move-corner-0": {
+    "file": "move-corner-0.svg",
+    "alt": "白角放到右前上方：紫框里的角，在目标位置正上方",
+    "width": 640,
+    "height": 520,
+    "version": "23074bc4a465"
+  },
+  "move-corner-1": {
+    "file": "move-corner-1.svg",
+    "alt": "右手做一整次后：白角归位后，同时检查两个侧色",
+    "width": 640,
+    "height": 520,
+    "version": "4f4c3c1899f2"
+  },
+  "move-last-left": {
+    "file": "move-last-left.svg",
+    "alt": "完整的绿色面朝前：后面缺橙色，橙色在左边",
+    "width": 640,
+    "height": 520,
+    "version": "6c73684d0b96"
+  },
+  "move-last-right": {
+    "file": "move-last-right.svg",
+    "alt": "完整的绿色面朝前：后面缺橙色，橙色在右边",
+    "width": 640,
+    "height": 520,
+    "version": "0e49ae7a9a7c"
+  },
+  "move-solved": {
+    "file": "move-solved.svg",
+    "alt": "最后检查：六面分别同色：白底、黄顶；侧面每一层都与中心同色",
+    "width": 640,
+    "height": 520,
+    "version": "f738bcd33eec"
+  },
+  "official-center": {
+    "file": "official-center.svg",
+    "alt": "中心块只有一个颜色，决定这一面的颜色",
+    "width": 14274,
+    "height": 14274,
+    "official": true,
+    "version": "51ab1b7b4520"
+  },
+  "official-edge": {
+    "file": "official-edge.svg",
+    "alt": "棱块有两个颜色，位于两面交界的边中间",
+    "width": 15591,
+    "height": 15591,
+    "official": true,
+    "version": "56b4e494d39a"
+  },
+  "official-corner": {
+    "file": "official-corner.svg",
+    "alt": "角块有三个颜色，必须同时匹配三个中心",
+    "width": 15591,
+    "height": 15591,
+    "official": true,
+    "version": "4b04264c18c6"
+  },
+  "official-daisy-space": {
+    "file": "official-daisy-space.svg",
+    "alt": "先转顶层腾出空位，再把白色棱块送到黄色中心旁",
+    "width": 1738,
+    "height": 499,
+    "official": true,
+    "version": "dfb9774d7f58"
+  },
+  "official-white-cross-steps": {
+    "file": "official-white-cross-steps.svg",
+    "alt": "先让棱块侧色对准中心，再把这一面转半圈送到底部",
+    "width": 3678,
+    "height": 817,
+    "official": true,
+    "version": "1c9ea4e7bd69"
+  }
+}

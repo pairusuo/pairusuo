@@ -1,10 +1,13 @@
 import type { MDXComponents } from 'mdx/types'
 import React from 'react'
 import Image from 'next/image'
+import { CubeFigure, CubeSteps } from '@/components/blog/cube-figure'
 import { RawHtmlFile } from '@/components/blog/raw-html'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
+    CubeFigure,
+    CubeSteps,
     RawHtmlFile: (props: any) => <RawHtmlFile {...props} />,
     // 自定义组件
     h1: ({ children }) => (
